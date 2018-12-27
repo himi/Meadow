@@ -1,0 +1,193 @@
+***************************************************************************
+     Meadow Installation Manual
+***************************************************************************
+
+1. Caution
+
+o You CANNOT share elc files (byte-compiled lisp files) with
+  Meadow-2.XX and Meadow-1.XX.
+
+2. Preparation
+
+Meadow requires the following software.
+
+2.1 ImageMagick
+
+ImageMagick is a collection of tools and libraries to read, write, and
+manipulate an image in many image formats. Currently Meadow supports
+only ImageMagick-6.2.4, so you should install this without fail.
+
+You can get these packages in the following URLs.
+
+o ImageMagick
+http://www.meadowy.org/meadow/dists/snapshot/
+http://www.imagemagick.org/www/download.html
+
+3. Installation
+
+You can select installation methods, 3.1 or 3.2 subsection.
+
+3.1 Installation of binary archive.
+
+<STEP1: Extract the archive>
+
+Please extract the archive of Meadow
+There are following binary archives.
+
+  Meadow-${VERSION}-i386.tar.gz	Intel x86 Binary
+
+For example, a name of Meadow version 2.10 is "Meadow-2.10-i386.tar.gz".
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! You can extract the arvhie with tar.exe and gzip.exe.   !
+! If you want to use the other archiver,                  !
+! disable the feature of conversion LF into CR+LF.        !
+! (Winzip enables this feature in the case of default.)   !
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! DON'T install Meadow to the directory whose name contains non-ascii      !
+! characters                                                               !
+! and a white space. Maybe, you can install Meadow to such directories,    !
+! but I don't verify its case.  Similarly, you should not specify your     !
+! home directory named with non-ascii characters.                          !
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+If you want to install the archive to "c:/win32app/Meadow",
+please extract this at c:/win32app.
+
+For example,
+-----------------
+c: [RETURN]
+cd \win32app [RETURN]
+tar zxvf Meadow-<VERSION>-<ARCHITECTURE>.tar.gz [RETURN]
+-----------------
+
+You can get the following tree.
+
+c:/win32app/Meadow/
+               +---- bin/              Main programs
+               +---- bitmap/           splash bitmapfile
+               +---- etc/              Other data
+               +---- info/             info directory
+               +---- leim/             leim directory
+               +---- lisp/             Emacs Lisp library
+               +---- site-lisp/        site-lisp Emacs Lisp library
+               +---- README.Meadow.ja  
+               +---- INSTALL.Meadow.ja 
+               +---- dot.emacs.ja      sample of .emacs
+               +---- install.exe
+
+<STEP2: Execute install.exe>
+
+Please execute "install.exe".
+
+In the "Meadow" directory, you will find "install.exe".
+It is an installtion program, please execute it.
+(by an explorer, a command prompt, and so on.)
+
+<STEP3: Specify your home directory>
+
+The installation program asks you where your HOME DIRECTORY is.
+Please input your HOME DIRECTORY.
+
+;; FYI.
+;; Your home directory is used for your personal space.
+;; And you can put ".emacs" file here, then Meadow will read it.
+
+That's all.  The installation program will install Meadow correctly.
+
+You can invoke Meadow from the "Start" menu.
+Its menu is stored in "Start -> Program -> Meadow -> Meadow".
+
+3.2 Using Netinstaller
+
+Download Net Release Setup Program (setup.exe) from
+http://www.meadowy.org/meadow/dists/2.10/
+and execute it.
+
+
+4. Installation of source archive.
+
+Your compilation environment (Microsoft Visual C++ or Cygwin) make the
+following procedures different.
+
+4.1 With Microsoft Visual C++
+
+<STEP1: Extract the archive>
+
+Please extract the archive of Meadow
+
+The source archive is named "Meadow-<VERSION>-src.tar.gz"
+;; <VERSION> is the version name of Meadow.
+;; Please replace it to the version name.
+
+For example, if you want to put sources to c:/source
+-----------------
+c: [RETURN]
+cd \source [RETURN]
+tar zxvf Meadow-<VERSION>-src.tar.gz
+-----------------
+
+Then you can get the follwing source tree.
+
+c:/source/Meadow-<VERSION>/-------src/      (Main source)
+                               +--lib-src/  (library and tools source)
+                               +--nt/       (configuration files for Meadow)
+                               +--info/     (info files)
+                               +--lisp/     (Emacs Lisp files)
+                               +--etc/      (Other data)
+                               +-- .... And so on
+
+Your compilation environment(Microsoft Visual C++ or Cygwin) make the
+following procedures different.
+
+<STEP2: Compilation>
+
+-----------------
+cd Meadow-<VERSION>\nt [RETURN]
+configure.meadow --with-msvc --prefix <YOUR INSTALL DIRECTORY> --magick "<IMAGEMAGICK DIRECTORY>" [RETURN]
+nmake bootstrap [RETURN]
+nmake all [RETURN]
+-----------------
+
+You would be able to compile with Microsoft Visual C++ 6.x and 7.x.
+I presume that you can do it with other version of Visual C++.
+But I'm not sure.
+
+If you meet any problem, you must resolve by YOURSELF!!! :-)
+
+<STEP3: Installation>
+
+-----------------
+nmake install [RETURN]
+-----------------
+
+4.2 With Cygwin
+
+<STEP1: Extract the archive>
+
+Please extract the archive of Meadow in the same way as 4.1 STEP1.
+
+<STEP2: Compilation>
+
+On a Cygwin shell(sh, bash and so forth), you should type the
+following command.
+
+-----------------
+cd Meadow-<VERSION>/nt [RETURN]
+./configure.meadow.bat --with-gcc --no-cygwin --no-debug --prefix=<YOUR INSTALL DIRECTORY> --magick "<IMAGEMAGICK DIRECTORY>" [RETURN]
+make bootstrap [RETURN]
+make all [RETURN]
+-----------------
+
+You would be able to compile with cmd.exe (or command.com).
+If you meet any problem, you must resolve by YOURSELF!!! :-)
+
+<STEP3: Installation>
+
+-----------------
+make install [RETURN]
+-----------------
+
+That's all.

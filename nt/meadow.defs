@@ -1,0 +1,21 @@
+# -*- Makefile -*-
+# from makefile.def
+
+# Define W32_VER4 to be nonzero if you use on Windows95/NT3.51, and you
+# will use extended functions.
+W32_VER4 = 1
+
+# Define SPECIAL_EXEC to be nonzero if you want to boot
+# up under any environments like removable media.
+SPECIAL_EXEC = 0
+
+# Define MW32_BDF to be nonzero if you use BDF font.
+MW32_BDF = 1
+
+MEADOW = 1
+MEADOW_TEST_VERSION = 1
+MEADOW_SVN_URL=http://svn.meadowy.org/Meadow/branches/2.1/
+
+MEADOW_VERSION=2.11
+MEADOW_RELEASE_TAG=ASAGAO-2.11
+MEADOW_VERSION_STRING="\"Meadow-2.11-pre (ASAGAO)\""

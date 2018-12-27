@@ -1,0 +1,42 @@
+***************************************************************************
+     Meadow 2.10 Basic and Brief Manual.
+       (Multilingual enhancement to gnu Emacs with ADvantages Over Windows)
+	Written by Miyashita Hisashi <himi@bird.scphys.kyoto-u.ac.jp>
+	Edited by Takeyori Hara <takeyori@mechatro2.ME.Berkeley.EDU>
+
+	Revised by Miyashita Hisashi for 1.10
+	Revised by MIYOSHI Masanori for 1.99 and 2.00
+***************************************************************************
+
+1..... Introduction
+
+  Since this project started, we have been working for multilingual
+enhancement to GNU Emacs that runs on Windows9X/NT/2000/XP, and the
+result of the work is Meadow.
+
+  At present, however, GNU Emacs and Mule have been integrated, and an
+implementation for Windows of GNU Emacs, which is called NTEmacs, also
+can handle multilingual features, which is partly imported from
+Meadow's result.
+
+  From historical affairs, Meadow and NTEmacs make another decision on
+Windows implementation of GNU Emacs from a certain stage.  Therefore,
+these two implementaion is different from each other especially on
+Windows interfaces, and Meadow have been added on various features to
+original GNU Emacs.
+
+This Meadow version is based on GNU Emacs 21.1 currently.  We plan to
+extend many features to Meadow.  Thus, Meadow may change from original
+GNU Emacs, maybe or not maybe. :-)
+
+2..... Installation
+
+  Installation is very easy.  Please read `INSTALL.Meadow.'
+
+3..... Further information
+
+  There is a web page that serves as a FAQ and Manuals. at:
+
+    http://www.meadowy.org/meadow/
+
+------------------------------------------------------------

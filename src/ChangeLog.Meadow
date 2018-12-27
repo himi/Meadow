@@ -1,0 +1,4982 @@
+2005-11-03  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* mw32fns.c (define_imagemagick_type): Ignore Encapsulated
+	PostScript related formats, which ImageMagick cannot handle
+	correctly.  Refer to ticke:209.
+
+2005-11-02  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* coding.c (coding_restore_composition): Sync up with Emacs CVS
+	HEAD to fix ticket:181.
+
+2005-10-29  Kyotaro HORIGUCHI  <horiguti@meadowy.org>
+
+	* mw32fns.c (mw32m_create_frame_window): Prevent the title bar
+	from overlapping with the task bar at the top of the screen on
+	creating frame. See ticket:212.
+
+2005-09-16  Kyotaro HORIGUCHI  <horiguti@meadowy.org>
+
+	* indent.c (back-to-previous-visible-line-start): New lisp
+	function.
+
+2005-09-08  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* mw32term.c (mw32_message_loop): Set `keyboard_handle' to the
+	signaled state.
+
+2005-09-03  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* mw32menu.c (single_menu_item): Add a prefix to not only the item
+	name but the pane name.
+
+2005-09-03  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* mw32term.c (mw32_message_loop): New argument `leftover'.  Thanks
+	to pooh <pooh-san@basil.freemail.ne.jp>.
+	(mw32_message_loop): Don't set `keyboard_handle' to the signaled
+	state.  Thanks to ISHIKURA Hiroyuki <neko@cc.rim.or.jp>.
+	(mw32_async_handle_message): Don't call WaitMessage() if
+	`leftover' which is obtained in mw32_message_loop() is false.
+	Thanks to pooh <pooh-san@basil.freemail.ne.jp>.
+	(mw32_async_handle_message): Set `keyboard_handle' to the signaled
+	state.  Thanks to ISHIKURA Hiroyuki <neko@cc.rim.or.jp>.
+
+2005-08-28  KOSEKI Yoshinori  <kose@meadowy.org>
+
+	* Meadow-2.10 (ASAGAO) Release.
+
+	* mw32fns.c (IMAGE_MAGICK_REQUIRE_VERSION): Change the supported
+	version of ImageMagick. (624)
+
+2005-08-26  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* lisp.h: Declare egetenv() at all times.
+
+2005-07-10  Kyotaro HORIGUCHI  <horiguti@meadowy.org>
+
+	* w32proc.c (sys_spawnve): Don't use LISP string object directly
+	being pointed by C pointer here because GC may move the object on
+	Ffuncall(call1) used after here.
+
+2005-05-21  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* mw32fns.c (mw32_WndProc<WM_IME_ENDCOMPOSITION>): Inactivate
+	ime_composition_state
+
+2005-03-26  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* coding.c (syms_of_coding): Undo the last change.
+
+2005-03-22  KOSEKI Yoshinori  <kose@meadowy.org>
+
+	* Meadow-2.10 (ASAGAO) Release. (not Released)
+
+2005-03-16  KOSEKI Yoshinori  <kose@meadowy.org>
+
+	* makefile.meadow.w32-in (bootstrap-temacs): Increase
+	PDUMP_OBJECT_ARRAY_SIZE up to 205000.
+
+2005-03-13  Shuichi KITAGUCHI  <kit@meadowy.org>
+
+	* editfns.c (syms_of_editfns): Sync up with Emacs 21.4.
+
+	* fileio.c (Fcopy_file): Ditto.
+
+	* window.c: Ditto.
+
+	* paths.h: Ditto.
+
+	* w32heap.c: Ditto.
+
+	* w32gui.h: Ditto.
+
+	* coding.c (syms_of_coding): Ditto.
+
+	* print1.c: Ditto.
+
+	* Makefile.c: Ditto.
+
+	* makefile.nt: Sync up with Emacs 21.4 and cleanup.
+
+	* w32.c (init_environment): add packages/lisp to EMACSLOADPATH.
+
+	* paths.in: Sync up with Emacs 21.4.
+
+	* unexelf1.c: Ditto.
+
+	* unexw32.c: Ditto.
+
+2005-03-06  Shuichi KITAGUCHI  <kit@meadowy.org>
+
+	* mw32fns.c (WIN32): define WIN32 when it is not defined.
+
+2005-03-06  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* mw32fns.c: undefine WIN32_LEAN_AND_MEAN when it has already been
+	defined.
+	Include <magick/nt-base.h> to define `ssize_t'.
+
+2005-03-06  Masayuki FUJII  <boochang@m4.kcn.ne.jp>
+
+	* makefile.meadow.w32-in (LOCAL_FLAGS): cleanup ImageMagick support.
+
+2005-03-06  Shuichi KITAGUCHI  <kit@meadowy.org>
+
+	* mw32magick: removed. (cleanup ImageMagick support)
+
+	* mw32fns.c: update to ImageMagick 6.2.0.
+	cleanup ImageMagick support.
+
+	* makefile.nt (LOCAL_FLAGS): cleanup ImageMagick support.
+
+2005-01-08  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* w32proc.c (sys_spawnve): Duplicate the whole elements of `argv'
+	to prevent errors in GC.
+
+2005-01-04  Masayuki FUJII  <boochang@m4.kcn.ne.jp>
+
+	* dired.c: undefine S_ISLNK and S_IFLNK for mingw-runtime 3.6
+	and later.
+
+	* fileio.c : Ditto.
+
+	* filemode.c: Ditto.
+
+2004-12-02  Kyotaro HORIGUCHI  <horiguti@meadowy.org>
+
+	* mw32term.c (mw32_get_ime_font_property): Unblock the input
+	if the current thread has blocked it.
+
+2004-11-28  Shuichi KITAGUCHI  <kit@meadowy.org>
+
+	* makefile.nt (DOC): use makefile instead of makefile.nt
+	(bootstrap-temacs): Ditto.
+
+2004-11-13  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* keyboard.c (gen_help_event): Undo the last changes.
+
+2004-11-12  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* mw32term.c (mw32_scroll_bar_handle_click): Initialize
+	`input_event'.  Thanks to KOBAYASHI Yasuhiro
+	<kobayays@otsukakj.co.jp>.
+	(mw32_drop_file_handler): Ditto.
+	(mw32_menu_bar_store_activate_event): Ditto.
+	(mw32_process_tool_bar_click): Ditto.
+	(mw32_message_loop): Ditto.
+
+	* keyboard.c (gen_help_event): Ditto.
+	(kbd_buffer_store_help_event): Ditto.
+	(record_asynch_buffer_change): Ditto.
+	(read_avail_input): Ditto.
+
+	* termhooks.h (EVENT_INIT): New macro from Emacs CVS HEAD.
+
+2004-11-08  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* mw32term.c (mw32_message_loop): Undo the last change.
+
+2004-10-20  Kyotaro HORIGUCHI  <horiguti@meadowy.org>
+
+	* mw32term.c (mw32_message_loop<WM_MOUSEMOVE>): Confirm
+	last_mouse_motion_frame is not nil before doing XSETFRAME.
+
+2004-10-09  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* mw32term.c (mw32_async_handle_message): Call
+	WaitForSingleObject() after all the emacs events are stored.
+
+2004-10-06  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* mw32font.c (mw32font_set_frame_ime_font_by_llogfont): Do nothing
+	when IME_CONTROL is defined.
+
+	* mw32fns.c (mw32m_ime_create_agent): Invalidated when IME_CONTROL
+	is defined.
+	(mw32m_ime_destroy_agent): Ditto.
+
+2004-09-16  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* xdisp.c (IT_OVERFLOW_NEWLINE_INTO_FRINGE): Always return false.
+
+2004-09-14  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* xdisp.c (message_dolog_marker1): New static variable.
+	(message_dolog_marker2): Ditto.
+	(message_dolog_marker3): Ditto.
+	(message_dolog): Sync up with Emacs CVS HEAD.
+	(syms_of_xdisp): Initialize message_dolog_marker1,
+	message_dolog_marker2 and message_dolog_marker3.
+
+2004-09-06  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* xdisp.c (IT_OVERFLOW_NEWLINE_INTO_FRINGE): New macro from Emacs
+	CVS HEAD.
+	(move_it_in_display_line_to): Sync up with Emacs CVS HEAD.
+
+2004-08-29  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* mw32fns.c (mw32_encode_text_prepare): Don't set src_multibyte
+	and dst_multibyte true.
+
+2004-08-26  Masayuki FUJII  <boochang@m4.kcn.ne.jp>
+
+	* mw32term.c (mw32_message_loop): Set frame to
+	dpyinfo->mouse_face_mouse_frame when WM_MOUSEMOVE is received.
+
+2004-08-14  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* mw32term.c (mw32i_update_window_end): Draw fringes.
+	(mw32_draw_row_bitmaps): Don't draw fringes.
+	(mw32_draw_window_fringes): New function from Emacs CVS HEAD.
+
+2004-08-14  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* mw32term.c (mw32_draw_image_foreground): Draw an image with
+	offscreen rendering.
+
+2004-08-13  Masayuki FUJII  <boochang@m4.kcn.ne.jp>
+
+	* callint.c (Fcall_interactively): Save and restore Vthis_command,
+	real_this_command, and current_kbd->Vlast_command. These codes are
+	imported from Emacs CVS HEAD.
+
+2004-08-12  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* mw32clpbd.c (last_clipboard_text): New variable form Emacs CVS
+	HEAD.
+	(clipboard_storage_size): Ditto.
+	(Fw32_set_clipboard_data): Stash away the data we are about to put
+	into the clipboard. These codes are imported from Emacs CVS HEAD.
+	(Fw32_get_clipboard_data): If the text in clipboard is identical
+	to what we put there last time, pretend there's no data in the
+	clipboard. These codes are imported from Emacs CVS HEAD.
+
+2004-08-11  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* mw32fns.c (Fmw32_get_image_magick_extensions): Use Vimage_types
+	instead of magick_get_magick_list() to avoid initialization of
+	MagickInfos.
+
+2004-08-10  Masayuki FUJII  <boochang@m4.kcn.ne.jp>
+
+	* mw32term.h (WM_EMACS_SETFOREGROUND): New define.
+	(SPI_GETFOREGROUNDLOCKTIMEOUT): Ditto.
+	(SPI_SETFOREGROUNDLOCKTIMEOUT): Ditto.
+
+	* mw32term.c (mw32_raise_frame): Delegate the message thread to
+	call SetForegroundWindow().
+
+	* mw32fns.c (mw32_WndProc<WM_EMACS_SETFOREGROUND>): New message
+	handling.
+
+2004-08-10  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* mw32fns.c (Fmw32_get_image_magick_extensions): New function.
+
+2004-08-09  Masayuki FUJII  <boochang@m4.kcn.ne.jp>
+
+	* makefile.meadow.w32-in ($(DOC)): New target.
+
+2004-08-07  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* mw32fns.c (pget_image_magick_t): New type definition.
+	(pget_image_magick): New static variable.
+	(magick_get_image_magick): New function.
+	(Fmw32_get_image_magick): Ditto.
+	(syms_of_mw32fns): Define the above function.
+
+2004-07-25  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* mw32term.c (MW32_frame_up_to_date): Block other threads in the
+	process of mouse hightlighting.
+
+2004-07-24  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* mw32font.c (mw32_set_layout): Comment out entire codes, because
+	no layout information is used currently.
+	(Fw32_get_font_info): Fix a typo.
+
+2004-07-24  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* mw32font.c (mw32_set_windows_logical_font): If the font width is
+	not desired, adjust `lfWidth' and recreate it later.
+	(mw32_convert_lface_to_LOGFONT): Set lfHeight to positive value.
+	(mw32_initialize_default_logfont): The height is explicitly set
+	here to avoid the annoying variable font width.
+
+2004-07-20  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* mw32font.c (mw32_initialize_default_logfont): Undo the last
+	change.
+
+2004-07-19  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* mw32font.c (mw32_initialize_default_logfont): Set the default
+	height to 16 and the default width to 8.
+
+	* mw32fns.c (DEFAULT_COLS): Set the default number of columns to
+	80.
+
+2004-07-18  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* mw32term.c (mw32_draw_box_rect): Don't fill the center of a box.
+
+2004-07-15  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* mw32bdf.c (mw32_BDF_TextOut): Free GDI resources before exiting.
+
+2004-07-15  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* xdisp.c (message_dolog): Unprotect lisp markers after they are
+	freed.
+
+2004-07-10  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* mw32fns.c (mw32_set_frame_ime_font): Correct the argument for
+	error().
+
+2004-07-07  KOSEKI Yoshinori  <kose@meadowy.org>
+
+	* Meadow 2.00 (KIKYOU) Release.
+
+2004-07-05  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* mw32font.c (default_logfont_courier_new): Abolished.
+	(default_logfont_fixed_sys): Ditto.
+	(mw32_enumerated_face_name): New static variable.
+	(enumfont_callback): New function.
+	(mw32_convert_lface_to_LOGFONT): Choose a suitable logfont with
+	EnumFontFamiliesEx() if face family is not specified.
+	(mw32_initialize_default_logfont): Initialize a logfont with the
+	variable in the local scope.
+	(mw32_default_logical_font_loader): Don't try `courier new' and
+	`FixedSys'.
+	(mw32font_set_frame_ime_font_by_llogfont): Call
+	mw32_initialize_default_logfont().
+
+2004-07-02  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* coding.c (find_safe_codings): Undo the last Change.
+	(syms_of_coding): `Qchar_coding_system' has reverted to
+	Emacs-21.1.
+
+2004-06-26  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* coding.c (find_safe_codings): Sync up with Emacs CVS HEAD.
+	(code_convert_region): Suppress compilation warnings.
+
+2004-06-23  Kyotaro HORIGUCHI  <horiguti@meadowy.org>
+
+	* mw32fns.c (mw32_set_frame_ime_font): Accept nil as default
+	font.
+	(mw32_WndProc<WM_EMACS_MODIFY_IME_FONT_PROP>): Use
+	selected_frame but f of main thread as target frame.
+	(Fx_create_frame): Revive ime-font of frame parameter.
+	Use nil as default parameter of ime-font.
+
+	* mw32font.c (mw32font_set_frame_ime_font_by_llogfont): Set
+	fixedsys font when llf is nil. Set logical IME font into frame
+	parameter.
+
+2004-06-20  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* mw32font.c (mw32_default_logical_font_loader): Release resources
+	for a logical font if no suitable font is found.
+	Normalize coding style.
+
+2004-06-19  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* w32proc.c: Normalize coding style.
+
+	* mw32ime.c: Ditto.
+
+	* mw32fns.c: Ditto.
+
+2004-06-18  Masayuki FUJII  <boochang@m4.kcn.ne.jp>
+
+	* w32proc.c (Fw32_get_locale_info): Decode the return value of
+	GetLocaleInfo()
+
+2004-06-13  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* mw32bdf.c: Normalize coding style.
+
+2004-06-13  Masayuki FUJII  <boochang@m4.kcn.ne.jp>
+
+	* mw32bdf.c (mw32_free_bdf_font): Unmap `fontp->font' instead of
+	`fontp->hfilemap'.
+
+2004-06-12  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* xdisp.c (window_box_height): Ensure that the window height
+	should be greater than 0.
+
+	* eval.c (Fsignal): Unblock the input if the current thread has
+	blocked it.
+
+2004-06-09  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* mw32term.c (mw32_message_loop): Clear last_mouse_motion_frame
+	when either WM_NCMOUSEMOVE or WM_MOUSELEAVE is received.
+
+2004-06-07  Masayuki FUJII  <boochang@m4.kcn.ne.jp>
+
+	* mw32fns.c (file_dialog_callback): Alter the behaviour of the
+	dialog even when the system has finished arranging the controls.
+	(Fmw32_file_dialog): Ditto.
+	Use the dialog even if default_file_name is a directory.
+
+2004-06-05  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* Merge changes from 2.00 branch.
+
+2004-06-05  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* mw32font.c (mw32_glyph_metric): Restore the hdc when
+	GetCharABCWidths() fails.
+
+2004-06-03  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* mw32font.c (mw32_glyph_metric): Return an invalid character
+	metric when GetCharABCWidths() fails.
+
+2004-06-01  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* w32.c (init_w32system): Don't use w32_mule_clipboard_format to
+	encode and decode clipboard string properly.
+
+2004-05-31  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* mw32clpbd.c (Fw32_get_clipboard_data): Ignore
+	mw32_mule_clipboard_format if the coding-system is specified.
+
+2004-05-30  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* mw32term.c: Normalize coding storing.
+
+	* mw32font.c (mw32_set_windows_logical_font): Free the memory
+	block for mw32_windows_font * when GetTextMetrics() fails.
+
+2004-05-30  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* mw32clpbd.c (Fw32_set_clipboard_data): Allocate a memory block
+	for storing information about compositions.
+
+2004-05-28  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* mw32font.c: Normalize coding style.
+
+2004-05-27  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* mw32font.c (mw32_glyph_metric): Handle errors from
+	GetCharABCWidths().
+
+2004-05-25  Masayuki FUJII  <boochang@m4.kcn.ne.jp>
+
+	* mw32menu.c (name_is_separator): New function imported from
+	w32menu.c.
+	(add_menu_item): Detect a separator by calling name_is_separator.
+
+2004-05-25  Kyotaro HORIGUCHI  <horiguti@meadowy.org>
+
+	* mw32fns.c (imagemagick_read_color_table): Correct buffer
+	size to allocate not to overrun the area.
+
+2004-05-23  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* mw32fns.c: Normalize coding style.
+
+2004-05-22  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* mw32font.c (mw32_set_layout): Remove workaround for the Mingw
+	environment.
+
+	* mw32fns.c (color_radix_change): Normalize coding style.
+	(parse_XPM_color_symbols): Check name and color strictly.
+	(define_imagemagick_type): Cast the argument to `void **' to
+	suppress compilation warning.
+	(XPM_read_blob_to_string): Modify the expression of memory size to
+	allocate.
+	(XPM_read_image): Use macro instead of magic number.
+
+2004-05-22  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* alloc.c (pure_alloc): Sync up with Emacs-21.3.50.
+
+2004-05-17  Kyotaro HORIGUCHI  <horiguti@meadowy.org>
+
+	* mw32term.c (mw32i_update_window_begin): Totally reconstructed
+	system caret handling.
+	(mw32i_update_window_end): Ditto.
+	(mw32_expose_frame): Ditto.
+	(anticipate_overwrite_caret): Ditto.
+	(mw32_draw_caret_cursor): Ditto.
+	(mw32_draw_phys_cursor_glyph): Ditto.
+	(mw32_erase_phys_cursor): Ditto.
+	(mw32_display_and_set_cursor): Ditto.
+	(mw32_draw_bar_cursor): Use macro to access frame parameter.
+
+	* mw32term.h (frame_caret_state): Change enum items.
+	(MW32_FRAME_CARET_BLOCKED): New macro.
+	(MW32_FRAME_CARET_SHOWN): New macro.
+	(MW32_FRAME_CARET_HEIGHT): New macro.
+	(MW32_FRAME_CARET_ENABLED_P): Removed.
+	(cursor_height): New variable.
+	(cursor_blocked): New variable.
+
+	* mw32fns.c (mw32_set_cursor_height): New function.
+	(Qcursor_height): New symbol.
+	(mw32_frame_parms<cursor-height>): New frame parameter.
+	(mw32_set_cursor_height): New function.
+	(mw32_set_cursor_type): Totally reconstructed system caret
+	handling.
+	(mw32_WndProc<WM_SETFOCUS>): Ditto.
+	(mw32_WndProc<WM_KILLFOCUS>): Ditto.
+	(mw32_WndProc<WM_IME_ENDCOMPOSITION>): Ditto.
+	(mw32_WndProc<WM_EMACS_SETCARET>): Ditto.
+	(Fx_create_frame): Initializing frame parameter cursor-height.
+	(syms_of_mw32fns): Initializing symbol cursor-height.
+	(mw32_create_tip_frame): Remove initialize for Qcursor_type.
+
+2004-05-13  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* xdisp.c (window_box_width): Ensure to avoid negative width.
+
+2004-05-11  Masayuki FUJII  <boochang@m4.kcn.ne.jp>
+
+	* mw32fns.c (pacquire_string_t): New type definition.
+	(pacquire_string): New static variable.
+	(magick_acquire_string): New function.
+	(initialize_imagemagick): Substitute strings replicated with
+	magick_acquire_string().
+
+2004-05-11  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* mw32fns.c (initialize_imagemagick): Purge xstrdup().
+
+2004-05-11  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* mw32fns.c (resolve_imagemagick_api): Correct the function name
+	for prelinquish_magick_memory.
+
+2004-05-11  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* mw32fns.c (IMAGE_MAGICK_REQUIRE_VERSION): Change the supported
+	version of ImageMagick.
+	(pget_magick_list_t): New type definition.
+	(prelinquish_magick_memory_t): Ditto.
+	(pget_magick_list): New static variable.
+	(prelinquish_magick_memory): Ditto.
+	(magick_get_magick_list): New function.
+	(magick_relinquish_magick_memory): Ditto.
+	(define_imagemagick_type): Use magick_get_magick_list() instead of
+	magick_get_magick_info().
+
+	* mw32magick.h: Rewrite for ImageMagick 6.0.1.
+
+2004-05-05  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* mw32term.c (mw32_process_tool_bar_click): New argument,
+	modifiers.
+	(struct mw32_tool_bar_parm): New structure.
+	(mw32_process_main_thread_message): Get a frame and modifiers out
+	of wParm and use them.
+	(mw32_message_loop): Get modifiers and give them the the main
+	thread.
+	Normalize coding style.
+
+2004-04-29  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32term.h (FRAME_HDC_VALID_P): New macro.
+
+	* mw32term.c (mw32_display_and_set_cursor): Check if HDC of the
+	frame is valid.
+
+	* mw32fns.c (mw32m_new_focus_frame): Undo the last change.
+
+2004-04-25  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32fns.c (mw32m_new_focus_frame): Don't call
+	mw32_new_focus_frame() for a null frame.
+	Normalize coding style.
+	
+2004-04-15  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32term.c (mw32_get_ime_font_property): Reset the height
+	property of the IME font regardless of `lf.lfHeight'.
+
+2004-04-09  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32term.c (get_face_height): New function to obtain height
+	property out of a face or a list of faces.
+	(mw32_get_ime_font_property): Call get_face_height().
+
+2004-03-21  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* xdisp.c (try_window): Sync up with Emacs-21.3.50.
+	(display_line): Ditto.
+
+2004-03-09  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32term.h (WM_EMACS_GET_IME_FONT_PROP): New define.
+	(WM_EMACS_MODIFY_IME_FONT_PROP): Ditto.
+
+	* mw32term.c (mw32_get_ime_font_property): New function.
+	(mw32_process_main_thread_message<WM_EMACS_GET_IME_FONT_PROP>):
+	New message handling.
+
+	* mw32fns.c (mw32_WndProc<WM_IME_STARTCOMPOSITION>): Delegate the
+	main thread to derive a face under the cursor.
+	(mw32_WndProc<WM_EMACS_MODIFY_IME_FONT_PROP>): New message
+	handling.
+
+2004-03-03  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32term.h (struct mw32_output): New member `ime_logfont'.
+
+	* mw32font.h (mw32_initialize_default_logfont): New declaration.
+
+	* mw32font.c (mw32_initialize_default_logfont): New function.
+
+	* mw32fns.c (mw32_WndProc<WM_IME_STARTCOMPOSITION>): Scale font
+	size for IME.
+	(mw32_WndProc<WM_MULE_IMM_SET_COMPOSITION_FONT>): Register the
+	logfont for the later use.
+	(Fx_create_frame): Initialize the logfont for IME.
+
+2004-02-21  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32font.c (default_logfont_courier_new): New variable.
+	(default_logfont_fixed_sys): Renamed from default_logfont.
+	(mw32_convert_lface_to_LOGFONT): Don't initialize plogf.
+	(mw32_default_logical_font_loader): First try `courier new' and
+	next try `FixedSys'.
+
+2004-02-17  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* emacs.c (main): Don't call init_syntax_once() when Emacs has
+	already initialized.
+
+2004-01-22  Hideyuki SHIRAI  <shirai@meadowy.org>
+
+	* fileio.c (Fcopy_file): Ensure file is writable while its
+	modified time is set.
+
+2004-01-09  Kyotaro HORIGUCHI  <horiguti@meadowy.org>
+
+	* mw32font (mw32_set_encoding_to_lf): set font_unit_byte to 2
+	when encoding.type is ENCODIF_SHIFTJIS.
+
+2004-01-08  Kyotaro HORIGUCHI  <horiguti@meadowy.org>
+
+	* mw32term (expose_frame): Erase system caret before updating
+	frame. This procedure is moved from window.c (delete_window)
+	into more appropriate place to cover the other situations.
+
+	* window.c (delete_window): Ditto.
+
+2004-01-07  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32fns.c (load_in_memory_image): Invert pixel values of bitmap.
+
+2004-01-03  MIYASHITA Hisashi  <himi@meadowy.org>
+
+	* mw32term.h (mw32_output<frame_change_state>):
+	Redefined it as char.
+	(mw32_output<ime_composition_state>): Ditto.
+	(mw32_output<wait_for_wm>): Removed.
+
+	* mw32fns.c (Qwait_for_wm): Removed.  It has not been used.
+	(Fx_create_frame): Don't touch waitForWM property.
+	(syms_of_mw32fns): Don't initialize Qwait_for_wm.
+
+2004-01-03  MIYASHITA Hisashi  <himi@meadowy.org>
+
+	* mw32fns.c (mw32_WndProc<WM_IME_STARTCOMPOSITION>):
+	Set ime_composition_state.
+	(mw32_WndProc<WM_IME_ENDCOMPOSITION>): Reset ime_composition_state.
+
+	* mw32term.c (mw32_display_and_set_cursor): Update IME composition
+	window unless ime_composition_state is zero.
+
+	* mw32term.h (mw32_output<ime_composition_state>): New member.
+
+2004-01-02  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* makefile.meadow.w32-in (bootstrap-temacs): Increase
+	PDUMP_OBJECT_ARRAY_SIZE up to 203622.
+
+2003-12-29  MIYASHITA Hisashi  <himi@li18nux.org>
+
+	* mw32fns.c (mw32_WndProc<WM_IME_STARTCOMPOSITION>):
+	Update the IME composition window position.
+
+	* mw32term.c (mw32_display_and_set_cursor): Disabled because
+	eager IME composition window position update is not used.
+
+2003-12-29  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* Sync up with Emacs-21.3.
+
+2003-12-28  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* Sync up with Emacs-21.2.
+
+2003-12-26  MIYASHITA Hisashi  <himi@meadowy.org>
+
+	* mw32term.c (mw32_handle_tool_bar_click): That was removed because
+	tool bar event processing was delegated to the main thread so that
+	mw32_process_tool_bar_click() deal with it.
+	(mw32_process_tool_bar_click): New function.
+	(mw32_process_main_thread_message): Call mw32_process_tool_bar_click()
+	when WM_EMACS_TOOL_BAR_UP/DOWN message comes.
+	(mw32_message_loop): Post WM_EMACS_TOOL_BAR_UP/DOWN if "window" is a
+	tool bar window.
+
+	* mw32term.h (WM_EMACS_SHOW_MOUSE_FACE): Removed.
+	(WM_EMACS_TOOL_BAR_UP, WM_EMACS_TOOL_BAR_DOWN): New macros.
+
+2003-12-25  MIYASHITA Hisashi  <himi@meadowy.org>
+
+	* mw32term.c (mw32_handle_tool_bar_click): Don't call show_mouse_face() directly.
+	Post WM_EMACS_SHOW_MOUSE_FACE instead.
+	(mw32_process_main_thread_message): New function.
+	(note_sync_event): Call mw32_process_main_thread_message(), but it may be
+	moved in MW32_read_socket later.
+
+	* mw32term.h (w32_create_frame_window): Removed the declaration since
+	it isn't used.
+	(mw32_process_main_thread_message): New declaration.
+	(WM_EMACS_NOTE_MOUSE_MOVEMENT, WM_EMACS_SHOW_MOUSE_FACE): New internal
+	windows messages.
+	(WAIT_REPLY_MESSAGE): Use mw32_process_main_thread_message().
+
+2003-12-24  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32fns.c: Suppress compilation warning.
+	Normalize coding style.
+	Don't use deprecated defines of ImageMagick.
+
+	* mw32magick.h: Remove deprecated defines.
+
+2003-12-23  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* w32term.h: Don't define macros for font operation.
+
+	* xfaces.c (xlfd_point_size): Suppress compilation warning.
+	(pixel_point_size): Ditto.
+	(cmp_font_names): Ditto.
+	(merge_face_heights): Ditto.
+	(merge_face_heights): Ditto.
+	(build_scalable_font_name): Ditto.
+
+	* xdisp.c (handle_single_display_prop): Ditto.
+	(handle_single_display_prop): Ditto.
+	(resize_mini_window): Ditto.
+	(try_scrolling): Ditto.
+	(try_scrolling): Ditto.
+
+	* window.c (Fset_window_vscroll): Ditto.
+
+	* w32.c (getwd): Ditto.
+	(gettimeofday): Ditto.
+	(open_unc_volume): Ditto.
+	(unc_volume_file_attributes): Ditto.
+
+	* syntax.c (scan_lists): Ditto.
+
+	* strftime.c (my_strftime): Ditto.
+
+	* s/ms-w32.h (warning): Ditto.
+
+	* regex.c: Ditto.
+
+	* keyboard.c (read_char): Ditto.
+
+	* gmalloc.c (register_heapinfo): Ditto.
+	(morecore): Ditto.
+	(_malloc_internal): Ditto.
+	(_free_internal): Ditto.
+
+	* fns.c (maybe_resize_hash_table): Ditto.
+
+	* floatfns.c (Flogb): Ditto.
+
+	* eval.c (internal_catch): Ditto.
+	(internal_condition_case): Ditto.
+	(internal_condition_case_1): Ditto.
+	(internal_condition_case_2): Ditto.
+	(Fsignal): Ditto.
+
+	* dispnew.c (required_matrix_width): Ditto.
+	(Fsleep_for): Ditto.
+	(Fsit_for): Ditto.
+
+	* composite.c (get_composition_id): Ditto.
+
+	* coding.c (code_convert_region): Ditto.
+
+	* charset.h (CHAR_STRING): Ditto.
+
+	* charset.c (Fmake_char_internal): Ditto.
+
+2003-12-01  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32term.c (note_mouse_movement): Remove redundant expressions.
+
+2003-12-01  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32term.c (note_mouse_movement): Remove redundant expressions.
+	(update_mouse_cursor): Validate last_mouse_movement_time.
+	(x_destroy_window): Invalidate last_mouse_motion_frame.
+
+2003-11-29  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32fns.c (imagemagick_read_color_table): Normalized coding
+	style.
+	(imagimagick_get_mono_bmpdata): Ditto
+	(get_foreground_and_background_color): Determine the pallets of fg
+	and bg according to their value.
+	(get_foreground_and_background_color): Normalized coding style.
+	(imagemagick_load_image_data): Don't swap fg and bg.
+
+2003-11-24  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* fns.c (Fstring_to_multibyte): Compensate CHECK_STRING() for the
+	second argument.
+
+2003-11-22  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* lisp.h (SREF): New macro from Emacs-21.3.50.
+	(SSET): Ditto.
+	(SDATA): Ditto.
+	(SCHARS): Ditto.
+	(SBYTES): Ditto.
+	(STRING_SET_CHARS): Ditto.
+	(STRING_COPYIN): Ditto.
+
+	* process.c (read_process_output): Use Fstring_to_multibyte()
+	instead of Fstring_as_multibyte().
+
+	* fns.c (string_to_multibyte): New function from Emacs-21.3.50.
+	(Fstring_to_multibyte): Ditto.
+
+2003-11-07  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* process.c (read_process_output): Sync up with Emacs-21.3.50.
+
+2003-10-22  KOSEKI Yoshinori  <kose@meadowy.org>
+
+	* mw32term.c (internal_bitmap_array): Fix. Indindicate
+	indicate-empty-lines at left side.
+
+2003-10-18  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* s/ms-w32.h (fileno): Undefine for Mingw-3.2 or any later
+	version. Thanks to Masayuki FUJII (boochang@m4.kcn.ne.jp).
+	(_MT): Define to avoid the bug of Mingw-3.2. Thanks to Masayuki
+	FUJII (boochang@m4.kcn.ne.jp).
+
+2003-10-15  Richard M. Stallman  <rms@gnu.org>
+
+	* regex.c (MAX_BUF_SIZE): Reduce to 2**15.
+	(print_partial_compiled_pattern): Replace assert with a printout.
+	(skip_noops, mutually_exclusive_p): Change args, values to re_char *.
+
+2003-10-14  Koichiro Ohba  <koichiro@meadowy.org>
+
+	* mw32reg.c (Fmw32_registry_list_keys): fix typo doc-string.
+	Check if key is string.  Thanks to Masayuki FUJII (boochang@m4.kcn.ne.jp).
+	(Fmw32_registry_list_values): Ditto.
+	(registry_to_string_list): use registry_to_expand_string().
+	(registry_to_expand_string): Added new function.
+
+2003-10-04  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32fns.c (file_dialog_callback): New function imported from
+	Emacs-21.3.50.
+	(Fmw32_file_dialog): Sync up with Emacs-21.3.50. Now selecting a
+	directory is allowed.
+
+2003-10-04  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32fns.c (Ffile_system_info): New function imported from
+	w32fns.c.
+	(syms_of_mw32fns): Define the above function.
+
+2003-10-04  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32fns.c (imagemagick_load): Take account of `:index' property
+	only if it is specified.
+
+2003-10-04  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32fns.c (initialze_multi_monitor_api): New function.
+	(get_working_area_size): Ditto.
+	(mw32_WndProc): Derive the size of working area with
+	get_working_area_size().
+	(init_mw32fns): Call initialze_multi_monitor_api().
+
+2003-10-02  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32fns.c (imagemagick_load): Take account of `:index' property.
+
+2003-09-28  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* xdisp.c (try_scrolling): Call line_bottom_y() to derive the
+	bottom y-position of the line.
+
+2003-09-27  MIYASHITA Hisashi  <himi@meadowy.org>
+
+	* mw32term.c (TrackMouseEvent_Proc): Correct the declaration.
+
+2003-09-17  MIYASHITA Hisashi  <himi@meadowy.org>
+
+	* mw32term.c (keymodifier): Set the MSB of keymodifier[0x0d] to 1.
+
+2003-09-06  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32term.c (note_mouse_highlight): Clear the mouse face if the
+	mouse cursor is off.  Thanks to
+	Masayuki FUJII (boochang@m4.kcn.ne.jp).
+	(mw32_message_loop): Ditto.
+
+2003-09-06  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32term.c (note_sync_event): Don't call
+	kbd_buffer_store_help_event() directly but use gen_help_event()
+	and kbd_buffer_store_event().
+	Simplify redundant expressions.
+
+2003-09-02  MIYASHITA Hisashi  <himi@meadowy.org>
+
+	* mw32font.c (default_logfont): Set the lfCharSet to DEFAULT_CHARSET.
+	(mw32_convert_lface_to_LOGFONT): If c is less than 0, set lfCharSet
+	to ANSI_CHARSET.
+
+2003-08-28  MIYASHITA Hisashi  <himi@li18nux.org>
+
+	* mw32font.c (mw32_face_family_unspecified_p):
+	Bug fix.  Must compare name[0] with a char.
+
+	* mw32font.c (mw32_face_family_unspecified_p): New function.
+	(mw32_convert_lface_to_LOGFONT): Only when
+	mw32_face_family_unspecified_p returns false, override
+	the family attribute to lfFaceName.
+
+2003-08-26  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32fns.c (Qwm_syscommand): New variable.
+	(Qsc_keymenu): Ditto.
+	(Qsc_monitorpower): Ditto.
+	(Qsc_tasklist): Ditto.
+	(Qsc_maximize): Ditto.
+	(Qsc_restore): Ditto.
+	(Qlow_power): Ditto.
+	(Qshut_off): Ditto.
+	(Fw32_access_windows_intrinsic_facility): New function.
+	(syms_of_mw32fns): Initialize symbols for
+	Fw32_access_windows_intrinsic_facility().
+
+2003-08-24  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32term.c (note_mouse_movement): Don't suspend the main thread,
+	because this function is called in the thread.
+	(note_sync_event): New function.
+	(mw32_message_loop): Don't call note_mouse_movement() but set
+	last_mouse_motion_frame.
+	Don't handle help echo.
+
+	* keyboard.c (kbd_buffer_get_event): Activate note_sync_event().
+	(gobble_input): Call note_sync_event().
+
+2003-08-16  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32term.c (mw32_draw_relief_rect): Draw a relief rectangle with
+	Polygon() instead of Ractangle().
+
+2003-08-16  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32term.c (mw32_draw_glyph_string_foreground): Draw a text
+	inside its relief box.
+	(mw32_draw_relief_rect): Draw a relief rectangle which is consist
+	of a number of lines with Ractangle(). These coded are imported
+	from w32term.c.
+	(mw32_draw_glyph_string): Don't call
+	mw32_set_glyph_string_clipping() more than once.
+	(mw32_fill_glyph_string): Strip off extra width of a box line.
+	(mw32_setup_default_hdc): Normalized coding style.
+	(mw32_fill_area_pix): Ditto.
+	(mw32_draw_glyph_string_background): Ditto.
+	(mw32_draw_composite_glyph_string_foreground): Ditto.
+	(mw32_draw_box_rect): Ditto.
+	(mw32_draw_glyph_string): Ditto.
+	(mw32_expose_frame): Ditto.
+
+	* dispextern.h (struct face): New member variable
+	`colors_copied_bitwise_p'.
+
+	* xfaces.c (free_face_colors): Don't free face colors if
+	`colors_copied_bitwise_p' is t.
+
+2003-08-03  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* buffer.c (Fother_buffer): Check if XBUFFER (buf)->name is nil.
+
+2003-07-30  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32font.c (mw32_compute_min_glyph_bounds): Guarantee that
+	smallest_char_width and smallest_font_height should be greater
+	than 0.
+
+	* mw32term.c (mw32_message_loop): Normalized coding style.
+
+2003-07-27  Kyotaro HORIGUCHI  <horiguti@meadowy.org>
+
+	* window.c (delete_window) Explicitly erase the cursor on
+	deleting window.
+
+2003-07-10  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32term.c (mw32_draw_image_foreground) Clip image regions not
+	with Emacs but with Windows.
+	Normalized coding style.
+
+2003-07-08  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* w32.c (sys_pipe): Limit the number of file descriptors to less
+	than MAXDESC.
+
+	* mw32fns.c (imagemagick_valid_object_p): Fix a typo.
+
+2003-07-05  Kyotaro HORIGUCHI  <horiguti@meadowy.org>
+
+	* mw32term.c (note_mouse_highlight_handler): New signal handler for
+	get-text-property called in note_mouse_highlight.
+	(note_mouse_highlight): Enclose get-text-property by gcondition-case
+	to catch signal.
+
+2003-06-29  MIYASHITA Hisashi  <himi@meadowy.org>
+
+	* mw32term.c (mw32_display_and_set_cursor): Made it
+	not directly set MW32_FRAME_CARET_STATE(), call
+	mw32_set_caret() instead.
+
+2003-06-28  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32term.c (mw32i_write_glyphs): Revive the deleted codes which
+	invalidate old phys cursor to clear garbage under it.
+
+2003-06-28  Kyotaro HORIGUCHI  <horiguti@meadowy.org>
+
+	* xdisp.c (redisplay_window): Current matrix must be up to
+	date when calling try_window_id.
+
+2003-06-28  Kyotaro HORIGUCHI  <horiguti@meadowy.org>
+
+	* mw32term.h: (enum frame_caret_state):
+	Add comment for caret type macros.
+	(CARET_CURSOR_P): Fix condition not to be discarded by optimization.
+
+	* mw32term.c: Surely disable caret when non-caret cursor is selected.
+
+	* mw32fns.c: Ditto.
+
+2003-06-28  Kyotaro HORIGUCHI  <horiguti@meadowy.org>
+
+	* mw32term.c: Change to enable compiling by VC7.
+
+	* mw32term.h: Ditto.
+
+2003-06-14  MIYASHITA Hisashi  <himi@meadowy.org>
+
+	* mw32fns.c (mw32_WndProc<WM_SETFOCUS>)
+	(mw32_WndProc<WM_KILLFOCUS>): Show and hide caret if required.
+	(mw32_WndProc<WM_EMACS_SETCARET>): Set a caret appropriately.
+
+	* mw32sync.h (block_input_ownthread): New declaration.
+	(mw32_special_input): Removed.
+	(W32_BLOCK_INPUT): Set block_input_ownthread.
+	(W32_UNBLOCK_INPUT): Clear block_input_ownthread.
+	(W32_SELF_INPUT_BLOCKED_P): New macro.
+
+	* mw32term.h (enum text_cursor_kinds): Assign CARET_CURSOR from 0x100.
+	(CARET_CURSOR_P): New macro.
+	(enum frame_caret_state): New enum.
+	(MW32_FRAME_CARET_STATE, MW32_FRAME_CARET_WIDTH) 
+	(MW32_FRAME_CARET_BITMAP, MW32_FRAME_CARET_ENABLED_P): New macros.
+	(struct mw32_output): Added a new member, caret_bitmap.
+	Removed current_cursor.
+
+	* mw32term.c (mw32_special_input): Removed.  It has not been used.
+	(block_input_ownthread): New variable.
+	(notice_overwritten_cursor): Imported it from xterm.c.
+	(anticipate_overwrite_caret): New function.
+	(restore_overwritten_caret): New function.
+	(mw32_fill_area_pix): Removed the part that manipulate a caret.
+	(MW32_update_begin): Ditto.
+	(mw32_set_caret): New function.
+	(mw32i_write_glyphs): Call anticipate_overwrite_caret before drawing,
+	and also call notice_overwritten_cursor and restore_overwritten_caret
+	after drawing.
+	(mw32i_insert_glyphs): Likewise.
+	(mw32i_clear_end_of_line): Likewise, but notice_overwritten_cursor
+	beforehand because we know it before actually drawing.
+	(mw32_message_loop): Removed the part on mw32_special_input.
+	(mw32_compute_cursor_width): New function.
+	(mw32_draw_hollow_cursor): Use mw32_compute_cursor_width().
+	(mw32_draw_caret_cursor): New function.
+	(mw32_erase_phys_cursor): If the current cursor is a caret, hide it.
+	(mw32_display_and_set_cursor): Call mw32_erase_phys_cursor whenever the
+	current cursor is a caret, and acll mw32_draw_caret_cursor().
+
+2003-06-08  KOSEKI Yoshinori  <kose@meadowy.org>
+
+	* mw32font.c: Fixed typo.
+
+2003-06-08  MIYASHITA Hisashi  <himi@meadowy.org>
+
+	* mw32font.c: Normalized coding style.
+
+2003-06-07  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32term.c (x_set_window_size): Set the frame size with
+	SetWindowPlacement() for iconic or zoomed frame.  Thanks to
+	Masayuki FUJII (boochang@m4.kcn.ne.jp).
+
+	* mw32fns.c (mw32_WndProc): Rearrange the frame size, which should
+	be smaller than the display size.
+
+2003-05-29  MIYASHITA Hisashi  <himi@meadowy.org>
+
+	* mw32font.c (mw32_load_function_spec): When it's not in the main
+	thread, return NULL without calling an elisp function.
+
+2003-05-28  MIYASHITA Hisashi  <himi@meadowy.org>
+
+	* mw32fns.c: Deleted needless codes.  (Note that these functions are
+	implimented with elisp based emulation functions.)
+
+	* mw32term.c (Fmw32_get_device_capability): New function.
+	(syms_of_mw32term): do defsubr() for mw32-get-device-capability.
+
+2003-05-27  ABE Yasushi  <yas@meadowy.org>
+
+	* mw32font.c (mw32_check_font_request_alist): Fix typo.
+
+2003-05-25  MIYASHITA Hisashi  <himi@meadowy.org>
+
+	* mw32font.c: Defined Qspec and Qstrict.  Removed Qstrict_spec.
+	(mw32_load_strict_spec, mw32_load_function_spec): New functions.
+	(mw32_spec_base_font_loader): New function.  Substituded it for
+	mw32_strict_logical_font_loader and mw32_elisp_logical_font_loader.
+	(mw32_check_font_option): Separated checking option part from
+	mw32_check_font_request_alist().
+	(mw32_check_font_request_alist): Made it adapt to the new font "spec"
+	format.  Furthermore, check logfont lisp object strictly.
+	(reinit_syms_of_mw32font): Added mw32_spec_base_font_loader.
+	Removed mw32_strict_logical_font_loader and
+	mw32_elisp_logical_font_loader.
+	(syms_of_mw32font): Initialize Qspec and Qstrict.
+	Removed the code on Qstrict_spec.
+
+	* xdisp.c (display_mode_element): When getting charpos,
+	check if elt is a multibyte string.
+
+	* window.c (Fset_window_configuration): Add comments.
+
+2003-05-20  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32term.c (mw32i_scroll_run): Delete GDI objects.
+
+2003-05-07  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32mem.c (mw32_start): Set _CRT_fmode _O_BINARY for
+	Mingw-runtime-3.0 and the later versions. Thanks to Masayuki FUJII
+	(boochang@m4.kcn.ne.jp).
+
+2003-04-28  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32term.c (mw32_message_loop): Remove a garbage.
+
+2003-04-10  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32term.c (mw32_draw_glyphs): Don't call
+	notice_overwritten_cursor().
+	Simplify redundant expressions.
+	(mw32_draw_hollow_cursor): Enlarge a hollow box cursor.
+
+2003-04-03  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* window.c (Fset_window_configuration): Unblock input around
+	 Fselect_window() to prevent deadlock. It may cause deadlock to
+	 call a function which handles a message in a critical section.
+
+2003-03-24  MIYASHITA Hisashi  <himi@meadowy.org>
+
+	* mw32font.c (mw32_logfont_equal): Check lfCharSet as well.
+	(mw32_set_encoding_to_lf): When encoding is Q2_byte_set_msb,
+	set ENCODING_BYTE2MSB11 instead.
+
+	* mw32font.h (MW32EncodingType): Remove ENCODING_BYTE2MSB1 and
+	ENCODING_BYTE2LSB1.  Define ENCODING_BYTE2MSB11 instead.
+
+	* mw32term.c (mw32_encode_char): Get encoding from MW32LogicalFont.
+	When encoding is ENCODING_BYTE2MSB11, set the msb of both bytes.
+	Ignore charset_dimension when encoding is ENCODING_BYTE1MSB1 or
+	ENCODING_BYTE2MSB11.
+
+2003-03-11  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32term.c (mw32_draw_glyphs): Change the condition to correct
+	the row position. Sync up with Emacs-21.3.50.
+	(mw32_draw_glyphs): Call notice_overwritten_cursor().
+	(mw32i_write_glyphs): Invalidate old phys cursor if the glyph at
+	its hpos is redrawn. Sync up with Emacs-21.3.50.
+	(mw32i_insert_glyphs): Don't call notice_overwritten_cursor().
+	(notice_overwritten_cursor): Sync up with Emacs-21.3.50.
+	(mw32_erase_phys_cursor): If row is completely invisible, don't
+	 attempt to delete a cursor which isn't there. Sync up with
+	 Emacs-21.3.50.
+
+2003-03-09  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32font.c (mw32_check_font_request_alist): Parse and check a
+	font request alist.
+
+2003-03-09  MIYASHITA Hisashi  <himi@meadowy.org>
+
+	* mw32font.c (Vmw32_windows_font_charset_database): Removed.
+	(mw32_windows_set_logical_font_from_char): Now it takes an Emacs char
+	not a charset of Windows LOGFONT.
+	(mw32_set_windows_logical_font): It takes an Emacs char as well, and
+	pass it to mw32_windows_set_logical_font_from_char.
+	(mw32_load_lf_from_lisp_object): Likewise, but pass it to
+	mw32_set_windows_logical_font.
+	(mw32_default_logical_font_loader): Ditto.
+	(mw32_convert_lface_to_LOGFONT): Use XCAR() and XCDR(), and if the
+	data is invalid, return 0.
+	(mw32_strict_logical_font_loader): Pass "c" to
+	mw32_load_lf_from_lisp_object.
+	(mw32_elisp_logical_font_loader): Ditto.
+	(syms_of_mw32font): Remove Vmw32_windows_font_charset_database.
+
+	* mw32fns.c (Fmw32_file_dialog): Almost totally rewrite
+	how to handle filename, i.e., manipulate filename with Emacs Lisp
+	functions, then finally encode it to a system dependent text.
+	And encode "prompt" as well.
+
+2003-03-08  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32term.c (mw32i_scroll_run): Don't set the frame garbaged,
+	because this causes unexpected "End of buffer".
+
+2003-03-08  MIYASHITA Hisashi  <himi@meadowy.org>
+
+	* mw32font.c (mw32_set_encoding_byte_from_charset):
+	When c < 0, regard it as an ascii, so set font_unit_byte to 1.
+	(mw32_elisp_logical_font_loader): Return immediately whenever it
+	is not in the main thread.
+
+2003-03-08  MIYASHITA Hisashi  <himi@meadowy.org>
+
+	* mw32font.c (Qencoding_type, Qencoder, Qdim): Removed.
+	(Qencoding, Qfont_unit_byte, Q1_byte_set_msb)
+	(Q2_byte_set_msb, Qunicode, Qshift_jis): New symbols.
+	(mw32_windows_set_logical_font_from_charset): Call mw32_set_encoding_to_lf()
+	to initialize MW32Encoding.
+	(mw32_glyph_metric): Don't examine dim.  Check font_unit_byte instead.
+	(mw32_bdffont_textout): Use font_unit_byte instead of dim.
+	(mw32_set_bdf_font): Do nothing with dim, encoding_type, nor ccl_method.
+	(set_font_info): When setting font_encoder, use MW32FontEncoding instead of
+	encoding_type and ccl_method.
+	(mw32_find_ccl_program): Likewise.
+	(free_font_info): Removed.
+	(mw32_valid_encoding_p): New function.
+	(mw32_set_encoding_to_lf): New function.
+	(mw32_set_encoding_byte_from_charset): New function.
+	(mw32_default_hash_function): Don't use the removed members, encoding_type,
+	ccl_method, nor dim.
+	(mw32_lf_equal): Ditto.
+	(mw32_load_lf): Finally canonicalize encoding info. by calling
+	mw32_set_encoding_byte_from_charset.
+	(mw32_delete_logical_font): Free ccl_method if possible.
+	(mw32_set_option_alist_to_logical_font): Set encoding.  Remove the codes on
+	encoding_type, ccl_method, and dim.
+	(mw32_check_font_request_alist): Check a value on Qencoding, and don't
+	check Qencoding_type, Qencoder, nor Qdim.
+	(syms_of_mw32font): Init Qencoding, Qfont_unit_byte, Q1_byte_set_msb,
+	Q2_byte_set_msb, Qunicode, and Qshift_jis.  Remove the codes on Qencoding_type,
+	Qencoder, nor Qdim.
+
+	* mw32font.h (ENCODING_DIMENSION, ENCODING_BYTE1MSB1)
+	(ENCODING_BYTE2MSB1, ENCODING_BYTE2LSB1)
+	(ENCODING_SHIFTJIS, ENCODING_UNICODE): Moved to a new enumerator
+	named MW32EncodingType.
+	(ENCODING_EXTERNAL): New constant.
+	(INITIALIZE_CCL_ID): Removed.
+	(MW32EncodingType): New enumerator.
+	(MW32Encoding): New structure.
+	(MW32LogicalFont): Remove encoding_type, ccl_method, and dim.
+	Introduce encoding instead.
+	(MW32_FONT_FROM_FONT_INFO): New macro.
+
+	* mw32term.c (mw32_encode_char): len is taken from
+	MW32LogicalFont.
+
+
+2003-03-07  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32term.c (mw32i_scroll_run): Sync up with Emacs-21.3.50.
+
+	* mw32term.h: Undefine VK_KANA because Cygwin header file defines
+	a wrong virtual key code as VK_KANA.
+
+2003-03-06  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32term.c (mw32_draw_vertical_border): Correct area of a
+	vertical window border.
+
+2003-03-04  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32term.c (MW32_set_vertical_scroll_bar): Clear under the space
+	reserved for scroll bars on the frame. These codes were imported
+	from Emacs-21.2.
+	(mw32_draw_glyphs): Notice when the text cursor of window W has
+	been completely overwritten by a drawing operation.
+	(mw32_draw_phys_cursor_glyph): Keep w->phys_cursor_on_p and
+	restore it after mw32_draw_glyphs().
+
+2003-03-02  MIYASHITA Hisashi  <himi@meadowy.org>
+
+	* mw32mci.c (Fmw32_mci_send_string): Don't use ENCODE_SYSTEM
+	and DECODE_SYSTEM.  Use mw32_encode/decode_lispy_string()
+	instead.
+	(Fmw32_mci_get_error_string): Likewise.
+
+	* mw32term.c (mw32_message_loop<MM_MCINOTIFY>): Simplify redundant
+	expressions, and avoid using kbd_buffer_store_event().
+
+	* mw32fns.c (mw32_encode_lispy_string)
+	(mw32_decode_lispy_string): New functions.
+
+	* mw32term.h (mw32_encode_lispy_string, mw32_delete_lispy_string):
+	New function declaration.
+
+2003-03-02  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* window.c (window_scroll_pixel_based): Break while loop, if
+	move_it_by_lines() cannot move the cursor.  Sync up with
+	Emacs-21.3.50.
+
+2003-03-01  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32mci.c (Fmw32_mci_send_string): Encode a command string with
+	w32-system-coding-system.
+
+2003-02-26  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* termhooks.h (enum event_kind): Add mw32_mci_event.
+
+	* mw32term.c (mw32_message_loop): Generate an Emacs event when
+	MM_MCINOTIFY is notified.
+
+	* mw32mci.h: New file.
+
+	* mw32mci.c (Fmw32_mci_send_string): New function.
+	(Fmw32_mci_get_error_string): Ditto.
+	(syms_of_mw32mci): Ditto.
+	(init_mw32mci): Ditto.
+	(Qmw32_mci_notify): New lisp object.	
+
+	* makefile.meadow.w32-in (FULL_LINK_FLAGS): Append mw32mci.c.
+	Update dependancies.
+
+	* makefile.nt (LINK_FLAGS): Ditto.
+	Update dependancies.
+
+	* keyboard.c (make_lispy_event): Convert mw32_mci_event to a lisp
+	object.
+	(make_lispy_event): Modify the lisp object correspond to
+	mw32_mci_event.
+
+	* emacs.c (main): Add initialization of mw32mci.
+
+2003-02-24  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32fns.c (Fmw32_file_dialog): encode a default filename for a
+	dialog box.
+
+2003-02-24  MIYASHITA Hisashi  <himi@meadowy.org>
+
+	* mw32font.c (mw32_wf_allocator_reserve, mw32_wf_allocator_cancel):
+	Revoked.
+	(mw32_set_windows_logical_font): 
+	Cancel to use the above allocator.  Reverted.
+	(mw32_lf_allocator_reserve, mw32_lf_allocater_cancel): Ditto.
+	(mw32_add_logical_font, mw32_delete_logical_font):
+	Cancel to use the above allocator.  Reverted.
+
+2003-02-22  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32font.c (Qcentering): New variable.
+	(mw32_set_windows_logical_font): Invalidate vertical centering.
+	(mw32_set_bdf_font): Ditto.
+	(set_font_info): Validate vertical centering if the centering flag
+	of the font is true or the font request matches
+	vertical-centering-font-regexp.
+	(mw32_default_hash_function): Take account of `centering'.
+	(mw32_lf_equal): Ditto.
+	(mw32_set_option_alist_to_logical_font): Ditto.
+	(mw32_check_font_request_alist): Ditto.
+	(syms_of_mw32font): Initialize `Qcentering'.
+
+	* mw32font.h (struct MW32LogicalFont): New member variable
+	`centering'.
+
+2003-02-20  MIYASHITA Hisashi  <himi@meadowy.org>
+
+	* mw32fns.c (initialize_imagemagick): When magick_get_magick_info("XPM")
+	returns NULL, immediately return.
+	(initialize_imagemagick): Fix coding style and comment.
+
+2003-02-19  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32fns.c (mw32_WndProc): Set async_visible 0 and
+	async_iconified 1 when a frame is iconified.
+	(mw32_destruct_image): Use xfree() instead of free().
+
+2003-02-18  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32font.c (mw32_wf_allocator_reserve): New function.
+	(mw32_wf_allocator_cancel): Ditto.
+	(mw32_set_windows_logical_font): Call mw32_wf_allocator_cancel()
+	instead of xfree().
+	(set_font_info): Allocate heap memory after set_ccl_method()
+	successfully has finished.
+	(mw32_find_ccl_program): Ditto.
+	(mw32_internal_add_font): Allocate memory chunk for pointers to
+	MW32LogicalFont.
+	(mw32_lf_allocator_reserve): New function.
+	(mw32_lf_allocater_cancel): Ditto.
+	(mw32_add_logical_font): Call mw32_lf_allocator_reserve() instead
+	of xmalloc().
+	(mw32_add_logical_font): Expand memory chunk if no space is left.
+	(mw32_delete_logical_font): Call mw32_lf_allocater_cancel()
+	instead of xfree().
+
+	* mw32font.h (struct MW32FontRequest): New member variable.
+
+2003-02-17  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32fns.c (mw32_cross_disabled_image): Restore the GDI object
+	that has been attached to the DC object.
+
+	* mw32font.c (mw32_lf_equal): Compare font requests instead of
+	font infos.
+	(set_font_info): Clear plf->fontip.
+	Free fontp->name and fontp->full_name, if they are not NULL.
+
+	* mw32term.c (mw32_free_frame_resources): Free resources of
+	menubar and faces.
+	(x_destroy_window): Free frame resources before the destruction of
+	a window.
+	(mw32_draw_relief_rect): Restore the GDI object that has been
+	attached to the DC object.
+	(mw32_draw_box_rect): Ditto.
+
+2003-02-14  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32term.c (mw32_destroy_frame_hdc): Clear *pf instead of pf.
+	(mw32_draw_relief_rect): Unify the calls of RestoreDC().
+	(mw32_draw_image_foreground): Narrow the clipping rectangle.
+	Ensure deletion of HDC and HGDIOBJ.
+
+	* mw32font.c (mw32_set_windows_logical_font): Defer initializing
+	message_thread_hdc.
+
+2003-02-13  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32mem.c (mw32_start): Set _CRT_fmode _O_BINARY for
+	Mingw-runtime-2.3 and the later versions.
+
+	* mw32term.c: Include limits.h in the Mingw environment.
+
+2003-02-12  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32font.c (w32_score_logfont): Compare the slant component if
+	the font is not scalable.
+
+	* mw32fns.c (mw32_WndProc): Move the codes that handle
+	WM_MOUSELEAVE from mw32fns.c to mw32term.c
+
+	* mw32term.c (mw32_message_loop): Ditto.
+
+2003-02-08  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32term.h: Add definitions for TRACKMOUSEEVENT.
+
+	* mw32term.c (mw32_message_loop): Import partial codes that handle
+	WM_MOUSELEAVE from emacs-21.3.50.
+
+	* mw32font.c (mw32_bdffont_glyph_metric): Substitute
+	glyph.metric.dwidth for glyph.metric.bbw.
+
+	* mw32fns.c (Fx_show_tip): Don't strip the width of the cursor
+	glyph in the middle of rows.
+	(mw32_WndProc): Import partial codes that handle WM_MOUSEMOVE and
+	WM_MOUSELEAVE from emacs-21.3.50.
+	(reinit_syms_of_mw32fns): Reset track_mouse_window.
+	(init_mw32fns): Initialize track_mouse_event_fn.
+
+2003-02-07  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32term.c (mw32_message_loop): Reset any_help_event_p.
+	(mw32_message_loop): Ditto.
+
+2003-02-05  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32fns.c (x_bitmap_height): Derive Meadow specific
+	display_info.
+	(Fclear_image_cache): Use FRAME_MW32_P() instead of FRAME_X_P().
+
+2003-02-04  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32menu.c (Fx_popup_menu): Extract menu info from the keymap if
+	it is a cons cell.
+	(mw32menu_show): Remove irrelevant flags from uflags.
+
+	* mw32fns.c (mw32_WndProc): Revive the removed codes that handle
+	the WM_MEASUREITEM event.
+	(initialize_imagemagick): Fix comment.
+	(forall_images_in_image_cache): Use FRAME_MW32_P() instead of
+	FRAME_X_P().
+
+2003-01-31  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32fns.c (w32_abort): Exit Meadow only in the Cygwin/Mingw
+	environment. This requires w32_abort() not to return.
+	(Fx_show_tip): Validate the calculation of the row width of text
+	area.
+
+2003-01-30  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32menu.c (Fx_popup_menu): Clean up status of the frame after a
+	popup menu has gone.
+
+	* mw32font.c (mw32_set_windows_logical_font): Defer abolishing
+	release message_thread_hdc that is temporally set.
+
+	* mw32fns.c: Remove irrelevant codes that were import from
+	emacs-21.3.50 
+
+	* mw32term.c (mw32_message_loop): Ditto.
+
+	* mw32magick.h: Fix the comment on the version of ImageMagick.
+
+2003-01-29  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32fns.c (mw32_WndProc): Reset dpyinfo->grabbed after a popup
+	menu goes away.
+
+2003-01-28  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32font.c (mw32_set_windows_logical_font): Setup and release
+	message_thread_hdc of the frame temporally, if it is invalid.
+
+	* mw32term.c (note_mouse_movement): Compare message_thread_hdc and
+	INVALID_HANDLE_VALUE instead of substitution.
+	(note_mouse_movement): Don't setup and release message_thread_hdc
+	of the frame. This is moved to
+	mw32_set_windows_logical_font()@mw32font.c
+	(show_mouse_face): Initialize mhdc with INVALID_HANDLE_VALUE.
+
+2003-01-24  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* makefile.meadow.w32-in: Execute makedepend.pl with -cc option.
+	Refine regular expression for replacement.
+	
+	* mw32term.c (note_mouse_movement): Setup and release
+	message_thread_hdc of the frame temporally, if it is invalid.
+
+2003-01-23  ABE Yasushi  <yas@meadowy.org>
+
+	* mw32fns.c (cross_disabled_images): New Variable.
+	(mw32_cross_disabled_image): New function.
+	(mw32_disable_image): Call mw32_cross_disabled_image().
+
+2003-01-22  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32font.c (mw32_set_layout): Suppress compilation warnings for
+	Cygwin/Mingw environment.
+
+	* mw32fns.c (w32_abort): Ditto.
+	(IMAGE_MAGICK_REQUIRE_VERSION): Change the supported version of
+	ImageMagick.
+	(imagemagick_valid_object_p): Use magick_ping_blob() instead of
+	magick_blob_to_image().
+	(initialize_imagemagick): Use magick_register_magick_info ()
+	instead of hack code.
+
+	* makefile.meadow.w32-in: Ditto.
+
+2003-01-21  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32fns.c (mw32_WndProc): Derive frame position with
+	GetWindowRect() instead of GetClientRect().
+
+2003-01-20  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32term.c (MW32_clear_frame): Clear whole of the frame.
+
+	* mw32fns.c (x_set_tool_bar_lines): The condition to clear the
+	internal border below was changed, because it is not cleared when
+	the tool bar gets larger.
+
+2003-01-19  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* makefile.nt: Update dependencies.
+
+	* makefile.meadow.w32-in (depend): New dependency.
+	Update dependencies.
+
+2003-01-16  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32term.h (WM_EMACS_CREATE_TIP_FRAME): New definitions for
+	tooltip.
+	(WM_EMACS_CREATE_TIP_FRAME_REPLY): Ditto.
+
+	* mw32fns.c (mw32m_create_tip_frame_window): New function.
+	(mw32_WndProc): Don't redraw tooltip with WM_PAINT.
+	(mw32_WndProc): New event handling with WM_EMACS_CREATE_TIP_FRAME.
+	(mw32_create_tip_window): Renamed from my_create_tip_window.
+	(mw32_create_tip_window): Inform the message thread to create a
+	tip window.
+	(Fx_show_tip): Don't ensure tooltip is on top of other topmost
+	windows (eg menus). I think this is irrelevant.
+
+2003-01-15  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32font.c (mw32_set_layout): Suppress meaningless warning.
+
+	* mw32fns.c (XPM_read_blob_to_string): Initialize allocated
+	memory for image data.
+
+2003-01-10  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32fns.c (XPM_read_blob_to_string): Check if *p is not NULL.
+	Because magick_read_blob_string () returns NULL, even if reading
+	blob successfully has finished.
+
+	* mw32term.h: Abolish some definitions for SetWindowLong().
+
+	* mw32fns.c (my_create_tip_window): Don't use SetWindowLong().
+	Currently it is meaningless.
+	(mw32_create_tip_frame): Renamed from x_create_tip_frame().
+	(mw32_create_tip_frame): Derive a tooltip font from `parms'.
+
+2003-01-09  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32menu.c (Fx_popup_menu): Build keymap from menu if (car menu)
+	is a kind of keymap.
+	(Fx_popup_dialog): Import partial code from emacs-21.3.50.
+	(menubar_selection_callback): Free memory used by owner-drawn and
+	help-echo strings. This is imported form emacs-21.3.50.
+	(single_submenu): Encode pane_name. This is imported form
+	emacs-21.3.50.
+	(mw32menu_show): Ditto.
+	(mw32menu_show): Change fuflags for the title of popup menu.
+	(mw32menu_show): Initialize entry.
+
+	* mw32fns.c (mw32_WndProc): Import partial code from
+	emacs-21.3.50, which handles such event as WM_MEASUREITEM and
+	WM_DRAWITEM.
+	(mw32_WndProc): Inform the main thread of
+	WM_MULE_IMM_SET_COMPOSITION_FONT_REPLY message.
+
+2003-01-08  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32fns.c (initialize_imagemagick): Don't use
+	magick_register_magick_info () that may cause a crash.
+
+2003-01-07  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* xdisp.c (x_consider_frame_title): Skip setting the title of the
+	frame, if it is a tool-tip frame.
+
+	* mw32term.h (struct mw32_output): New member variables,
+	menubar_active and menu_command_in_progress.
+	Add some definitions for tool-tip.
+
+	* mw32term.c (note_mouse_highlight): Reset help_echo.
+	(clear_mouse_face): Remove the last change that is moved to
+	mw32_message_loop().
+	(mw32_message_loop): Import partial code from emacs-21.3.50, that
+	handles WM_MOUSEMOVE event for help echo.
+	(mw32_message_loop): Reset dpyinfo->mouse_face_mouse_frame.
+	(mw32_message_loop): Import partial code from emacs-21.3.50, that
+	cancels a help-echo.
+	(mw32_message_loop): Import partial code from emacs-21.3.50, that
+	handles WM_COMMAND event.
+
+	* mw32menu.c (push_menu_item): New arguments, `type', `selected'
+	and `help'.
+	(add_menu_item): New argument, `help'.
+	(add_menu_item): Import partial code from emacs-21.3.50 that
+	handles info of menu items.
+	(single_menu_item): Follow the change of add_menu_item().
+	(list_of_items): Ditto.
+	(Fx_popup_menu): Derive the menu position for tool-bar in the same
+	way as that for menu-bar.
+	(Fx_popup_menu): Discard menu items if current_popup_menu is not
+	NULL.
+	(mw32_menu_display_help): Import whole code from emacs-21.3.50.
+	(mw32_free_submenu_strings): Ditto.
+	(mw32_free_menu_strings): Ditto.
+	(single_submenu): Follow the change of add_menu_item() and
+	add_menu_item().
+	(mw32menu_show): Ditto.
+	(globals_of_w32menu): Import whole code from emacs-21.3.50.
+
+	* mw32fns.c (mw32_WndProc): Import partial code from
+	emacs-21.3.50 that handles some events such as WM_EXITMENULOOP,
+	WM_MENUSELECT, WM_TIMER and WM_EMACS_POPUP_MENU for tool-tip.
+	(my_create_tip_window): Import whole code from emacs-21.3.50.
+	(unwind_create_tip_frame): Ditto.
+	(x_create_tip_frame): Ditto.
+	(compute_tip_xy): Ditto.
+	(Fx_show_tip): Ditto.
+	(Fx_hide_tip): Ditto.
+	(syms_of_mw32fns): Validate x-show-tip and x-hild-tip.
+
+	* frame.c (Fdelete_frame): Call `delete-frame-functions' instead
+	of `delete-frame-hook' if the frame is not a tool-tip.
+
+	* emacs.c (main): Call globals_of_w32menu() in mw32menu.c.
+
+2003-01-02  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32term.c (mw32_draw_image_foreground): Fix the type of bitmap
+	handle.
+
+2003-01-01  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32fns.c (postprocess_image): Don't call mw32_mask_image().
+	(imagemagick_make_maskdata): Take account of mask color that is
+	defined with :mask or :heuristic-mask, to determine mask.
+	(imagemagick_setup_bmpmask): Change the condition to make a mask
+	data.
+	(resolve_mask_color): New function.
+	(imagemagick_load_image_data): Implement `:mask' and
+	`:heuristic-mask'.
+	(mw32_mask_image): Abolished.
+
+	* mw32term.c (mw32_draw_image_foreground): Change the algorithm of
+	image composition. Now you don't have to make a background of a
+	masked image black.
+
+2002-12-30  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32fns.c (XPM_read_colors_section): Support a color name that
+	is consist of more than one word.
+
+	* mw32magick.h (BlobMode): New enumeration.
+
+	* mw32fns.c (magick_open_blob): New function.
+	(magick_read_blob_string): Ditto.
+	(magick_close_blob): Ditto.
+	(magick_allocate_image_colormap): Ditto.
+	(magick_query_color_database): Ditto.
+	(magick_register_magick_info): Ditto.
+	(magick_set_magick_info): Ditto.
+	(imagemagick_valid_data_p): Don't destroy image if image is NULL.
+	(imagemagick_valid_object_p): Ditto.
+	(XPM_color_symbols_elem): New enumeration.
+	(XPM_color_symbols): Ditto.
+	(parse_XPM_color_symbols): New function.
+	(free_XPM_color_symbols): Ditto.
+	(imagemagick_load): Take account of color-symbols.
+	(XPM_palette_info): New structure.
+	(XPM_strip_line): New function.
+	(XPM_find_next_line): Ditto.
+	(XPM_extract_line): Ditto.
+	(XPM_read_blob_to_string): Ditto.
+	(XPM_read_values_section): Ditto.
+	(XPM_read_colors_section): Ditto.
+	(XPM_correct_colormap_with_symbols): Ditto.
+	(XPM_read_pixels_section): Ditto.
+	(XPM_read_image): Ditto.
+	(initialize_imagemagick): Entry a customized XPM decoder for
+	color-symbols.
+
+2002-12-22  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32fns.c (unpack_bitmap_data): New function.
+	(load_in_memory_image): Use the function described above.
+
+2002-12-21  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32term.c (clear_mouse_face): Reset
+	dpyinfo->mouse_face_mouse_frame.
+
+	* mw32fns.c (Fmw32_file_dialog): Decode filename.
+
+2002-12-14  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32term.c (mw32i_get_glyph_overhangs): Don't call metricproc if
+	font is NULL.
+	
+2002-12-10  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32fns.c (load_in_memory_image): Take account of boundary
+	alignment of bitmap data.
+
+2002-12-09  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32fns.c (load_in_memory_image): Fix computation of pixel
+	position.
+
+2002-12-07  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32fns.c (magick_constitute_image): New function.
+	(magick_allocate_image): Ditto.
+	(magick_set_image_piexels): Ditto.
+	(imagemagick_valid_object_p): Use magick_blob_to_image () instead
+	of magick_ping_blob (), for magick_ping_blob () seems not to work
+	correctly.
+	(load_in_memory_image): New function.
+	(imagemagick_load): Protect data from GC.
+	Support various image formats: in-memory file, string, vector and
+	bit-vector.
+
+2002-12-05  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32fns.c (imagemagick_load_image_data): Add comparison with GIF
+	image. Pixel values of GIF image should be also inverted.
+	
+2002-12-03  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32fns.c (imagemagick_load_image_data): Hack for
+	ImageMagick-5.5.1. It inverts pixel value of PBM(PNM) image, so I
+	swap fg and bg.
+
+2002-11-28  Koichiro Ohba  <koichiro@meadowy.org>
+
+	* mw32fns.c (IMAGE_MAGICK_REQUIRE_VERSION): Support for ImageMagick
+	5.5.1.
+	(imagemagick_transparent_color_p): Use MaxRGB.
+
+	* mw32magick.h : Support for ImageMagick 5.5.1.
+
+2002-11-27  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32font.c (mw32_default_hash_function): Calculate hash value as
+	unsigned int.
+	(mw32_register_lf_hash): Ditto.
+	(mw32_unregister_lf_hash): Ditto.
+
+	* mw32font.h: Ditto.
+
+2002-11-26  MIYASHITA Hisashi  <himi@meadowy.org>
+
+	* mw32term.c (mw32i_flush): Call GdiFlush().
+	(mw32i_clear_mouse_face): Add comment on GdiFlush().
+	(mw32i_scroll_run, mw32i_clear_end_of_line, mw32i_insert_glyphs) 
+	(mw32i_write_glyphs, mw32i_after_update_window_line) 
+	(mw32i_update_window_end, mw32i_update_window_begin): Ditto.
+
+	* dispnew.c (update_frame): Call flush_display() after
+	updating the frame.
+
+2001-11-22  Yoshiki Hayashi  <yoshiki@meadowy.org>
+
+	* mw32font.c (mw32_get_font_request_parameter): Use assq_no_quit
+	instead of Fassq.
+	(mw32_convert_lface_to_LOGFONT): Ditto.
+	(mw32_elisp_logical_font_loader): Ditto.
+	(mw32_strict_logical_font_loader): Ditto.  Also remove unused code and
+	check only options is list or not.
+
+2002-11-21  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32font.c (mw32_logfont_equal): Add comparison of font name.
+	(mw32_lf_equal): Ditto.
+	(mw32_set_bdf_font): Set fixed_pitch TRUE instead of Qt.
+
+2002-11-19  Yoshiki Hayashi  <yoshiki@meadowy.org>
+
+	* mw32font.c (mw32_get_font_request_parameter): Use assq_no_quit
+	instead of Fassq to avoid throwing error.
+
+2002-11-19  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32font.h (struct MW32LogicalFont): New member
+	`character_spacing'.
+
+	* mw32font.c (Qspacing, Qdim): New lisp objects.
+	(getDeviceWidth): New function.
+	(mw32_set_layout): Fix comment.
+	(mw32_glyph_metric): Take account of character spacing.
+	(mw32_set_windows_logical_font): Ditto.
+	(mw32_bdffont_textout): Ditto.
+	(mw32_bdffont_glyph_metric): Ditto.
+	(mw32_set_bdf_font): Ditto.
+	(mw32_default_hash_function): Ditto.
+	(mw32_lf_equal): Ditto.
+	(mw32_set_option_alist_to_logical_font): Ditto.
+	(mw32_check_font_request_alist): Ditto.
+	(syms_of_mw32font): Ditto.
+	(mw32_set_option_alist_to_logical_font): Set `dim' parameter.
+	(mw32_set_bdf_font): Abolish option argument.
+	(mw32_load_lf_from_lisp_object): Ditto.
+	(mw32_strict_logical_font_loader): Check if font option is alist.
+
+	* mw32bdf.h: Ditto.
+
+	* mw32bdf.c (mw32_BDF_TextOut): Take account of character spacing.
+
+	* makefile.meadow.w32-in: Add dependancies of mw32*.c.
+
+2002-11-18  Yoshiki Hayashi  <yoshiki@meadowy.org>
+
+	* mw32term.c (mw32_message_loop): Call mw32_handle_tool_bar_click
+	if mouse button event is on tool-bar frame.
+
+2002-11-18  Yoshiki Hayashi  <yoshiki@meadowy.org>
+
+	* alloc.c (pdump_map_file): New function.  Move in dump file loading
+	code from pdump_load and add memory mapped file code for Windows.
+	(pdump_load): Call pdump_map_file.
+	(pdump_open_dump_file): Add new argument, path.
+
+2002-11-16  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32term.c (mw32_draw_glyph_string): Add some comment on
+	underline position.
+
+2002-11-15  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32term.c (mw32_draw_glyph_string_foreground): Take account of
+	baseline offset.
+
+	* mw32font.c (set_font_info): Set vertical_centering according to
+	vertical-centering-font-regexp.
+
+2002-11-14  Yoshiki Hayashi  <yoshiki@meadowy.org>
+
+	* gc: Removed.
+	* history.sh: Ditto.
+	* w32.c.rea: Ditto.
+	* w32heap.c.rea: Ditto.
+	* xfns.foo.c: Ditto.
+
+2002-11-14  ABE Yasushi  <yas@meadowy.org>
+
+	* mw32fns.c (mw32_mask_image): New Function.
+	(mw32_disable_image): Adjust threshold.
+	(postprocess_image): Call mw32_mask_image() after postprocess.
+
+2002-11-13  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32term.c (mw32_draw_glyph_string): Derive y coordinates of
+	underline per not a glyph_string but a glyph_row.
+
+2002-11-09  MIYASHITA Hisashi  <himi@meadowy.org>
+
+	* dispnew.c (update_frame): Block the message thread between
+	updating.
+	(update_single_window): Likewise.
+
+2002-10-29  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32term.c (mw32_term_init): Derive n_planes in the Meadow1's
+	way for Windows9x.
+
+2002-10-28  Koichiro Ohba  <koichiro@meadowy.org>
+
+	* makefile.nt (mw32fns.obj): Depend on mw32magick.h.
+
+2002-10-25  Koichiro Ohba  <koichiro@meadowy.org>
+
+	* mw32reg.c (registry_set): Fix previous change.
+
+2002-10-25  Koichiro Ohba  <koichiro@meadowy.org>
+
+	* mw32reg.c (registry_data_valid_p): Simplify.  Use
+	registry_symbol_to_type().
+
+2002-10-25  Koichiro Ohba  <koichiro@meadowy.org>
+
+	* mw32reg.c (registry_to_string_list): Renamed from
+	registry_to_multi_string().
+	(registry_get): Bug Fix: Handle case that `regkey->to_lisp_object'
+	is NULL.  (Thanks Shun-ichi GOTO).
+	(registry_to_reg_multi_sz_size): New function.
+	(registry_to_reg_multi_sz): Likewise.
+	(registry_key_function_setup): Register new functions above.
+	(registry_data_valid_p): Added validation for `registry-multi-sz'
+	data.
+
+2002-10-24  Koichiro Ohba  <koichiro@meadowy.org>
+
+	* mw32reg.c (registry_prepare): Change return values.
+	(registry_build_registry_data): Removed function.
+	(registry_data_size): Removed function.
+	(registry_make_registry_data): Removed function.
+	(registry_key): New struct.
+	(registry_key_setup): New function.
+	(registry_key_function_setup): Likewise.
+	(registry_key_destory): Likewise.
+	(registry_to_reg_dword_size): Likewise.
+	(registry_to_reg_qword_size): Likewise.
+	(registry_to_reg_sz_size): Likewise.
+	(registry_to_reg_sz): Likewise.
+	(registry_to_string): Likewise.
+	(registry_to_multi_string): Likewise.
+	(registry_to_raw_number): Likewise.
+	(registry_to_raw_qword_number): Likewise.
+	(registry_to_unibyte_string): Likewise.
+	(registry_get): Use registry_key_function_setup().
+	(registry_set): Likewise.
+	(Fmw32_registry_delete_key): Simplify.  Use registry_key_setup()
+	and registry_key_destory().
+	(Fmw32_registry_delete_value): Likewise.
+	(Fmw32_registry_create_key): Likewise.
+	(Fmw32_registry_get): Likewise.
+	(Fmw32_registry_set): Likewise.  Removed create argument.
+
+	* mw32fns.c (pixel_to_rgb): Removed unused variables,
+	`value'.
+
+2002-10-24  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32bdf.c (mw32_init_bdf_font): Use `==` instead of `='.
+	(mw32_get_bdf_glyph): Suppress a compilation warning in the manner
+	of emacs 21.2.
+
+2002-10-23  Yoshiki Hayashi  <yoshiki@meadowy.org>
+
+	* mw32reg.c (registry_enum_all_keys): Restore GCPRO and add
+	struct gcpro.
+	(registry_enum_all_values): Ditto.
+
+2002-10-23  Yoshiki Hayashi  <yoshiki@meadowy.org>
+
+	* mw32reg.c (registry_build_registry_data): Remove bogus GCPRO.
+	(registry_get): Remove unused local variable.
+	(registry_enum_all_keys): Remove bogus GCPRO.
+	(registry_enum_all_values): Ditto.
+	(Fmw32_registry_list_keys): Remove unused local variable.
+	(Fmw32_registry_list_values): Ditto.
+	
+2002-10-22  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* mw32term.h: Suppress compilation warnings.
+
+	* mw32term.c: Ditto.
+
+	* mw32menu.c: Ditto.
+
+	* mw32font.c: Ditto.
+
+	* mw32bdf.c: Ditto.
+	
+	* mw32fns.c (pixel_to_rgb): New function.
+	(get_foreground_and_background_color): Ditto.
+	(imagemagick_load_image_data): Validate foreground and background
+	color.
+	Suppress compilation warnings.
+
+2002-10-22  Koichiro Ohba  <koichiro@meadowy.org>
+
+	* mw32reg.c (Fmw32_registry_list_keys): Extract method.
+	(Fmw32_registry_list_values): Likewise.
+	(registry_enum_all_values): New function.
+	(registry_enum_all_keys): New function.
+
+2002-10-20  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* makefile.meadow.w32-in (bootstrap-emacs): Change name of
+	executable for Meadow 2 featuring Portable-dumper. Thanks to
+	Masayuki FUJII (boochang@m4.kcn.ne.jp).
+
+	* mw32font.c (mw32_set_windows_logical_font): Set pphys_type.
+	(mw32_set_bdf_font): Ditto.
+
+	* mw32font.h (EQUALPROC): New type.
+	(font_id): Ditto.
+	(struct MW32LogicalFont): New method for equality check.
+	(MW32_INVOKE_LAYOUTPROC): New macro.
+
+	* mw32font.c (mw32_logfont_equal): New function.
+	(mw32_bdffont_equal): Ditto.
+	(mw32_set_windows_logical_font): Make an entry of
+	mw32_logfont_equal.
+	(mw32_set_bdf_font): Make an entry of mw32_bdffont_equal.
+	(mw32_register_lf_hash): Invoke equal procedure.
+
+	* makefile.meadow.w32-in (emacs): Change name of executable for
+	Meadow 2 featuring Portable-dumper.
+
+2002-10-19  Shun-ichi GOTO  <gotoh@taiyo.co.jp>
+
+	* mw32reg.c (registry_list_items): Obsoleted because it is
+	splitted into Fmw32_registry_list_keys and
+	Fmew32_registry_list_values.
+	(Fmw32_registry_list_keys): Merged code of registry_list_items.
+	(Fmw32_registry_list_values): Merged code of registry_list_items.
+
+2002-10-18  Koichiro Ohba  <koichiro@meadowy.org>
+
+	* mw32reg.c (Fmw32_registry_set): New function.
+	(registry_data_valid_p): New function.
+	(registry_set): New function.
+	(registry_make_registry_data): New function.
+	(registry_data_size): New function.
+	(registry_symbol_to_type): New function.
+	(syms_of_mw32reg): Register new functions above.
+
+2002-10-16  Koichiro Ohba  <koichiro@meadowy.org>
+
+	* mw32reg.c (registry_type_to_symbol): Rename from
+	registry_type_to_object().
+	(registry_build_registry_data): New function.
+	(registry_get): Simplify.
+
+2002-10-15  Koichiro Ohba  <koichiro@meadowy.org>
+
+	* mw32reg.c (registry_delete_key): Removed unused variables,
+	`hrkey'.
+	(Fmw32_registry_create_key): New function.
+	(registry_create_key): New function.
+	(syms_of_mw32reg): Register new functions above.
+
+2002-10-15  ABE Yasushi  <yas@meadowy.org>
+
+	* mw32fns.c (postprocess_image): Handle conversion.
+	(mw32_image_to_fullcolor): New function.
+	(mw32_disable_image): New function.
+	(mw32_detect_edges): New function.
+	(mw32_laplace): New function.
+	(mw32_emboss): New function.
+	(mw32_edge_detection): New function.
+
+2002-10-15  Koichiro Ohba  <koichiro@meadowy.org>
+
+	* mw32reg.c (Fmw32_registry_delete_value): New function.
+	(Fmw32_registry_delete_key): New function.
+	(registry_delete_key): New function.
+	(registry_delete_value): New function.
+
+2002-10-14  Shun-ichi GOTO  <gotoh@taiyo.co.jp>
+
+	* mw32reg.c (registry_get): Use alloca() for temp buffer.
+	Allowed NULL for KEY string which means without sub key.
+	(registry_list_items): New static function for using commonly
+	from mw32-registry-list-keys and mw32-registry-list-values.
+	(Fmw32_registry_list_keys): New function.
+	(Fmw32_registry_list_values): New function.
+	(syms_of_mw32reg): Register new functions above.
+
+2002-10-14  Shun-ichi GOTO  <gotoh@taiyo.co.jp>
+
+	* mw32reg.c (Fmw32_rigistry_get): Added doc string.
+	(Fmw32_registry_words_to_integer): New function.
+	(syms_of_mw32reg): Add initialization of error data object
+	and registration of mw32-registry-words-to-integer.
+
+2002-10-13  Shun-ichi GOTO  <gotoh@taiyo.co.jp>
+
+	* emacs.c (main): Call symbol registration functions for
+	mw32reg.c.
+
+	* mw32reg.c: Add Registry operation function (made by ohba)
+	(registry_type_to_object): New function.
+	(registry_get): New function.
+	(registry_root_key_to_hkey): New function.
+	(registry_prepare): New function.
+	(Fmw32_rigistry_get): New function.
+	(reinit_syms_of_mw32reg): New function.
+	(syms_of_mw32reg): New function.
+	(init_mw32reg): New function.
+
+	* coding.h (DECODE_SYSTEM): Fixed argument name.
+
+2002-10-12  Shun-ichi GOTO  <gotoh@taiyo.co.jp>
+
+	* makefile.nt (bootstrap-emacs): Handle new executable name.
+
+2002-10-12  Shun-ichi GOTO  <gotoh@taiyo.co.jp>
+
+	* makefile.nt (EMACS): Change name of executable for Meadow 2
+	featuring Portable-dumper.
+
+2002-10-08  Koichiro Ohba  <koichiro@meadowy.org>
+
+	* fileio.c (read-file-name): When MEADOW defined, use
+	Fmw32_file_dialog().
+
+	* mw32fns.c (Fmw32_file_dialog): New function. Support for NTGUI 
+	open file dialog.
+
+2002-10-07  Koichiro Ohba  <koichiro@meadowy.org>
+
+	* mw32fns.c (magick_set_image_type): Fix return type.
+	(imagemagick_pixel_to_bmpbit): Removed function.
+	(magick_get_number_colors): Removed wrapper function.
+	(magick_signature_image): Likewise.
+	(magick_get_pixels): Likewise.
+	(imagimagick_get_fullcolor_bmpdata): Use
+	magick_get_image_pixels().
+	
+2002-10-06  Koichiro Ohba  <koichiro@meadowy.org>
+
+	* mw32fns.c (imagemagick_load_image_data): Use
+	magick_transform_rgb_image() and imagemagick_get_bits_per_pixel().
+	Added support for palette image.
+	(imagemagick_setup_bitmapinfo): Removed unused
+	variables, `n'.
+	(imagemagick_get_bits_per_pixel): New function.
+	(magick_get_indexes): New wrapper function for GetMagickIndexes().
+	(magick_transform_rgb_image): New wrapper function for
+	TransformRGBImage().
+	(magick_acquire_image_pixels): New wrapper function for
+	AcquireImagePixels().
+	(magick_is_monochrome_image): New wrapper function for
+	IsMonochromeImage().
+	(magick_set_image_type): New wrapper function for SetImageType().
+	(imagemagick_setup_bitmapinfo): Fixed compression mode.
+	(imagemagick_transparent_color_p): Added attribute const for
+	pixel.
+	(imagemagick_setup_fullcolor_bitmapinfo): Renamed form
+	imagemagick_setup_bitmapinfo().  Use
+	imagemagick_get_bits_per_pixel().
+	(imagimagick_get_fullcolor_bmpdata): Renamed form
+	imagimagick_get_bmpdata().  Support for 24bit color.
+	(imagemagick_read_color_table): New function.
+	(imagemagick_setup_palette_bitmapinfo): New function.
+	(imagimagick_get_mono_bmpdata): New function.
+	(imagimagick_get_256_bmpdata): New function.
+
+2002-10-04  Koichiro Ohba  <koichiro@meadowy.org>
+
+	* mw32fns.c (imagemagick_load): Simplify.
+	(imagemagick_load_image_data): Likewise.
+
+2002-09-29  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* makefile.meadow.w32-in: Change install directory in Meadow's
+	way.
+
+2002-09-28  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* makefile.meadow.w32-in: New file. Apply Cygwin/Mingw support
+	patch from Masayuki FUJII (boochang@m4.kcn.ne.jp).
+
+	* mw32bdf.c: Apply Cygwin/Mingw support patch from Masayuki FUJII
+	(boochang@m4.kcn.ne.jp).
+	
+	* mw32fns.c: Ditto.
+	
+	* mw32font.h: Ditto.
+	
+	* mw32ime.c: Ditto.
+	
+	* mw32term.h: Ditto.
+	
+	* w32.c: Ditto.
+
+2002-09-27  Yoshiki Hayashi  <yoshiki@meadowy.org>
+
+	* alloc.c (pdump_write_objects): Free allocated data.
+	(pdump_header_type): Renamed from pdump_header_t.
+	(pdump_forward): Renamed from pdump_forward_t.
+	(pdump_forward_pointer): Renamed from pdump_forward_pointer_t.
+	(pdump_forward_subr_doc): Renamed from pdump_forward_subr_doc_t.
+	(pdump_forward_interval_tree): Renamed from pdump_forward_interval_tree_t.
+	(pdump_forward_hash_table): Renamed from pdump_forward_hash_table_t.
+	(pdump_root): Renamed from pdump_root.
+	(pdump_type_objects): Renamed from pdump_type_objects_t.
+	
+2002-09-25  MIYASHITA Hisashi  <himi@meadowy.org>
+
+	* mw32mem.c (mw32_initialize_system_info): Bug fix.
+	Set dwOSVersionInfoSize properly before calling GerVersionEx().
+	Thanks to M.Fujii.
+	* w32.c (get_emacs_configuration): Likewise.
+
+2002-09-24  MIYASHITA Hisashi  <himi@meadowy.org>
+
+	* mw32fns.c (mw32_WndProc<WM_EMACS_FLASH_WINDOW>): Return 0.
+
+2002-09-23  MIYASHITA Hisashi  <himi@meadowy.org>
+
+	* mw32term.c (mw32_message_loop<WM_EMACS_CLEAR_MOUSE_FACE>):
+	When wParam is zero, don't clear help echo message.
+
+	* mw32fns.c (mw32_WndProc<WM_KILLFOCUS>): Post WM_EMACS_CLEAR_MOUSE_FACE
+	with setting WPARAM to 1 to clear help echo message as well.
+	(mw32_WndProc<WM_NCMOUSEMOVE>): Add comment (Set WPARAM to 0 in order
+	not to clear help echo message).
+
+2002-09-19  MIYASHITA Hisashi  <himi@meadowy.org>
+
+	* mw32mem.c: New file, which consists of new heap manager and small part of
+	w32heap.c and unexw32.c services.
+
+	* makefile.nt (STARTUP_ENTRY): New macro.
+	(LINK_FLAGS): Remove -merge option.  Use STARTUP_ENTRY macro to specify
+	-entry: option.
+	(OBJ2): When MEADOW is defined, add mw32mem.obj and remove w32heap.obj
+	and unexw32.obj.
+
+	* mem-limits.h (get_lim_data): When MEADOW is defined, use
+	get_reserved_heap_size() instead of directly accessing reserved_heap_size.
+
+	* w32proc.c: When MEADOW is defined, don't include w32heap.h.
+
+	* w32.c: When MEADOW is defined, don't include w32heap.h.
+	(get_emacs_configuration): Don't use osinfo_cache.  Call GetVersionEx()
+	here to set osinfo, and use it instead of osinfo_cache.
+
+	* w32.h (MW32_OSTYPE): New enum.
+	(os_subtype, get_processor_type)
+	(get_w32_major_version, get_w32_minor_version): New extern declarations
+	for mw32mem.c
+	(file_data, open_input_file, open_output_file, close_file_data):
+	Likewise, but for Memory Mapped file routines
+	(OFFSET_TO_RVA, RVA_TO_OFFSET, RVA_TO_PTR, find_section):
+	PE image manipulation macros and a function declaration.
+
+2002-09-19  MIYASHITA Hisashi  <himi@meadowy.org>
+
+	* alloc.c (NSTATICS): Increased it to 1280.
+
+	* mw32fns.c (Qgs): Removed.
+	(xbm_type, gs_type, pbm_type, xpm_type, jpeg_type)
+	(tiff_type, gif_type, png_type): Removed.  They are automatically
+	registered by define_imagemagick_type.
+	(pget_magick_info_t, pget_magick_info): new function pointer type and
+	variable for GetMagickInfo().
+	(magick_get_magick_info): New wrapper function for GetMagickInfo().
+	(resolve_imagemagick_api): Put error handling parts together.
+	(imagemagick_load): Removed unused variables, `contents' and `size'.
+	(imagemagick_image_type_lisp_symbol): New function.
+	(initialize_imagemagick): New function.
+	(syms_of_mw32fns): Remove the part on registering the symbol of "gs".
+	(init_mw32fns): Don't define image types of ImageMagick here.
+	Call initialize_imagemagick() instead only when `initialized' is true.
+
+	* mw32magick.h (MagickInfo): Added for GetMagickInfo().
+
+2002-09-11  Koichiro Ohba  <koichiro@meadowy.org>
+
+	* mw32fns.c (imagemagick_make_maskdata): Use
+	imagemagick_transparent_color_p.
+	(imagimagick_get_bmpdata): Likewise.
+	(imagemagick_transparent_color_p): New function.
+
+2002-09-11  MIYASHITA Hisashi  <himi@meadowy.org>
+
+	* mw32term.c (mw32_handle_tool_bar_click): Before using emacs_event
+	we MUST initialize it with MW32_INIT_EMACS_EVENT.
+	(mw32_scroll_bar_handle_click): Likewise.
+	(mw32_drop_file_handler): Likewise.
+	(mw32_menu_bar_store_activate_event): Likewise.
+	(mw32_message_loop): Likewise
+
+	* mw32term.h (MW32_INIT_EMACS_EVENT): New macro.
+
+	* mw32term.c (mw32_setup_image_bitmap_handle): Fix the
+	comment style.
+	(mw32_setup_glyph_string_hdc): Setup hdc also when hl is
+	DRAW_IMAGE_RAISED or DRAW_IMAGE_SUNKEN.
+
+	* mw32fns.c (imagemagick_make_maskdata): Make it return 1.
+	(mw32_WndProc<WM_PAINT>): Remove an unused variable, ps.
+	(mw32_WndProc<WM_ERASEBKGND>): mw32_clear_area() does not need
+	event blocking.  Remove it.
+
+	* mw32term.h (VERTICAL_SCROLL_BAR_TOP_RANGE): Fix the range to
+	0xffff regardless of f and height.
+
+2002-09-11  ABE Yasushi  <yas@meadowy.org>
+
+	* mw32fns.c (Fimage_mask_p): Use MW32_IMAGE_HAS_MASK_P.
+
+	* mw32term.c (mw32_draw_image_glyph_string): Use MW32_IMAGE_HAS_MASK_P.
+
+	* mw32term.h (MW32_IMAGE_HAS_MASK_P): New macro.
+
+	* dispextern.h (struct image): Remove member mask.
+
+2002-09-09  Koichiro Ohba  <koichiro@meadowy.org>
+
+	* mw32fns.c (imagemagick_pixel_to_bmpbit): Fixed a typo of pixcel.
+	(imagemagick_load_image_data): Use imagemagick_setup_bmpmask.
+	(imagimagick_get_bmpdata): Made the transparent color to be
+	converted to black.
+	(mw32_destruct_image): Added free resource for pbmpmask.
+	(imagemagick_setup_bmpmask): New function.
+	(imagemagick_make_maskdata): New function. Generates a
+	maskdata from ImageMagick.
+	(bmp_read_bitmap_info): Use bmp_get_bitmap_width_bytes.
+	(bmp_get_bitmap_width_bytes): New function.
+
+2002-09-06  MIYASHITA Hisashi  <himi@meadowy.org>
+
+	* mw32term.c (mw32_setup_image_bitmap_handle): Now we prepare
+	phbmpmask if possible.  And to return two values, change the
+	interface.  If fail to init bitmap handle(s), return 0.
+	Otherwise, return 1.
+	(mw32_draw_image_foreground): When hbmpmask is initialized,
+	transfer pbmpmask to fill the destination area covered by the
+	mask with 0, then transfer the image by taking bitwise-OR.
+
+	* mw32fns.c (imagimagick_get_bmpdata): Fix typo of pixcel.
+	(Fx_create_frame): At the startup of frame, set focus to it.
+
+	* dispextern.h (mw32_image): Add mask_size and pbmpmask.
+
+2002-08-27  Koichiro Ohba  <koichiro@meadowy.org>
+
+	* mw32fns.c (imagemagick_load): Fix overflow of blob data size.
+
+2002-08-27  Keiichi Suzuki  <keiichi@meadowy.org>
+
+	* mw32term.c (x_set_offset): Fix unable to use
+	`set-frame-position'.
+
+2002-08-23  MIYASHITA Hisashi  <himi@meadowy.org>
+
+	* mw32fns.c (bmp_read_bitmap_info): Correct the expression that caliculates
+	image size in byte.  For detail, see the comment.
+	(bmp_read_bitmap_info): The temporary variable, align is removed.
+
+2002-08-21  Koichiro Ohba  <koichiro@meadowy.org>
+
+	* mw32fns.c (imagemagick_load): Free resoruce for multi page images.
+	(imagemagick_valide_object_p): Comment out.
+
+2002-08-21  Koichiro Ohba  <koichiro@meadowy.org>
+
+	* mw32fns.c : Added validation for image data.
+	(magick_destroy_image_list): New function. ImageMagick wrapper
+	function.
+	(resolve_imagemagick_api): Added lookup for ImageMagick function.
+	(imagemagick_valide_data_p): New function.
+	(imagemagick_valide_object_p): New function.
+	(imagemagick_load): Use imagemagick_valide_data_p() and 
+	imagemagick_valide_object_p().
+
+2002-08-21  Koichiro Ohba  <koichiro@meadowy.org>
+
+	* mw32fns.c : Added version check for ImageMagick.
+	(IMAGE_MAGICK_REQUIRE_VERSION): New macro.
+	(magick_get_magick_version): New function.  ImageMagick wrapper
+	function.
+	(magick_ping_blob): Likewise.
+	(magick_ping_image): Likewise.
+	(resolve_imagemagick_api): Added lookup for ImageMagick function.
+	(imagemagick_version_p): New function.
+	(define_imagemagick_type): Use imagemagick_version_p.
+	
+2002-08-20  Koichiro Ohba  <koichiro@meadowy.org>
+
+	* mw32magick.h : New file.  stub header based on 
+	ImageMagick 5.4.8.
+
+	* mw32fns.c : Added support for ImageMagick
+	<http://www.imagemagick.org/>.
+	Include mw32magick.h.
+	(magick_initialize_magick): New function.  ImageMagick wrapper
+	function.
+	(magick_get_exception_info): Likewise.
+	(magick_clone_image_info): Likewise.
+	(magick_read_image): Likewise.
+	(magick_blob_to_image): Likewise.
+	(magick_destroy_image): Likewise.
+	(magick_destroy_image_info): Likewise.
+	(magick_get_image_pixels): Likewise.
+	(magick_get_pixels): Likewise.
+	(magick_signature_image): Likewise.
+	(magick_get_number_colors): Likewise.
+	(pinitialize_magick_t): New struct.
+	(pread_image_t): Likewise.
+	(pblob_to_image_t): Likewise.
+	(pclone_image_info_t): Likewise.
+	(pdestroy_image_t): Likewise.
+	(pdestroy_image_info_t): Likewise.
+	(pget_image_pixels_t): Likewise.
+	(pget_pixels_t): Likewise.
+	(pget_exception_info_t): Likewise.
+	(pget_exception_info_t): Likewise.
+	(psignature_image_t): Likewise.
+	(pget_number_colors_t): Likewise.
+	(pinitialize_magick): New variable.
+	(pread_image): Likewise.
+	(pblob_to_image): Likewise.
+	(pclone_image_info): Likewise.
+	(pdestroy_image): Likewise.
+	(pdestroy_image_info): Likewise.
+	(pget_image_pixels): Likewise.
+	(pget_pixels): Likewise.
+	(pget_exception_info): Likewise.
+	(psignature_image): Likewise.
+	(pget_number_colors): Likewise.
+	(IMAGE_MAGICK_DLL): New macro.  Filename of the ImageMagick DLL
+	file.
+	(hmagick): New variable.  Handle ImageMagick DLL.
+	(magick_exception): New variable.
+	(resolve_imagemagick_api): New function.
+	(imagemagick_setup_bitmapinfo): Likewise.
+	(imagemagick_pixel_to_bmpbit): Likewise.
+	(imagimagick_get_bmpdata): Likewise.
+	(imagemagick_load_image_data): Likewise.
+	(imagemagick_load): Likewise.
+	(define_imagemagick_type):
+	(Qxbm): New variable.
+	(Qgs): Likewise.
+	(Qpbm): Likewise.
+	(Qxpm): Likewise.
+	(Qjpeg): Likewise.
+	(Qtiff): Likewise.
+	(Qgif): Likewise.
+	(Qpng): Likewise.
+	(xbm_type): New variable.  For typecodes suppouted by ImageMagick.
+	(gs_type): Likewise.
+	(pbm_type): Likewise.
+	(xpm_type): Likewise.
+	(jpeg_type): Likewise.
+	(tiff_type): Likewise.
+	(gif_type): Likewise.
+	(png_type): Likewise.
+	(syms_of_mw32fns): Added lisp symbol for ImageMagick.
+	(init_mw32fns): Use define_imagemagick_type.
+	
+2002-08-07  ABE Yasushi  <yas@meadowy.org>
+
+	* mw32term.c (mw32i_produce_glyphs): Adapt to change of METRICPROC
+	return value type.
+	(mw32i_get_glyph_overhangs): Ditto.
+
+	* mw32font.c (mw32_glyph_metric): Change return value type to MW32CharMetric.
+	(mw32_bdffont_glyph_metric): Ditto.
+	(mw32_bdffont_cm): Remove.
+
+	* mw32font.h (METRICPROC): Change return value type to MW32CharMetric.
+
+2002-08-06  ABE Yasushi  <yas@meadowy.org>
+
+	* mw32bdf.h: New extern mw32_init_cached_bitmap_slots.
+
+	* mw32font.c (reinit_syms_of_mw32font): Call mw32_init_cached_bitmap_slots.
+
+	* mw32bdf.c (mw32_free_bdf_font): Put NULL to released bitmap
+	cache slot.
+	(clear_cached_bitmap_slots): Likewise.
+	(mw32_init_cached_bitmap_slots): New function.
+
+2002-08-02  Keiichi Suzuki  <keiichi@meadowy.org>
+
+	* mw32font.c (mw32_elisp_logical_font_loader): Use `Qfunction'
+	instead of `Qstrict_spec'.
+
+2002-07-24  ABE Yasushi  <yas@meadowy.org>
+
+	* mw32font.c (mw32_bdf_font): Delete.
+	(mw32_bdffont_glyph_metric): Use mw32_get_bdf_glyph().
+	(mw32_bdffont_textout): Use bdffont instead of mw32_bdf_font.
+	(mw32_bdffont_free): Likewise.
+	(mw32_set_bdf_font): Likewise.
+
+2002-07-21  MIYASHITA Hisashi  <himi@meadowy.org>
+
+	* mw32font.c (mw32_register_lf_hash): Don't check plf->hash
+	because it must be set by LF creater or loader.
+	(mw32_add_logical_font): Set the default hash LF method.
+	(mw32_register_logical_font): New function.
+	(mw32_load_lf_from_lisp_object): Use mw32_register_logical_font.
+	(mw32_default_logical_font_loader): Likewise.
+
+	* mw32term.c (mw32_clip_to_row): Delete hcr before exiting.
+	It was resource leak.
+
+	* mw32font.c (LF_HASH_SIZE): New macro.
+	(lfhashtbl): Hash table for LF.
+	(mw32_windows_set_logical_font_from_charset): Use INITIALIZE_CCL_ID()
+	instead of manually setting members of ccl_method.
+	(mw32_set_bdf_font): Likewise.
+	(mw32_get_ccl_id): Likewise.
+	(mw32_bdffont_textout): Correct the style.
+	(mw32_set_bdf_font): Ditto.
+	(HASHMAXVAL): New macro.
+	(mw32_hash_ccl_method): New function.
+	(mw32_default_hash_function): New function.
+	(mw32_ccl_method_equal): New function.
+	(mw32_lf_equal): New function.
+	(mw32_register_lf_hash): New function.
+	(mw32_unregister_lf_hash): New function.
+	(mw32_compute_min_glyph_bounds): Now try to set the minimum char width
+	and height.
+	(mw32_delete_logical_font): Call mw32_unregister_lf_hash().
+	(mw32_load_lf_from_lisp_object): Try to register LF to the hash table.
+	If it has already existed, delete the created LF and return the existed
+	LF.
+	(mw32_default_logical_font_loader): Likewise.
+
+	* mw32font.h (INITIALIZE_CCL_ID): New macro.
+	(HASHPROC): New LF method.
+	(struct MW32LogicalFont): Add a new member pnext.
+	(MW32_INVOKE_HASHPROC): New macro.
+
+	* mw32fns.c (mw32_WndProc [WM_MULE_IMM_SET_COMPOSITION_FONT]):
+	Don't send the reply message because this UI-related message does not
+	need to guarantee synchronous operation and message reachability.
+	(mw32_WndProc [WM_MULE_IMM_SET_CONVERSION_WINDOW]): Likewise.
+
+2002-07-18  MIYASHITA Hisashi  <himi@meadowy.org>
+
+	* mw32term.c (mw32_initialize): Increase the message thread's
+	stack size to 4MB.
+
+2002-05-31  Keiichiro Nagano  <knagano@sodan.org>
+
+	* mw32font.c (mw32font_set_frame_ime_font_by_llogfont): New
+	function for IME font support.
+
+	* mw32fns.c (mw32_set_frame_ime_font): New function for IME font
+	support.
+	(Fx_create_frame): Remove default value for the parameter
+	'ime-font'.
+
+2002-05-26  ABE Yasushi  <yas@meadowy.org>
+
+	* mw32font.c (mw32_load_lf_from_lisp_object): Added support for
+	bdf-font.
+	(mw32_bdf_font): New struct.
+	(mw32_bdffont_textout): New function.
+	(mw32_bdffont_glyph_metric): New function.
+	(mw32_bdffont_set_layout): New function.
+	(mw32_bdffont_free): New function.
+	(mw32_set_bdf_font): New function.
+
+2002-04-23  Shun-ichi GOTO  <gotoh@taiyo.co.jp>
+
+	* emacs.c (Fdump_emacs): GetModuleFileName() returns upper-cased
+	pathname on Win9x, so use xstrcmp() to compare.
+	Correct comments on #else and #endif.
+
+2002-04-22  Keiichiro Nagano  <knagano@sodan.org>
+
+	* buffer.c (init_buffer): Always use getwd when WINDOWSNT.
+
+2002-04-18  Keiichiro Nagano  <knagano@sodan.org>
+
+	* buffer.c (reinit_buffer_once_1): Intialize
+	buffer_permanent_local_flags at here.
+
+	* emacs.c (Fdump_emacs): Always Fcopy_file temacs.exe -> emacs.exe
+	on Windows.
+
+	* mw32font.c (mw32_set_option_alist_to_logical_font): Fixed typo.
+
+2002-04-16  Shun-ichi GOTO  <gotoh@taiyo.co.jp>
+
+	* makefile.nt (install): Modified to copy fns-VERSION.el.
+
+2002-04-15  Keiichiro Nagano  <knagano@sodan.org>
+
+	* makefile.nt (bootstrap-emacs): Copy dump file to bindir.
+	(bootstrap-clean): Remove dump file.
+
+	* alloc.c (PDUMP_HASH_SIZE): Set default value iff. it is not
+	defined yet.
+	(PDUMP_OBJECT_ARRAY_SIZE): Likewise.
+	(pdump_message): fflush.
+	(PDUMP_REGISTERING_MESSAGE): New macro.  Display stats of
+	registering objects.  This should be set to noop usually.
+
+2002-04-14  Keiichiro Nagano  <knagano@sodan.org>
+
+	* Makefile.in: Do not compile in UNEXEC when PDUMP.
+	(emacs): Add -nd option when PDUMP.
+	(clean): Remove emacs.dmp when PDUMP is defined.
+
+	* abbrev.c (reinit_syms_of_abbrev): New function.  Reinitialize
+	abbrev_table.
+	(syms_of_abbrev): Call reinit_syms_of_abbrev.
+
+	* alloc.c (NSTATICSP): New constant.
+	(staticpvec, staticpidx): New array to hold root objects which are
+	not dumped by portable dumper.
+	(Fmake_byte_code): Use Fmake_vector when PDUMP.
+	(pure_alloc): Abort when called, when PDUMP_DEBUG is defined.
+	(Fpurecopy): Return given obj immediately with no action when
+	PDUMP.
+	(staticpro_nopdump): New function.
+	(Fgarbage_collect): Mark objects in staticpvec.
+	(mark_object): Do not check pure space when PDUMP.  Throw obj to
+	the object validity checker when
+	PDUMP_CHECK_OBJECT_VALIDITY_ON_GC.
+	(gc_sweep): Call unmark_pdumped_objects when PDUMP.
+	(pdump_header_t): New struct.
+	(pdump_forward_t): Likewise.
+	(pdump_forward_pointer_t): Likewise.
+	(pdump_forward_subr_doc_t): Likewise.
+	(pdump_forward_interval_tree_t): Likewise.
+	(pdump_forward_hash_table_t): Likewise.
+	(pdump_root_t): Likewise.
+	(PDUMP_HASH_SIZE): New constant.
+	(PDUMP_OBJECT_ARRAY_SIZE): Likewise.
+	(PDUMP_POINTERS_SIZE): Likewise.
+	(PDUMP_SUBR_DOC_SIZE): Likewise.
+	(PDUMP_INTERVAL_TREE_SIZE): Likewise.
+	(PDUMP_HASH_TABLE_SIZE): Likewise.
+	(PDUMP_OFFSET): Likewise.
+	(pdump_hash): New variable that holds Lisp_Objects.
+	(pdump_load_scheme): New enum.
+	(pdump_current_load_scheme): New variable.
+	(pdump_load_offset): Likewise.
+	(pdump_object_type): New enum.
+	(pdump_type_objects_t): New struct.
+	(pdump_lisp_object): New variable.
+	(pdump_pointers, pdump_pointers_index): Likewise.
+	(pdump_subr_doc, pdump_subr_doc_index): Likewise.
+	(pdump_interval_tree, pdump_interval_tree_index): Likewise.
+	(pdump_hash_table, pdump_hash_table_index): Likewise.
+	(pdump_header): Likewise.
+	(pdump_objects_start): Likewise.
+	(hash_put, hash_clear): New extern.
+	(PDUMP_STRING_BYTES, PDUMP_LARGE_STRING_P,
+	PDUMP_STRING_DATA_DUMP_SIZE_ALIGNMENT,
+	PDUMP_STRING_DATA_DUMP_SIZE, PDUMP_LISP_STRING_DUMP_SIZE): New
+	macros.
+	(PDUMP_BOOL_VECTOR_SIZE, PDUMP_BOOL_VECTOR_P,
+	PDUMP_VECTORLIKE_LENGTH, PDUMP_VECTORLIKE_SIZE,
+	PDUMP_LISP_HASH_TABLE_SIZE, PDUMP_LISP_HASH_TABLE_ELEM_COUNT,
+	PDUMP_LISP_HASH_TABLE_ALLOCATED_COUNT): Likewise.
+	(pdump_message, PDUMP_MESSAGE): New function and macro for
+	PDUMP_DEBUG.
+	(pdump_hash_value): New function.
+	(pdump_put_hash): Likewise.
+	(pdump_get_hash): Likewise.
+	(pdump_register_object): New function.
+	(pdump_register_pointer): Likewise.
+	(pdump_register_subr_doc): Likewise.
+	(pdump_count_interval_tree_length,
+	pdump_register_interval_tree_iter, pdump_register_interval_tree):
+	Likewise.
+	(pdump_register_hash_table): Likewise.
+	(pdump_add_object): Likewise.
+	(pdump_object_to_enum): Likewise.
+	(pdump_forward_object): Likewise.
+	(pdump_size): Likewise.
+	(pdump_write_objects): New function.
+	(pdump_add_special_buffers, pdump_write_special_buffers):
+	Likewise.
+	(pdump_write_coding_symbols): Likewise.
+	(pdump): New function.
+	(PDUMP_RELOCATE): New macro.
+	(pdump_object_start_address): New function.
+	(pdump_load_interval_tree, pdump_load_hash_table,
+	pdump_read_coding_symbols): Likewise.
+	(pdump_load): New function.
+	(pdump_free): New function.
+	(pdump_relocate_objects): New function.
+	(unmark_pdumped_objects): New function.
+	(pdump_check_hash_table): New function.
+	(PDUMPED_PTR_P): New macro.
+	(pdump_check_object_validity): New function.
+	(pdump_check_object_validity_Lisp_Int,
+	pdump_check_object_validity_Lisp_String_data,
+	pdump_check_object_validity_Lisp_String_intervals,
+	pdump_check_object_validity_Lisp_String,
+	pdump_check_object_validity_Lisp_Vectorlike,
+	pdump_check_object_validity_Lisp_Symbol,
+	pdump_check_object_validity_Lisp_Misc,
+	pdump_check_object_validity_Lisp_Cons,
+	pdump_check_object_validity_Lisp_Float): Likewise.
+	(pdump_check_root_objects): Likewise.
+	(pdump_file_check_readable): New function.
+	(PATH_MAX): Try to decide PATH_MAX from MAX_PATH, MAXPATHLEN when
+	PATH_MAX is not given.
+	(pdump_find_exe_path): New function.
+	(pdump_find_dump_file): Likewise.
+	(pdump_open_dump_file): Likewise.
+	(Fpdump_load_scheme): New Lisp function that gives current load
+	scheme.
+	(Fpdump_relocated_p): New Lisp function that predicates whether
+	pure data are reloctated while startup.
+	(Fpdumped_p): New Lisp function that predicates whether this Emacs
+	is dumped using the portable dumper.
+	(reinit_alloc_once): New function.  Reinitialize global data.
+	(init_alloc): Call reinit_alloc_once.
+
+	* buffer.c (pdump_global_buffer_p): New function.
+	(reinit_buffer_once_1): New function.
+	(reinit_buffer_once_2): New function.
+	(init_buffer_once): Call reinit_buffer_once_1, reinit_buffer_once_2.
+	(syms_of_buffer): Do not pdump Vbuffer_defaults, Vbuffer_local_symbols,
+	Vbuffer_alist.
+
+	* callint.c (reinit_syms_of_callint): New function.  Reinitialize data.
+	(syms_of_callint): Call reinit_syms_of_callint.
+
+	* category.c (reinit_syms_of_category): New function.  Reinitialize
+	category_table_version.
+	(syms_of_category): Call reinit_syms_of_category.
+
+	* coding.c (reinit_coding_once): New function.  Reinitialize
+	data.
+	(init_coding_once): Call reinit_coding_once.
+
+	* config.in (HAVE_MMAP, PDUMP, PDUMP_DEBUG): New #undef,
+	substituted by configure.
+	(PDUMP_CHECK_OBJECT_VALIDITY_ON_GC): New #undef.
+
+	* dispnew.c (reinit_syms_of_display): New function.  Reinitialize
+	frame_and_buffer_state.
+	(syms_of_display): Call reinit_syms_of_display.
+
+	* editfns.c (reinit_syms_of_editfns): New function.
+	(syms_of_editfns): Call reinit_syms_of_editfns.
+
+	* emacs.c (print_version_and_exit): New function.
+	(main): When PDUMP, set print_version and print version string later.
+	Handle -nd option when PDUMP.
+	Initialize initialized to the negation of no_dump.
+	Call reinit functions to reinitialize global data when PDUMP.
+	(standard_args): Add -nd.
+	(Fkill_emacs): Call pdump_free when PDUMP.
+	(Fdump_emacs): Call pdump when PDUMP.  Link temacs to emacs.
+
+	* eval.c (reinit_eval_once): New function.  Reinitialize data.
+	(init_eval): Call reinit_eval_once.
+
+	* fns.c (HASH_KEY): Moved to lisp.h.
+	(HASH_VALUE): Likewise.
+	(HASH_NEXT): Likewise.
+	(HASH_HASH): Likewise.
+	(HASH_INDEX): Likewise.
+	(HASH_TABLE_SIZE): Likewise.
+
+	* fontset.c (reinit_syms_of_fontset): New function.  Reinitialize
+	next_fontset_id.
+	(syms_of_fontset): Call reinit_syms_of_fontset.
+
+	* frame.c (syms_of_frame): Use staticpro_nodump for Vframe_list.
+
+	* insdel.c (reinit_syms_of_insdel): New function.  Reinitialize
+	combine_after_change_buffer.
+	(syms_of_insdel): Call reinit_syms_of_insdel.
+
+	* keyboard.c (syms_of_keyboard): Do staticpro on Qecho_area_clear_hook.
+
+	* keymap.c (syms_of_keymap): Staticpro meta_map, control_x_map.
+
+	* lisp.h (HASH_KEY): Moved from fns.c.
+	(HASH_VALUE): Likewise.
+	(HASH_NEXT): Likewise.
+	(HASH_HASH): Likewise.
+	(HASH_INDEX): Likewise.
+	(HASH_TABLE_SIZE): Likewise.
+	(DEFUN): Add PSEUDOVECTOR_FLAG.
+
+	* lread.c (read1): Never use make_pure_string when PDUMP.
+	(read_vector): Never use make_pure_vector when PDUMP.
+	(read_list): Never use pure_cons when PDUMP.
+	(make_symbol): Never use make_pure_string when PDUMP.
+	(reinit_obarray): New function.  Reinitialize data.
+	(init_obarray): Call reinit_obarray.  Use non pure version
+	to construct data when PDUMP.
+
+	* makefile.nt (EMACS_DMP): Filename of the dumped file.
+	(emacs, bootstrap-emacs): Add -nd flag.
+	(install): Install emacs.dmp.
+
+	* minibuf.c (reinit_minibuf_once): New function.  Reinitialize
+	Vminibuffer_list.
+	(init_minibuf_once): Call reinit_minibuf_once.  Do
+	staticpro_nopdump on Vminibuffer_list.
+	(reinit_syms_of_minibuf): New function reinitialize minibuf_level.
+	(syms_of_minibuf): Call reinitialize.
+
+	* mw32fns.c (reinit_syms_of_w32fns): Call init_w32_parm_symbols.
+	(syms_of_w32fns): Call reinit_syms_of_w32fns.
+
+	* mw32font.c (reinit_syms_of_mw32font): New function.  Reinitialize
+	data.
+	(syms_of_mw32font): Call reinit_syms_of_mw32font.
+
+	* mw32menu.c (reinit_syms_of_w32menu): New function.  Reinitialize
+	menu_items to Qnil.
+	(syms_of_w32menu): Call reinit_syms_of_w32menu.  Do
+	staticpro_nopdump on menu_items.
+
+	* print.c (syms_of_print): Mark Vprin1_to_string_buffer as non
+	portable dumpable root object.
+
+	* puresize.h (CHECK_IMPURE): Make this noop when PDUMP.
+	(PURE_P): Always return FALSE when PDUMP.
+
+	* search.c (reinit_syms_of_search): New function.
+	(reinit_syms_of_search): Call reinit_syms_of_search.
+
+	* w32.c (init_ntproc): Do not call check_windows_init_file when PDUMP.
+
+	* w32fns.c (reinit_syms_of_w32fns): New function.
+	(syms_of_w32fns): Call reinit_syms_of_w32fns.
+
+	* w32menu.c (reinit_syms_of_w32menu): New function.
+	(syms_of_w32menu):  Call reinit_syms_of_w32menu.
+
+	* w32proc.c (syms_of_ntproc): Staticpro Qhigh and Qlow.
+
+	* window.c (make_window): Initialize window->height_fixed_p and
+	last_cursor_off_p.
+	(reinit_window_once): New function.
+	(syms_of_window): Call reinit_window_once.  Mark Vwindow_list as
+	non-portable-dumpable root object.
+
+	* xfaces.c (next_face_id): Remove static so that pdump can access
+	this variable.
+	(lface_id_to_name, lface_id_to_name_size): Likewise.
+	(font_sort_order): Likewise.
+
+	* xfns.c (reinit_syms_of_xfns): New function.
+	(syms_of_xfns): Call reinit_syms_of_xfns.
+
+	* xmenu.c (reinit_syms_of_xmenu): New function.
+	(syms_of_xmenu): Call reinit_syms_of_xmenu.
+
+	* xselect.c (reinit_syms_of_xselect): New function.
+	(syms_of_xselect): Call reinit_syms_of_xselect.
+
+2002-02-21  ABE Yasushi  <yasushi@stbbs.net>
+
+	* mw32term.c (mw32_destroy_frame_hdc): Bug fix. Put
+	INVALID_HANDLE_VALUE to released DC's cache slot
+
+2002-02-09  MIYASHITA Hisashi  <himi@m17n.org>
+
+	* mw32term.c (mw32_get_frame_hdc): Bug fix.  Put the new hdc and
+	frame to the last slot.
+	(mw32_draw_relief_rect): Before drawing right edge, move
+	to (right_x, top_y + 1).
+	(mw32_expose_frame): Call expose_window_tree on f->root_window
+	only if WINDOWP (f->root_window).
+	(mw32_update_cursor): Call mw32_update_cursor_in_window_tree
+	on f->root_window only if WINDOWP (f->root_window).
+
+	* mw32fns.c (bmp_load): Free contents before exiting.
+
+	* frame.c: Include mw32sync.h.
+	(Fdelete_frame): During destroying windows, block the 
+	message thread by W32_BLOCK_INPUT.
+
+2002-01-26  MIYASHITA Hisashi  <himi@m17n.org>
+
+	* mw32term.c (mw32_draw_relief_rect): Adjust bottom_y and right_x before actually
+	drawing relieves.  And correct the coodinates of relief stencils.
+	(mw32_draw_glyphs): Don't touch head->hdc when head is NULL.
+
+	* mw32term.c (mw32_setup_default_hdc): Set hdc's background mode to
+	TRANSPARENT.
+	(mw32_draw_glyph_string_background): Only when really filled the
+	background, set s->background_filled_p.
+	(mw32_draw_glyph_string_foreground): When fulfilling the condition that
+	we don't have to draw background, never draw background even if
+	s->face->box is FACE_NO_BOX. 
+
+	* makefile.nt: Regenerate dependency rules.
+
+	* mw32term.c (mw32_draw_image_foreground): When drawing cursor,
+	select NULL_BRUSH not to fill the area by Rectangle ().
+	(mw32_draw_hollow_cursor): Likewise.
+
+	* keyboard.c (kbd_buffer_get_event): Remove the part for Meadow that
+	waits for the next event.  MW32_read_socket() do the same thing.
+	(gobble_input): Remoed the #if 0 part that calls note_sync_event().
+	(async_handle_message): Removed.
+
+	* mw32term.c (MW32_read_socket, mw32_message_loop): Rename MW32_read_socket
+	into mw32_message_loop.  And create simple version of MW32_read_socket
+	as an external interface for read_socket_hook().
+	(mw32_async_handle_message): New function.  It replaces
+	async_handle_message@keyboard.c.
+	(mw32_initialize): Change the message thread's entry function to
+	mw32_async_handle_message().
+
+2002-01-25  MIYASHITA Hisashi  <himi@m17n.org>
+
+	* window.c (delete_window): Set this function as critical section with
+	W32_BLOCK_INPUT.
+	(Fset_window_configuration): Likewise.
+
+	* mw32term.c (MW32_update_begin): Remove W32_BLOCK_INPUT, because updating
+	process dose not alter glyph matrices.
+	(MW32_update_end): Remove W32_UNBLOCK_INPUT for the above reason.
+	(mw32_new_focus_frame): Don't return even if frame is NULL.
+	(note_mouse_movement): Suspend the main thread during mouse face updating
+	procedure.
+	(show_mouse_face): Setup message_thread_hdc if the current thread is
+	message thread.
+	(MW32_read_socket [WM_MOUSEMOVE]): Call note_mouse_movement(), and
+	generate help events.
+	(MW32_read_socket [WM_EMACS_CLEAR_MOUSE_FACE]): Call clear_mouse_face()
+	instead of note_mouse_highlight().  And generate help events to clear
+	help echo.
+	(mw32_initialize): Duplicate the main thread handle, and set it to
+	main_thread in order to control it from the message thread.
+
+	* mw32font.c (Fw32_add_font_internal): Renamed from w32_add_font.
+	(Fw32_change_font_attribute_internal): Renamed from
+	w32_change_font_attribute.
+	(syms_of_mw32font): Change each argument of defsubr for
+	the above two functions.
+
+	* xfaces.c (clear_font_table): Call mw32_delete_logical_font()
+	to release plf.
+
+2002-01-24  MIYASHITA Hisashi  <himi@m17n.org>
+
+	* mw32font.c: Include mw32bdf.h.
+	(Qfunction, QCwidth, QCheight, QCfamily, QCweight, QCslant):
+	Add declarations.
+	(Qany, Qstrict_spec): New symbols.
+	(mw32_select_logical_font_loader): Removed.
+	(mw32_lf_loader_num, mw32_lf_loaders): New variables.
+	(mw32_load_font, load_face_font): Call mw32_load_lf()
+	instead of MW32_INVOKE_LOADLFPROC().
+	(mw32_internal_add_font): Set pfr->idx.  Remove the
+	lines on setting pfr->FR and pfr->loadlf.
+	(check_lisp_object_logfont): New function.
+	(mw32_add_lf_loader): New function.
+	(mw32_load_lf): New function.
+	(mw32_delete_logical_font): Make this function non-static.
+	(mw32_set_option_alist_to_logical_font): New function.
+	(mw32_load_lf_from_lisp_object): New function.
+	(mw32_select_logical_font_loader): Removed.
+	(mw32_fr_spec_match_p): New function.
+	(mw32_strict_logical_font_loader): New function.
+	(mw32_convert_face_attrs): New function.
+	(mw32_elisp_logical_font_loader): New function.
+	(Fw32_check_logfont): Now it only calls check_lisp_object_logfont.
+	(syms_of_mw32font): Init Qany and Qstrict_spec.
+	(syms_of_mw32font): Add mw32_strict_logical_font_loader,
+	mw32_elisp_logical_font_loader, and mw32_default_logical_font_loader
+	as lf loaders.
+
+	* mw32fns.c (mw32_set_scroll_bar_width): Use
+	FRAME_DEFAULT_FONT_WIDTH().  And add the code to set
+	scroll bar pixel width to the column width of scroll bar,
+	but it is desabled.
+
+	* mw32term.c (MW32_set_vertical_scroll_bar): Don't put the
+	center of the area defined by SCROLL_BAR_COLS.  Put the
+	left boundary because the right side area is nallowed by
+	window adjustment.
+
+	* mw32font.h: Don't include mw32bdf.h here.
+	(MW32FontRequest): Add idx.  And, remove FR and laodlf.
+	(MW32_INVOKE_LOADLFPROC): Removed.
+	(mw32_add_lf_loader, mw32_load_lf, mw32_delete_logical_font):
+	Add declarations.
+
+2002-01-22  MIYASHITA Hisashi  <himi@m17n.org>
+
+	* mw32font.c (mw32_plf_table): replaces mw32_lf_table with it.
+	(mw32_plf_alloced_num): replaces mw32_lf_alloced_num.
+	(mw32_get_font_info): Lookup mw32_plf_table to obtain the
+	pointer of the corresponding LF.
+	(mw32_compute_min_glyph_bounds): Likewise.
+	(load_face_font): Likewise.
+	(mw32_add_logical_font): When expanding mw32_plf_table, fill
+	created slots with NULL pointer.  And set the pointer of
+	allocated LF.  Note that the allocated LF must be filled with 0.
+	(mw32_delete_logical_font): When deleting LF, clear the corresponding
+	slot in mw32_plf_table with NULL, and do xfree on the pointer of LF.
+
+	* mw32font.h: Add comments on the license.
+
+	* makefile.nt: Regenerate dependency rules with makedepend.pl.
+	* makefile.nt (EMACS_ROOT, SRC): Move it to the head of this file.
+	(ALLOBJES, MAKEDEPEND): New macros.
+	(depend): New target.
+
+	* mw32fns.c (mw32_WndProc [WM_SIZE]): Remove the part on
+	change the frame size because WM_WINDOWPOSCHANGED do it.
+	(mw32_WndProc [WM_WINDOWPOSCHANGED]): When the client area
+	is smaller than the required size, ignore it and call
+	DefWindowProc().
+
+2002-01-21  MIYASHITA Hisashi  <himi@m17n.org>
+
+	* mw32fns.c (x_set_tool_bar_lines, valid_image_p): Merge
+	the differences of xterm.c between 21.0.104 and 21.1.
+	(Vmw32_max_tooltip_size): New variable.  It comes from
+	21.1.
+	* mw32fns.c: replace the code on tooltip with that of 21.1.
+
+	* mw32term.c (fast_find_position): Merge the differences of xterm.c
+	between 21.0.104 and 21.1.
+	(notice_overwritten_cursor): Likewise. (Renamed from note_overwritten_text_cursor.)
+	(mw32_get_glyph_string_clip_rect): Merge the differences of xterm.c
+	between 21.0.104 and 21.1.
+	(mw32_draw_glyph_string, mw32_set_glyph_string_background_width) 
+	(mw32i_write_glyphs, mw32i_insert_glyphs) 
+	(mw32i_clear_end_of_line, expose_window_tree, mw32_expose_frame) 
+	(expose_line, expose_window, note_mouse_highlight) 
+	(show_mouse_face): Likewise.
+
+2002-01-20  Shuichi KITAGUCHI  <kit@meadowy.org>
+
+	* xfaces.c (x_display_list): add new #define.
+
+	* xterm.c: Sync up with 21.1.
+
+	* xfns.c: Sync up with 21.1.
+
+	* xfaces.c: Sync up with 21.1.
+
+	* xdisp.c: Sync up with 21.1.
+
+	* window.c: Sync up with 21.1.
+
+	* w32fns.c: Sync up with 21.1.
+
+	* sinkmask.h: Sync up with 21.1. (Removed)
+	
+	* sink11mask.h: Sync up with 21.1. (Removed)
+	
+	* sink11.h: Sync up with 21.1. (Removed)
+	
+	* sink.h: Sync up with 21.1. (Removed)
+	
+	* process.c: Sync up with 21.1.
+
+	* minibuf.c: Sync up with 21.1.
+
+	* lisp.h: Sync up with 21.1.
+
+	* keymap.c: Sync up with 21.1.
+
+	* keyboard.c: Sync up with 21.1.
+
+	* insdel.c: Sync up with 21.1.
+
+	* indent.c: Sync up with 21.1.
+
+	* frame.c: Sync up with 21.1.
+
+	* fontset.c: Sync up with 21.1.
+
+	* fns.c: Sync up with 21.1.
+
+	* fileio.c: Sync up with 21.1.
+
+	* emacs.c: Sync up with 21.1.
+
+	* dispnew.c: Sync up with 21.1.
+
+	* dispextern.h: Sync up with 21.1.
+
+	* dired.c: Sync up with 21.1.
+
+	* coding.c: Sync up with 21.1.
+
+	* callproc.c: Sync up with 21.1.
+
+	* buffer.c: Sync up with 21.1.
+
+	* alloc.c: Sync up with 21.1.
+
+2002-01-18  MIYASHITA Hisashi  <himi@m17n.org>
+
+	* makefile.nt (OBJ1): When MEADOW is defined, add mw32atimer.obj
+	not atimer.obj.
+
+	* mw32fns.c: Almost totally rewrite it by merging with mw32fns.c.
+
+	* mw32term.c: Almost totally rewrite it by merging with xterm.c.
+	In this ChangeLog, write only the important part of changes.
+	(1) Now, in order to obtain HDC, use mw32_get_frame_hdc() instead
+	of directly calling GetDC() or something else except for the message
+	thread.  If obtaining HDC in the message thread, you can directly call
+	GetDC() but you MUST set it to message_thread_hdc!  If you used
+	mw32_get_frame_hdc() to obtain HDC, you don't have to release it.
+	HDC manager automatically release it when it cannot allocate a new DC.
+	(2) When you change the state of DC, you MUST restore it by using SaveDC()
+	or something else!
+	(3) Glyph string layout of characters must be rearranged by layoutproc
+	of LF.  In the current implementation, we prepare layout information
+	by refering the glyph metric information, but layoutproc could overwrite
+	the such predefined metric.
+	(4) Images must be stored in the format of DIB that could be interpreted
+	by CreateDIBSection().
+
+	* mw32term.h: Almost totally rewrite it by merging with xterm.h.
+	In this ChangeLog, write only the summary of changes.
+	(1) Newly introduce mw32_display_info.  It has DC cache slots.
+	(2) Renew mw32_output by merging with x_output.
+	(3) The prefix of many macro names are changed from w32 to mw32.
+	(4) Declare function declarations defined in mw32term.c, mw32fns.c,
+	mw32menu.c, mw32ime.c and xfaces.c
+	(5) Introduce new code conversion macros, MW32_ENCODE_TEXT
+	and MW32_ENCODE_CSTR.
+
+	* mw32font.c: Almost totally rewrite it for Meadow 2 new font system.
+	In this ChangeLog, write only the summary of changes.
+	(1) Introduce FR/LF/PF layers, c.f. Meadow-white-paper-font.txt.
+	(2) This module overwrite load_face_font and set_font_frame_param
+	to load fonts for faces.  So directly accesses fontset database.
+	(3) Only LF methods deal with actual PF layer.  mw32font.c also
+	provides windows_font LF methods.  mw32bdf.c will provide these
+	methods for BDF later.
+	(4) Now w32-add-font adds new FR, and Meadow font system will properly
+	load a new LF from the FR infomation data and the face data that will
+	be given at realization time.
+	!!!Note that the current FR implementation is very rudimentary.
+	This version could not call Elisp function to obtain LF, it
+	colud only select the default LF loader.
+
+	* mw32font.h: Almost totally rewrite for Meadow 2 new font system.
+	(MW32CharMetric): New struct.
+	(FontCp): New Font Codepoint data type.
+	(LOADLFPROC, OUTPUTPROC, LAYOUTPROC, FREEPROC): New FR/LF handler.
+	(MW32FontRequest): New struct(FR).
+	(MW32LogicalFont): New struct(LF).
+	(FONT_WIDTH, FONT_HEIGHT, FONT_BASE, FONT_NAME): New macros.
+	(MW32_LF_EMPTY_SLOT_P, MW32_FONT_INFO_FROM_FONT): LF accessing macros.
+	(MW32_INVOKE_OUTPUTPROC, MW32_INVOKE_METRICPROC) 
+	(MW32_INVOKE_LAYOUTPROC, MW32_INVOKE_FREEPROC): LF Method invocation
+	macros.
+	(MAKEFONTCP, SERIALIZE_FONTCP): New macros to construct FontCp.
+	(load_face_font, set_font_frame_param): New function declarations.
+
+	* mw32menu.c: Include charset.h, coding.h, and dispextern.h.
+	And remove the part on including coding.h that is only for MEADOW.
+	(appendmenu_encode): Use MW32_ENCODE_CSTR().
+	(modifymenu_encode): Likewise.
+	(insertmenu_encode): Likewise.
+	(Fx_popup_menu): Call check_mw32() to check the facility.
+	(Fx_popup_menu): Use SELECTED_FRAME() instead of selected_frame.
+	(Fx_popup_menu): Use FRAME_DEFAULT_FONT_WIDTH() and FRAME_LINE_HEIGHT()
+	to caliculate xpos and ypos.
+	(Fx_popup_menu): Use get_keymap() also for checking the object validity.
+	And change the calling fashion of get_keymap.
+	(popup_activated): New function.
+	(menubar_selection_callback): Use mw32_window_to_frame() instead of
+	w32_window_to_frame().
+	(menubar_selection_callback): Change the event kind to MENU_BAR_EVENT.
+	(set_frame_menubar, mw32menu_show): Change the output_data member
+	from w32 to mw32.
+	(set_frame_menubar, mw32menu_show): Use FRAME_MW32_WINDOW().
+	(free_frame_menubar): Likewise.
+	(syms_of_mw32menu): Renamed from syms_of_w32menu.
+
+	* mw32ime.c: Include windows.h at the top.  And don't define NULL
+	macro here.  Include mw32term.h only if HAVE_NTGUI is defined.
+	(hinst, hprevinst, lpCmdLine, nCmdShow): Declare them as `extern'
+	variables.
+	(mw32_set_ime_conv_window): Change the function interface.  This
+	function now takes hwnd, x, and y.  And change the prefix from
+	w32 to mw32.
+	(mw32_set_ime_status): Change the prefix from w32 to mw32.
+	(mw32_get_ime_status): Likewise.
+	(conversion_agent_wndproc): Change the function prefix from w32
+	to mw32.
+	(Ffep_force_on): Use SELECTED_FRAME() instead of selected_frame.
+	And use FRAME_MW32_WINDOW() instead of FRAME_W32_WINDOW().
+	(Fw32_ime_register_word_dialog): Use MW32_ENCODE_TEXT().
+	(Fw32_ime_associate_context): Use FRAME_MW32_WINDOW().
+	(Fw32_ime_get_composition_string): Don't use not Fconcat() but concat2().
+
+	* mw32reg.c: Include lisp.h.  But don't include blockinput.h.
+	(mw32_get_resource_with_class, mw32_get_string_resource) 
+	(mw32_get_env_resource): Change the prefix from w32 to mw32.
+
+	* mw32reg.h (mw32_get_resource, mw32_get_resource) 
+	(mw32_get_resource): Change the prefix from w32 to mw32.
+
+	* mw32oime.c (Ffep_force_on): Use FRAME_MW32_WINDOW() instead of
+	FRAME_W32_WINDOW().
+	(Ffep_force_off): Likewise.
+	(Ffep_get_mode): Likewise.
+	(Fdoes_ime_have_undetermined_strings): Likewise.
+	(mw32_set_ime_conv_window): Likewise.
+	(mw32_set_ime_conv_window): Renamed from w32_set_ime_conv_window().
+	(mw32_ime_font): Likewise.
+	(mw32_ime_control_init): Likewise.
+
+	* mw32sync.h (mw32_special_input): Renamed from w32_special_input.
+
+	* mw32dl.c: Change my e-mail address.
+	(set_function_documentation, set_variable_documentation) 
+	(free_function_documentation, free_variable_documentation):
+	Add Qnil for the new argument of Fintern_soft().
+	(Fdll_function_call): Removed.
+
+	* mw32clpbd.c (MW32_MULE_CB_REQSIZE, MW32_MULE_CB_SIZE) 
+	(MW32_MULE_CB_CONTENTS, MW32_MULE_SET_CB): Renamed from W32_* to MW32_*.
+	(Fw32_set_clipboard_data, Fw32_get_clipboard_data): Use MW32_MULE_* macros
+	instead of W32_MULE_* macros.
+
+	* mw32bdf.c: Add GPL copyright notice.
+
+	* mw32atimer.c: New file.  Substitute it for atimer.c on Meadow.
+
+	* keyboard.c (make_lispy_event [w32_mouse_wheel]): Change
+	the calling fashion of pixel_to_glyph_coords() and
+	glyph_to_pixel_coords().
+	(gobble_input): Don't call note_sync_event().  We'll take
+	consideration to it later.
+
+	* dispextern.h (struct glyph): Don't define w32_font_type if MEADOW
+	is defined.
+	(struct face): Don't define gc if MEADOW is defined.
+	(struct face): Define stipple as not Pixmap but int.
+	(PREPARE_FACE_FOR_DISPLAY): Make it void when MEADOW is defined.
+	(mw32_image): Define it when MEADOW is defined.  I'll move it to
+	mw32term.h later.
+	(struct image): When MEADOW is defined, defined mw32_img as mw32_image
+	and mask as HBITMAP instead of defining them as Pixmap.
+	(gamma_correct): Change the function declaration.
+
+	* dispnew.c: Include mw32sync.h and mw32term.h when MEADOW is defined.
+	(adjust_glyphs): Set this function as critical section with
+	W32_BLOCK_INPUT.
+	(free_glyphs): Likewise.
+	(change_frame_size_1): Likewise but apply it to the part of this
+	function.
+
+	* xfaces.c: If MEADOW is defined, (1) include mw32term.h and fontset.h;
+	and (2) define x_display_info as mw32_display_info, check_x_frame as
+	check_mw32_frame, and x_list_fonts as mw32_list_fonts.
+	(XColor): Don't define here if MEADOW is define, because mw32term.h
+	defines it.
+	(set_font_frame_param): Don't define it here because mw32font.c defines it.
+	(load_face_font): Likewise.
+	(choose_face_font): Likewise.
+	(x_create_gc, x_free_gc): Don't define them if MEADOW is defined.
+	(init_frame_faces): Use FRAME_MW32_WINDOW if MEADOW is defined.
+	(clear_font_table): Free font_info->font with MW32_INVOKE_FREEPROC.
+	Notice that this operation is invalid!!!
+	(defined_color): When MEADOW is defined, call x_defined_color().
+	(x_face_list_fonts): When MEADOW is defined, call x_list_fonts(),
+	which is acutually mw32_list_fonts().
+	(free_realized_face): Don't operate GC when MEADOW is defined.
+	(prepare_face_for_display): Likewise.
+	(clear_face_gcs): Likewise.
+	(realize_x_face): Likewise.
+	(dump_realized_face): Likewise.
+
+	* w32gui.h: Change the alias of XFontStruct to MW32LogicalFont.
+
+	* w32.c (init_environment): Set BITMAPPATH.
+	(init_w32system): Initialize mw32_mule_clipboard_format, which
+	is renamed from w32_mule_clipboard_format.
+
+	* w32.h (mw32_mule_clipboard_format): Renamed from
+	w32_mule_clipboard_format.
+
+	* w32console.c (initialize_w32_display): Don't call w32_initialize_display_info()
+	if Meadow is defined.
+
+	* w32heap.c: Merged from Meadow-1_X branch.
+
+	* window.c: Include mw32term.h if MEADOW is defined.
+	(set_window_buffer): Save w->buffer to tem to access it from
+	where we call Qset_selected_window_buffer_functions hook.
+
+	* process.c (Fstart_process): Merged from Meadow-1_X branch.
+
+	* fontset.c (Vfontset_table): Remove `static' qualifier to make it accessible
+	from mw32font.c.
+	(fontset_set, fontset_ref_via_base): Likewise.
+
+	* emacs.c (main): Call init_w32system() before any other initialization
+	functions because it initializes important critical sections for Meadow.
+	(main): Rewrite the part on calling syms_of_mw32*().
+
+	* dired.c (directory_files_internal): Merged from Meadow-1_X branch.
+
+	* ChangeLog: Sync up with 21.0.104.
+	* alloc.c: Likewise.
+	* blockinput.h: Likewise.
+	* buffer.c: Likewise.
+	* callproc.c: Likewise.
+	* category.c: Likewise.
+	* ccl.c: Likewise.
+	* ccl.h: Likewise.
+	* charset.c: Likewise.
+	* charset.h: Likewise.
+	* coding.c: Likewise.
+	* coding.h: Likewise.
+	* dired.c: Likewise.
+	* dispextern.h: Likewise.
+	* dispnew.c: Likewise.
+	* emacs.c: Likewise.
+	* fileio.c: Likewise.
+	* fns.c: Likewise.
+	* fontset.c: Likewise.
+	* frame.c: Likewise.
+	* frame.h: Likewise.
+	* indent.c: Likewise.
+	* insdel.c: Likewise.
+	* keyboard.c: Likewise.
+	* keymap.c: Likewise.
+	* lisp.h: Likewise.
+	* lread.c: Likewise.
+	* makefile.nt: Likewise.
+	* minibuf.c: Likewise.
+	* process.c: Likewise.
+	* termhooks.h: Likewise.
+	* w32.c: Likewise.
+	* w32.h: Likewise.
+	* w32console.c: Likewise.
+	* w32fns.c: Likewise.
+	* w32gui.h: Likewise.
+	* w32inevt.c: Likewise.
+	* w32proc.c: Likewise.
+	* w32xfns.c: Likewise.
+	* window.c: Likewise.
+	* xdisp.c: Likewise.
+	* xfaces.c: Likewise.
+	* xfns.c: Likewise.
+	* xterm.c: Likewise.
+	* m/ews4800.h: Likewise.
+	* s/bsdos4.h: Likewise.
+	* s/irix6-5.h: Likewise.
+	* s/ms-w32.h: Likewise.
+	* s/ux4800.h: Likewise.
+
+	* line.h: Removed. (Sync up with 21.0.104)
+	* unexencap.c: Removed. (Sync up with 21.0.104)
+	* unexfx2800.c: Removed. (Sync up with 21.0.104)
+	* unexsgi.c: Removed. (Sync up with 21.0.104)
+	* vms-pp.c: Removed. (Sync up with 21.0.104)
+	* vms-pp.trans: Removed. (Sync up with 21.0.104)
+	* vms-pwd.h: Removed. (Sync up with 21.0.104)
+	* vmsdir.h: Removed. (Sync up with 21.0.104)
+	* vmsfns.c: Removed. (Sync up with 21.0.104)
+	* vmsgmalloc.c: Removed. (Sync up with 21.0.104)
+	* vmsmap.c: Removed. (Sync up with 21.0.104)
+	* vmspaths.h: Removed. (Sync up with 21.0.104)
+	* vmsproc.c: Removed. (Sync up with 21.0.104)
+	* vmsproc.h: Removed. (Sync up with 21.0.104)
+	* vmstime.c: Removed. (Sync up with 21.0.104)
+	* vmstime.h: Removed. (Sync up with 21.0.104)
+	* w32faces.c: Removed. (Sync up with 21.0.104)
+	* x-list-font.c: Removed. (Sync up with 21.0.104)
+	* m/iris5d.h: Removed. (Sync up with 21.0.104)
+
+2001-08-29  Hideyuki SHIRAI  <shirai@meadowy.org>
+
+	* coding.c (code_convert_string): Apply patch from Miyashita-san.
+	Enable pre_post_conversion when code_convert_region.
+
+2001-08-28  Kyotaro HORIGUCHI	<horiguti@meadowy.org>
+
+	* dired.c (Fdirectory_files): Add missing GCPROs.
+	(Sync up with emacs-20.7.3)
+
+2001-08-27  Shun-ichi GOTO  <gotoh@taiyo.co.jp>
+
+	* mw32term.c: Fix for windows rect usage.
+	(pixel_to_glyph_coords): Calculate rect width and height
+	correctly.
+	(w32_draw_box): ditto.
+	(x_set_window_size): ditto.
+
+	* mw32fns.c: Bug fix for internal-border-width and windows rect
+	usage.
+	(w32_WndProc [WM_SIZE]): Calculate rect width and height
+	correctly.
+	(w32_WndProc [WM_WINDOWPOSCHANGED]): Calculate rect width and
+	height correctly. And calculate wdiff and hdiff considering
+	internal-border-width.
+	(Fx_create_frame): Default value of internal-border-width is 1.
+
+2001-08-21  Shun-ichi GOTO  <gotoh@taiyo.co.jp>
+
+	* w32heap.c: Cancel last import except allocate_heap().
+	(allocate_heap): Enable probing heap memory area for the problem
+	of "runtime error R6027 - not enough space for lowio initialization".
+
+2001-08-21  Shun-ichi GOTO  <gotoh@taiyo.co.jp>
+
+	* w32heap.c: Import whole code from emacs-20.7.
+
+2001-08-21  Shun-ichi GOTO  <gotoh@taiyo.co.jp>
+
+	* mw32term.h (struct w32_output): New struct member dwStyleEx to
+	hold extended window style.
+
+	* mw32term.c (x_set_window_size): Use AdjustWindowRectEx() instead
+	of AdjustWindowRect() to use extended window style.
+
+	* mw32fns.c (check_x_frame): New function from w32fns.c.
+	(Fw32_send_sys_command): Likewise.
+	(w32_real_positions): Use AdjustWindowRectEx() instead of
+	AdjustWindowRect() to use extended window style.
+	(w32_WndProc): Likewise.
+	(w32_create_frame_window): Use CreateWindowEx() instead of
+	CreateWindow() to use extended window style.
+	(Fx_create_frame): Use extended window style WS_EX_CLIENTEDGE as
+	default.
+	(syms_of_w32fns): Register new function w32_send_sys_command.
+
+2001-07-31  Kyotaro HORIGUCHI	<horiguti@meadowy.org>
+
+	* mw32ime.c (w32_ime_register_word_dialog): Show mouse cursor
+	on popping the dialog up.
+
+2001-05-09  KOSEKI Yoshinori  <kose@meadowy.org>
+
+	* regex.c (re_match_2_internal): Add `if (immediate_quit) QUIT;'
+	(Sync up with emacs-20.7.3)
+
+2000-12-21  Andrew Innes  <andrewi@gnu.org>
+
+	* w32xfns.c (select_palette): Avoid calling SelectPalette if
+	palette is NULL, since this corrupts memory!  Also get
+	display_info reference from frame.
+	(Sync up with emacs-20.7.3)
+
+2000-10-30  Kenichi Handa <handa@etl.go.jp>
+
+	* search.c (Fset_match_data): Be sure to make search_regs always
+	sane.
+
+1999-12-07  Kyotaro HORIGUCHI  <horiguti@meadowy.org>
+
+	* dired.c (Fdirectory_files): [MD:1632]
+	When re_search, ctrl-G problem Fix.
+
+2001-04-24  Hideyuki SHIRAI  <shirai@meadowy.org>
+
+	* sysdep.c: Delete duplicate '#define setpgrp setpgid'.
+
+2001-04-23  KOSEKI Yoshinori  <kose@meadowy.org>
+
+	* sync up with emacs-20.7
+
+2001-03-30  Keiichi Suzuki  <keiichi@nanap.org>
+
+	* mw32term.c (note_mouse_movement): Invalid mouse movement check,
+	fix.
+
+2001-03-16  Kyotaro HORIGUCHI  <horiguti@meadowy.org>
+
+	* mw32term.c(w32_mouse_wheel_handler): Make compatibe with
+	Sony VAIO Jog Dial Utility.
+
+2001-03-11  Kyotaro HORIGUCHI  <horiguti@meadowy.org>
+
+	* mw32fns.c: clear mouse-face on WM_NCMOUSEMOVE.
+	  (Moved from WM_SETCURSOR(lParam!=HTCLIENT))
+	(w32_track_popup_menu): Show mouse on popup menu and won't hide.
+	* mw32font.c(w32-query-get-logfont):
+	Show mouse cursor on dialogue.
+	* mw32term.c: new C variable mouse_cursor_stat.
+	new elisp variable w32-hide-mouse-timeout, w32-hide-mouse-on-key.
+	new function lock_mouse_cursor_visible.
+	(note_mouse_highlight): clear mouse-face when mouse-cursor hides.
+	(w32_menu_bar_store_activate_event): lock mouse cursor visible on 
+	menu.
+	(W32read_socket[WM_KEYDOWN]): Hide mouse cursor on key in.
+	(W32read_socket[WM_MOUSEMOVE],[WM_NCMOUSEMOVE]):
+	Show mouse cursor on mouse move.
+	(W32read_socket[WM_[LMR]]BUTTONDOWN):
+	Show mouse cursor on click mouse button.
+	* mw32term.h: definition of lock_mouse_cursor_visible.
+
+2001-03-06  Kyotaro HORIGUCHI  <horiguti@meadowy.org>
+
+	* mw32fns.c: FIX: Clearing mouse-face with kill focus.
+	
+2001-03-06  Kyotaro HORIGUCHI  <horiguti@meadowy.org>
+
+	* mw32fns.c: FIX: Clearing mouse-face when mouse cursor enters
+	menu-bar.
+	(WM_SETCURSOR ,lParam!=HTCLIENT): Triggers clearing mouse-face.
+	* mw32term.c (note_mouse_highlight): Bug fix. x = -1, y = -1 surely
+ 	clears mouse-face.
+	(WM_EMACS_CLEAR_MOUSE_FACE): Clear mouse-face.
+	* mw32term.h (WM_EMACS_CLEAR_MOUSE_FACE): New message added.
+
+2001-03-05  Kyotaro HORIGUCHI  <horiguti@meadowy.org>
+
+	* mw32fns.c: Correct caret vertical position.
+
+2001-02-22  Kyotaro HORIGUCHI  <horiguti@meadowy.org>
+
+	* mw32fns.c: Add new frame parameter 'cursor-height'
+	Add new global variable Qcursor-height.
+	(FRAME_CURRENT_CURSOR): Replace one w32 frame parameters to
+	 access via macro.
+
+	KNOWN_BUGS..Now it is effective only for caret cursors.
+
+	* mw32term.h: Add two macros, and one variable.
+	(FRAME_CURRENT_CURSOR, FRAME_CURSOR_HEIGHT): Macro added.
+	(w32_output): add cursor_height;
+
+	* mw32term.c: Replace some variable access to macro, see above.
+
+2001-02-22  Kyotaro HORIGUCHI  <horiguti@meadowy.org>
+
+	* mw32fns.c: Add new caret type 'hairline'
+	* mw32term.h:
+	* mw32fns.c:
+	 Add new global variable Qhairline_caret
+	(w32_set_cursor_type):
+	(w32_WndProc):
+
+	* mw32term.h: (text_cursor_kinds): Add hairline_caret_cursor.
+
+	* mw32term.c: Handle all caret cursors
+	(W32update_end):
+	(w32_display_caret_cursor): Modify parameter meaning.
+	(w32_display_cursor): Pass parameter 'caret_type' to
+	w32_display_caret_cursor.
+
+2001-02-21  Kyotaro HORIGUCHI  <horiguti@meadowy.org>
+
+	* mw32fns.c: caret cursor type (solid/checkered)
+	 Add new global variable Qcheckered_caret
+	(w32_set_cursor_type):
+	(w32_WndProc):
+
+	* mw32term.h: (text_cursor_kinds): Add checkered_caret_cursor.
+
+	* mw32term.c: Handle checkered_caret_cursor
+	(W32update_end):
+	(w32_display_caret_cursor): Add parameter 'checkered'.
+	(w32_display_cursor): Pass parameter 'checkered' to
+	w32_display_caret_cursor.
+
+2001-02-21  MIYASHITA Hisashi  <himi@m17n.org>
+
+	* mw32term.c (W32update_end): If frame's current cursor
+	is not caret, don't show caret.
+	(W32write_glyphs): Hide caret if there is no updating frame.
+	If updating, don't control caret state because Meadow is in
+	the critical section.
+
+2001-02-21  MIYASHITA Hisashi  <himi@m17n.org>
+
+	* mw32term.c (W32write_glyphs): Remove the part on controling the
+	caret state.
+	(W32update_begin): Erase the caret before updating.
+	(W32update_end): Restore the caret after updating.
+
+2001-02-21  Kyotaro HORIGUCHI <horiguti@meadowy.org>
+
+	* w32proc.c (variable process_dir): Protect process_dir from 
+	reallocation of source data memory.
+
+2001-02-08  Kyotaro HORIGUCHI   <horiguti@meadowy.org>
+
+	* alloc.c(make_string): Use multibyte_chars_in_text to create
+	multibyte string correctly for parameter 'contents' containing
+	multibyte characters.
+
+2001-01-21  MIYASHITA Hisashi  <himi@m17n.org>
+
+	* mw32fns.c (w32_set_frame_ime_font): We don't need
+	to call w32_set_ime_font() here because the window proc.
+	calls it.
+
+2001-01-05  MIYASHITA Hisashi  <himi@m17n.org>
+
+	* mw32term.c (W32write_glyphs): After f is set, hide a caret.
+
+2001-01-04  MIYASHITA Hisashi  <himi@m17n.org>
+
+	* mw32fns.c: Add new global variable Qcaret.
+	(w32_set_cursor_type): Deal with the case of Qcaret.
+	(w32_WndProc[WM_SETFOCUS]): Initialize caret if current_cursor
+	is caret_cursor.
+	(w32_WndProc[WM_KILLFOCUS]): Call DestroyCaret() if caret is
+	present.
+	(w32_WndProc[WM_EMACS_SETCARET]): Set a caret for the frame f.
+	(syms_of_w32fns): Initialize Qcaret.
+
+	* mw32term.c (w32_fill_rect): Before drawing,
+	hide the caret if exists.  After drawing,
+	restore the state.
+	(W32write_glyphs): Likewise.
+	(w32_display_caret_cursor): New function.
+	(w32_display_cursor): If FRAME_DESIRED_CURSOR is caret_cursor,
+	call w32_display_caret_cursor like the others.
+	(w32_get_glyph_width): New function.
+
+	* mw32term.h (text_cursor_kinds): Add caret_cursor.
+	(struct w32_output): Add a new member, caret_state.
+	(WM_EMACS_SETCARET): New macro.
+	(w32_get_glyph_width) New function declaration.
+
+2000-06-28  MIYASHITA Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* mw32term.h (WM_MULE_IMM_SET_COMPOSITION_FONT): New macro.
+	(WM_MULE_IMM_SET_COMPOSITION_FONT_REPLY): likewise.
+
+	* mw32fns.c (w32_WndProc): Modify test code on
+	w32_set_ime_font() to check the facility of
+	ImmSetCompositionFont.
+	(w32_WndProc[WM_MULE_IMM_SET_COMPOSITION_FONT):
+	This message invokes w32_set_ime_font().
+	(w32_set_frame_ime_font):
+	Send a message instead of setting the composition font
+	of IME directly.
+
+2000-06-22  MIYASHITA Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* ccl.c (ccl_driver[CCL_End]): Decrement stack_idx
+	only when it is more than 0.
+
+2000-06-15  MIYASHITA Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* mw32clpbd.c (W32_MULE_CB_REQSIZE):
+	(W32_MULE_CB_SIZE):
+	(W32_MULE_CB_CONTENTS):
+	(W32_MULE_SET_CB):
+	New macros to access new clipboard format.
+	(Fw32_set_clipboard_data):
+	(Fw32_get_clipboard_data):
+	Use the above macros to set mule specific clipboard format.
+
+	* w32.h (MULE_CLIPBOARD_FORMAT): modified in order to upgrade
+	format version.
+
+2000-05-15  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* .cvsignore: Add *.idb.
+
+	* fileio.c (Ffile_writable_p): When dir exists,
+	return t without checking the read-only attribute.
+
+2000-04-11  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* mw32bdf.c (draw_for_invalid_index): New function.
+	(mw32_BDF_TextOut):
+	When we cannot find out any griphs, display a
+	circle with slash.
+
+2000-04-10  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* mw32term.h (Vw32_system_coding_system):
+	Moved to coding.h from Emacs 20.6.
+
+2000-04-09  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* mw32term.c (dumpglyphs):
+	If encoding is ENCODING_UNICODE, call W API for rendering font.
+
+	* mw32font.h (ENCODING_DIMENSION): 
+	(ENCODING_BYTE1MSB1): 
+	(ENCODING_BYTE2MSB1): 
+	(ENCODING_BYTE2LSB1): 
+	(ENCODING_SHIFTJIS): 
+	(ENCODING_UNICODE):
+	Define encoding number macros.
+
+	* charset.c (str_cmpchar_id):
+	Fix CVS merge mistakes.
+
+2000-04-07  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* ccl.c: comment fixed. And merged to the newest version.
+	(MAX_MAP_SET_LEVEL): increased to 30.
+	(PUSH_MAPPING_STACK): Enclose with do-while block.
+	(POP_MAPPING_STACK): Likewise.
+	(stack_idx_of_map_multiple): New variable.
+	(CCL_CALL_FOR_MAP_INSTRUCTION): New macro.
+	(ccl_driver) <CCL_IterateMultipleMap>: If content is a symbol,
+	call the corresponding CCL program by CCL_CALL_FOR_MAP_INSTRUCTION.
+	(ccl_driver) <CCL_MapSingle>: Likewise.
+	(ccl_driver) <CCL_MapMultiple>: Rewrited in order to remove many
+	bugs, deal with the case where looking up process reaches to the
+	end of map-set, and call CCL programs like the above change.
+
+2000-03-09  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* coding.c (detect_coding_utf_8):
+	Don't skip extra octets.
+
+2000-02-26  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* coding.c (detect_coding_mask): Even if `priorities' are not
+	specified, check utf-8 and utf-16 coding systems as well as other
+	coding systems.
+
+2000-02-25  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* ccl.c (ccl_driver[CCL_MapMultiple]):
+	When the mapped valued is lambda, set the map index to reg[RRR].
+	(ccl_driver[CCL_MapSingle]):
+	When the mapped valued is found, set 0 to reg[RRR].
+	Otherwise, set -1 to reg[RRR].
+
+2000-02-16  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* mw32term.c (x_set_mouse_pixel_position):
+	Adjust given mouse corsor position by ClientToScreen().
+	(Thanks K.Horiguchi).
+
+	* mw32fns.c (w32_WndProc): 
+	(x_report_frame_params): 
+	Likewise.
+
+2000-01-29  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* keymap.c (Fsingle_key_description): 
+	(describe_buffer_bindings):
+	Use KEY_DESCRIPTION_SIZE to obtain buffer size.
+
+	* keyboard.c (echo_char):
+	Use KEY_DESCRIPTION_SIZE to obtain buffer size.
+
+	* w32.c (check_windows_init_file):
+	When fail to obtain EMACSLOADPATH, show MessageBox().
+
+	* lisp.h (KEY_DESCRIPTION_SIZE):
+	New macro.
+
+	* ccl.c (ccl_driver[CCL_WriteExprConst, CCL_WriteExprRegister]):
+	Set the next ic to jump_address.
+	(ccl_driver[ccl_set_expr]):
+	Set jump_address to the current ic even if code is
+	CCL_WriteExprConst or CCL_WriteExprRegister.
+
+	* lread.c (init_lread):
+	On cd-bootable Meadow, don't set Vload_path.
+
+	* w32.c (check_windows_init_file):
+	Add cd_load_path to load_path for cd-bootable Meadow.
+	(init_w32system):
+	Set cd_lock_path for cd-bootable Meadow.
+
+	* unexw32.c:
+	Define invocation_path, cd_exec_path, cd_load_path,
+	cd_info_path, cd_doc_path, and cd_lock_path for cd-bootable
+	Meadow.
+	(_start):
+	Set the above variables at startup.
+
+	* mw32term.c (EmacsTranslateMessage):
+	Add comments on ToAscii.
+
+	* emacs.c (main):
+	Load cd-startup.el if cd-bootable executable.
+	(main):
+	bug fix.  Set no_loadup correctly.
+
+1999-11-12  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* window.c (syms_of_window):
+	Fix documentation strings on select-window-functions and
+	set-selected-window-functions.
+
+1999-10-28  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* w32.c (getwd):
+	Normalize path by dostounix_filename().
+
+1999-10-15  Kenichi Handa  <handa@etl.go.jp>
+
+	* fns.c (Fstring_as_multibyte): Call
+	register_composite_chars_string for a multibyte string.
+
+1999-10-14  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* mw32term.c (dumpglyphs):
+	Also when charset is ascii, initialize cps.
+	Use font_unit_bytes instead of charset_dimension
+	as a length of byte stream of a character in the
+	case of cmpcharp.
+
+1999-10-10  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* mw32term.c (w32_menu_bar_store_activate_event):
+	During creating menu structure, Meadow maybe
+	call certain Emacs Lisp function that require
+	msg thread's operation.  Therefore, even during
+	menu updating phase, we wait only for 1 second.
+
+1999-10-03  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* coding.c (code_convert_string):
+	Apply patch from Handa-san.
+	recode_unwind_protect() for safety against
+	an error of temp_output_buffer_setup().
+	And deal with encoding of unibyte string.
+
+1999-10-01  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* mw32fns.c (w32_WndProc[WM_SETFOCUS]):
+	If selected_frame is the focused frame,
+	or selected_frame is the initial terminal frame,
+	not generate WM_EMACS_ACTIVATE.
+
+1999-09-28  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* mw32term.c:
+	New variable w32_frame_window.
+	(x_destroy_window): 
+	(w32_scroll_bar_create):
+	Use SEND_INFORM_MESSAGE() instead of POST_INFORM_MESSAGE().
+	(w32_scroll_bar_remove): 
+	To destroy scrollbar window, send WM_CLOSE instead of calling
+	DestroyWindow() from msg thread.
+	(W32read_socket):
+	Move operations for private messages, WM_EMACS_CREATE_SCROLLBAR,
+	WM_MULE_IME_DESTROY_AGENT, WM_EMACS_DESTROY_FRAME,
+	and WM_EMACS_POPUP_MENU to window procedure(w32_WndProc).
+	Still, also in the message loop, we deal with WM_EMACS_CREATE_FRAME
+	and WM_MULE_IME_CREATE_AGENT but just call w32_create_frame_window()
+	and w32_ime_create_agent() respectively.
+
+	* mw32ime.c (Fw32_ime_create_conversion_agent):
+	Use SEND_MSGTHREAD_INFORM_MESSAGE() instead of
+	POST_INFORM_MESSAGE(), and modify message type from
+	WM_MULE_CREATE_AGENT to WM_MULE_IME_CREATE_AGENT.
+	(Fw32_ime_destroy_conversion_agent): 
+	Use SEND_INFORM_MESSAGE() instead of POST_INFORM_MESSAGE().
+
+	* mw32fns.c :
+	Include <shellapi.h> for DragAcceptFiles().
+	(w32_WndProc):
+	Deal with WM_EMACS_CREATE_FRAME, WM_EMACS_CREATE_SCROLLBAR,
+	WM_MULE_IME_CREATE_AGENT, WM_MULE_IME_DESTROY_AGENT,
+	WM_EMACS_DESTROY_FRAME, and WM_EMACS_POPUP_MENU.
+	(w32_window):
+	Use SEND_MSGTHREAD_INFORM_MESSAGE() instead of
+	POST_INFORM_MESSAGE().
+	(w32_create_frame_window): 
+	(w32_destroy_frame): 
+	(w32_create_scrollbar): 
+	(w32_track_popup_menu): 
+	(w32_ime_create_agent): 
+	(w32_ime_destroy_agent):
+	New functions.
+
+	* mw32menu.c (w32menu_show):
+	Use SEND_INFORM_MESSAGE() instead of POST_INFORM_MESSAGE().
+
+1999-09-27  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* keyboard.c (make_lispy_event):
+	In the first call of DragQueryFile(), use only nfiles
+	and ignore returned filename.
+	Then in the second call of it, build files with decoding
+	filename.
+	And if window is not find from event coodinates,
+	store event->frame_or_window, not its car, to window.
+
+1999-09-20  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* mw32fns.c (Fx_create_frame):
+	Don't call Fselect_frame() on a newly created frame.
+
+	* keyboard.c (make_lispy_event[meadow_private_event]):
+	Currently, only return Qnil.
+
+	* mw32term.c (W32read_socket[WM_EMACS_ACTIVATE]):
+	Enable this message.  In order to raise switch-frame,
+	set meadow_private_event to event queue.
+
+	* termhooks.h (event_kind):
+	New event type for Meadow.
+
+1999-09-19  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* charset.c (str_cmpchar_id): 
+	Before xmalloc(), copy str to buf where is safe against
+	memory realocation caused by r_alloc.  After cmpcharp->data is
+	prepared by xmalloc(), copy buf to here.
+
+1999-09-17  Kenichi Handa  <handa@etl.go.jp>
+
+	* insdel.c (insert_from_string_1): Comparing the current gap size
+	with outgoing_nbytes to check if we must enlange the gap.
+
+1999-09-16  Kenichi Handa  <handa@etl.go.jp>
+
+	* charset.h: (register_composite_chars_region): Extern it.
+	(register_composite_chars_string): Extern it.
+
+	* charset.c (str_cmpchar_id): New argument REGISTERP.  Caller
+	changed.
+	(register_composite_chars_region): New function.
+	(register_composite_chars_string): New function.
+
+	* alloc.c (make_string): Call register_composite_chars_string for
+	a multibyte string. 
+	(make_multibyte_string): Likewise.
+	(make_string_from_bytes): Likewise.
+	(make_specified_string): Likewise.
+
+	* buffer.c (Fset_buffer_multibyte): On setting the buffer
+	multibyte, call register_composite_chars_region.
+
+	* insdel.c (insert_1_both): Call register_composite_chars_region
+	after the insertion.
+	(adjust_after_replace): Likewise.
+
+	* indent.c (MULTIBYTE_BYTES_WIDTH): Adjusted for the change of
+	str_cmpchar_id.
+
+1999-09-09  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* mw32fns.c (Fx_create_frame):
+	Output error messages if any font/fontset cannot be selected.
+
+1999-09-08  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* category.c (modify_lower_category_set):
+	Import Handa-san's bug fix.
+	To check whether the char table has category table,
+	use CATEGORY_SET_P().
+
+	* mw32font.c (Fw32_query_get_logfont):
+	Return Qnil when ChooseFont() fails.
+
+1999-09-03  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* coding.c:
+	New variable inhibit_pre_post_conversion.
+	If it is set, disable all operation as to nether
+	pre_write_conversion nor post_read_conversion.
+	(From Handa-san.)
+
+	* minibuf.c (Fminibuffer_complete_word):
+	To retrieve byte size of completion_string,
+	use STRING_BYTES() instead of size key of XSTRING().
+	(Thanks K.Horiguchi).
+
+	* keyboard.c (make_lispy_event):
+	Decode filenames that are passed
+	from DragQueryFile(). (Thanks K.Horiguchi).
+
+1999-09-02  Kenichi Handa  <handa@etl.go.jp>
+
+	* coding.c (setup_code_conversion_workbuf): New funtion.
+	(code_convert_string_unwind): New function.
+	(code_convert_string): Make work buffer by
+	setup_code_conversion_workbuf instead of temp_output_buffer_setup.
+	This is to avoid running temp-buffer-setup-hook.
+
+1999-08-31  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* mw32font.c (Fw32_get_logfont_info):
+	Add max-width element in returned A-list.
+
+	* mw32term.c (dumpglyphs):
+	Only on TrueType font, we utilize glyph metrics to draw
+	background.
+	(dumpglyphs):
+	If relative_compose is negative, draw all elements of one
+	composite character with one ExtTextOut() call in order
+	to make use of TrueType rendering facility.
+
+1999-08-29  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* mw32font.c (Fw32_score_logfont_candidates):
+	fix documentation string.
+
+	* w32.c (file_attributes_stat):
+	Generate hashval to store st_ino.
+
+	* mw32font.c :
+	New variables Qbase, Qweight, Qfixed, Qitalic,
+	Qfamily, Qraster, and Qscalable.
+	(w32_score_logfont): 
+	(Fw32_score_logfont_candidates):
+	New function.
+	(Fw32_get_logfont_info):
+	(Fw32_get_font_info): 
+	(Fw32_change_font_attribute): 
+	(Fw32_add_font): 
+	Use Qwidth, Qheight .etc instead of using intern().
+	(syms_of_mw32font):
+	Set Qbase, Qweight, Qfixed, Qitalic, Qfamily,
+	Qraster, and Qscalable, and staticpro().
+	defsubr Sw32_score_logfont_candidates.
+
+	* mw32font.h (logfont_candidates):
+	New struct for Fw32_score_logfont_candidates.
+
+1999-08-20  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* mw32menu.c (free_frame_menubar):
+	Bug fix: set correct width and height to SetWindowPos().
+
+1999-08-17  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* mw32menu.c (free_frame_menubar):
+	Set f->output_data.w32->menbar_handle to INVALID_HANDLE_VALUE.
+
+	* mw32fns.c (x_set_menu_bar_lines):
+	To enable menubar, call set_frame_menubar() when menubar is disable.
+
+1999-08-15  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* coding.c (detect_coding_system):
+	To look up category_index, apply Fget to a category symbol,
+	not to a category value, which is supporsed to be a coding-system
+	symbol.
+
+1999-08-09  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* w32.c:
+	New variable Vexec_suffix_list.
+	(setup_exec_suffix_list):
+	New fuction
+	(syms_of_w32misc):
+	set up Vexec_suffix_list.
+
+1999-08-07  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* mw32bdf.c (mw32_BDF_TextOut):
+	Let hBMP and bits static.
+	Make new static variables DIBsection_hdc, DIBsection_width,
+	and DIBsection_height to store current status of DIB section.
+	If these are identical to required DIB section,
+	use the current hBMP handle for efficiency.
+
+	* mw32menu.c (modifymenu_encode):
+	New function to check whether the current menu string is identical
+	to new one, and if it is, return 1.  Otherwise, modify menu string
+	with new one, and then return 0.
+	(x_activate_menubar):
+	Set pending_menu_activation to 1, call set_frame_menubar(),
+	and then reset pending_menu_activation to 0.
+	(set_frame_menubar):
+	Enable deep_p argument.  If deep_p is 0, refresh only top level
+	menu items.  At this, if all item strings are identical to
+	previous corresponding items, do nothing for efficiency.
+	And at the end of the function, in the case of pending_menu_activation,
+	call SetEvent() on f->output_data.w32->mainthread_to_frame_handle
+	in order to inform message loop thread of the finish of menubar
+	reconstruction.
+
+	* mw32term.c (w32_menu_bar_store_activate_event):
+	New function.
+	(W32read_socket [case WM_INITMENU]):
+	Removed.
+	(x_destroy_window):
+	Call CloseHandle() on
+	f->output_data.w32->mainthread_to_frame_handle.
+	(w32_term_init):
+	Initialize message_loop_blocked_p with 0.
+
+	* mw32term.h:
+	New extern declaration message_loop_blocked_p.
+
+	* mw32term.c:
+	New variable message_loop_blocked_p.
+
+	* mw32term.h (struct w32_output):
+	New menber mainthread_to_frame_handle
+	and disable reconstruct_menubar.
+
+	* mw32fns.c (w32_WndProc [case WM_INITMENU, WM_EXITMENULOOP):
+	When WM_INITMENU message comes from the menubar of the frame,
+	call w32_menu_bar_store_activate_event() to rebuild menubar.
+	When WM_EXITMENULOOP comes from the menubar of the frame,
+	set disable_reconstruct_menubar to 0 in order to allow main
+	thread reconstruct menubar.
+	(w32_window):
+	Initialize mainthread_to_frame_handle.
+
+1999-07-30  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* coding.c (detect_eol_type_in_2_octet_form):
+	New function.
+	(detect_eol):
+	cooding->category_idx selects
+	which detect_eol_type_XXX () is called.
+
+1999-07-29  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* coding.c 
+	write some comment on coding-category-utf-8,
+	coding-category-utf-16-be, and coding-category-utf-16-le.
+	(coding_category_name): 
+	Append "coding-category-utf-8",
+        "coding-category-utf-16-be",
+        and "coding-category-utf-16-le".
+	(UTF_8_1_OCTET_P): 
+	(UTF_8_EXTRA_OCTET_P): 
+	(UTF_8_2_OCTET_LEADING_P): 
+	(UTF_8_3_OCTET_LEADING_P): 
+	(UTF_8_4_OCTET_LEADING_P): 
+	(UTF_8_5_OCTET_LEADING_P): 
+	(UTF_8_6_OCTET_LEADING_P):
+	New macros for checking UTF-8 octets range.
+	(detect_coding_utf_8):
+	A new function for detecting UTF-8 text.
+	(UTF_16_INVALID_P):
+	(UTF_16_HIGH_SURROGATE_P): 
+	(UTF_16_LOW_SURROGATE_P):
+	New macros for checking UTF-16 octets range.
+	(detect_coding_utf_16):
+	A new function for detecting UTF-16 text.
+	(detect_coding_mask):
+	When priorities are specified, skip any categories that have
+	`nil' coding-system.
+	(detect_coding_mask):
+	Bug fix:if detect_coding_XXX() returns the mask
+	not set at priorities[i] but set at other bit,
+	detect_coding_mask() returned the wrong mask as
+	its result.  Fix to detect coding specified by
+	priorities[i] correctly.
+	(detect_coding_system):
+	remove `nil' coding-system in the result.
+	(Fupdate_coding_systems_internal):
+	update all coding-categories.
+
+	* coding.h (CODING_CATEGORY_IDX_UTF_8): 
+	(CODING_CATEGORY_IDX_UTF_16_BE): 
+	(CODING_CATEGORY_IDX_UTF_16_LE): 
+	New macros
+	(CODING_CATEGORY_IDX_RAW_TEXT): 
+	(CODING_CATEGORY_IDX_BINARY): 
+	(CODING_CATEGORY_IDX_MAX): 
+	Renumber these after CODING_CATEGORY_IDX_UTF_16_LE.
+	(CODING_CATEGORY_MASK_UTF_8): 
+	(CODING_CATEGORY_MASK_UTF_16_BE): 
+	(CODING_CATEGORY_MASK_UTF_16_LE): 
+	New macros.
+	(CODING_CATEGORY_MASK_ANY):
+	Append CODING_CATEGORY_MASK_UTF_8,
+	CODING_CATEGORY_MASK_UTF_16_BE,
+	and CODING_CATEGORY_MASK_UTF_16_LE.
+	(CODING_CATEGORY_MASK_UTF_16_BE_LE):
+	a new macro.
+
+1999-07-27  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+        * charset.c (Fmake_char_internal): Check validity of code points.
+        * coding.c (DECODE_CHARACTER_ASCII): Decode ASCII invocated to GR
+        correctly.
+	These changes are from Handa-san.
+
+	* mw32font.c (set_ccl_method):
+	Correspond to the below specification change.
+	Call setup_ccl_program() with symbol and
+	entruct checking whether the given data is valid to
+	setup_ccl_program().
+
+	Below changes are from Handa-san.
+
+	* ccl.h (setup_ccl_program): The type is changed to `int'.
+
+	* ccl.c (ccl_driver) <CCL_Call>: Now CCL program ID to call may be
+	stored in the following CCL code.  Adjusted for the change of
+	Vccl_program_table.
+	(resolve_symbol_ccl_program): Adjusted for the new style of
+	embedded symbols (SYMBOL . PROP) in CCL compiled code.   Return Qt
+	is resolving failed.
+	(ccl_get_compiled_code): New function.
+	(setup_ccl_program): Function type changed from `void' to `int'.
+	Resolve symbols in CCL_PROG.
+	(Fccl_program_p): New function.
+	(Fccl_execute): Get compiled CCL code by just calling
+	setup_ccl_program.
+	(Fccl_execute_on_string): Likewise.
+	(Fregister_ccl_program): Adjusted for the change of
+	Vccl_program_table.
+
+	* coding.c (setup_coding_system): Get compiled CCL code by just
+	calling setup_ccl_program.
+
+	* xterm.c (x_find_ccl_program): Get compiled CCL code by just
+	calling setup_ccl_program.
+
+	* w32fns.c (w32_find_ccl_program): Get compiled CCL code by just
+	calling setup_ccl_program.
+
+
+1999-07-19  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* w32inevt.c: 
+	enable below definitions.
+	    extern void reinvoke_input_signal (void);
+	    extern int change_frame_size (FRAME_PTR, int, int, int, int);
+	    extern int w32_use_full_screen_buffer;
+
+	* w32console.c (write_glyphs):
+	Use FillConsoleOutputAttribute() to fill attribute.
+
+	* w32.c (file_attributes_stat):
+	If Vw32_get_true_file_attributes is non-nil,
+	generate i-node and set link_count from the
+	information generated by GetFileInformationByHandle().
+	(stat):
+	Disable the part that corresponds to the above operation.
+
+	* makefile.nt (install):
+	If MEADOW_TEST_RELEASE is enabled, install vc.pdb.
+
+1999-07-18  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* w32proc.c (sys_select): 
+	On Meadow, use only WaitForMultipleObjects()
+	even if keyboard_handle is set to FD 0.
+	And disables drain operaion of message queue.
+	(read comments)
+
+	* callproc.c (Fcall_process): 
+	* process.c (Fstart_process): 
+	* w32.c (check_windows_init_file):
+	Close fd only when fd is valid (greater than 0).
+	(thanks to Hiroya Tsubakimoto [meadow-develop:1221])
+
+	* unexw32.c (get_section_info):
+	Bug fix: set SectionNameData_found to 1.
+
+	* mw32fns.c (x_rgb_names):
+	Bug fix: rescale color values because X rgb: color scale is
+	defined by number of characters.
+	(color_radix_change):
+	Check range of size.
+
+	* w32.c (init_w32system): 
+	* mw32term.c (w32_term_init): 
+	Initialize interrupt_handle in
+	init_w32system() instead of w32_term_init()
+	to initialize it also on console.
+	(reported from Shun-ichi GOTO [meadow-develop 1211])
+	(W32read_socket):
+	In the case of WM_INITMENU, store menu_bar_activate_event.
+
+1999-07-17  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* mw32bdf.c: 
+	(BDF_CODEPOINT_HEAP_INITIAL_SIZE):
+	(BDF_BITMAP_HEAP_INITIAL_SIZE): 
+	New macro for HeapCreate() parameter.
+	(hbdf_cp_heap):
+	(hbdf_bmp_heap):
+	heap handles for character codepoint and character bitmap respectively.
+	(mw32_init_bdf_font):
+	Initialize hbdf_cp_heap and hbdf_bmp_heap.
+	(mw32_free_bdf_font):
+	Call HeapFree() to free codepoint table.
+	(cache_char_offset):
+	Call HeapAlloc() to allocate codepoint table instead of xmalloc().
+	(clear_cached_bitmap_slots):
+	Call HeapFree() to free cached bitmap data.
+	(mw32_get_bdf_glyph):
+	Create bitmap data for DIB instead of compatible bitmap.
+	And if this glyph is white space, return -1.
+	(get_bitmap_with_cache):
+	Copy bitmap to memory allocated by HeapAlloc() for cache.
+	If bitmap is a what space, set pbmp to NULL.
+	(create_offscreen_bitmap):
+	New function to create DIBSection.
+	(mw32_BDF_TextOut):
+	Draw BDF font with DIBSection.
+	Copy bitmap data directly into DIBSection memory.
+	When pcb->pbmp is NULL, regard it as a white space character,
+	then skip it.
+
+	* mw32bdf.h
+	Write some comment on GLYPH METRIC.
+	(BDF_FONT_CACHE_SIZE):
+	Increase cache size to 3000.
+	(BDF_FONT_CLEAR_SIZE):
+	Increase clear size to 600.
+	(glyph_struct):
+	New member row_byte_size.
+	(cache_bitmap):
+	New member row_byte_size.
+
+	* unexw32.c (get_section_info):
+	Introduce SectionNameData_found to check if the current section is
+	the first .emdata section.  And print out the log of .emdata
+	section.  These dealings are for alpha version of Visual C++
+	Version 6.
+
+1999-05-12  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* mw32term.c
+	(fast_find_position):
+	(show_mouse_face): 
+	Sync up with xterm.c
+
+1999-05-10  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* mw32bdf.c (GET_HEX_VAL):
+	If the input is ranged from g(G) to z(Z), make it fails.
+
+1999-05-08  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* w32.c (CSTR_EQUAL):
+	If CSTR_EQUAL is not defined, define it as 2.
+
+1999-05-03  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* mw32font.c (Fw32_enum_logfont):
+	Cast mw32_enumfontfamilyproc with (FONTENUMPROC)
+	because the actual type of mw32_enumfontfamilyproc's last argument
+	is Lisp_Object* is confilicts with the formal type LPARAM.
+
+1999-05-02  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* mw32font.c
+	(Fw32_get_logfont_info):
+	(Fw32_get_font_info):
+	(Fw32_get_font_logfont):
+	At the tail, add return Qnil to make every control path return
+	value.
+
+	* keyboard.c (async_handle_message): 
+	call SetEvent(keyboard_handle), even if we read no events.
+
+1999-05-01  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* keyboard.c (async_handle_message):
+	Only when read_avail_input read any inputs,
+	call SetEvent(keyboard_handle).
+
+	* w32proc.c (sys_select):
+	ResetEvent() interrupt_event before waiting for interrupt_event.
+	because WaitForMultipleObjects() cannot be released by PulseEvent().
+
+	* keyboard.c (read_avail_input):
+	remove PulseEvent() because it is hard to check keycode
+	that is not modified at this point.
+	(interrupt_signal):
+	Set SetEvent().
+
+	* mw32term.c (w32_drop_file_handler): 
+	rename w32_drag_n_drop_handler to w32_drop_file_handler.
+
+	(W32read_socket [case WM_EMACS_POPUP_MENU]):
+	When the message queue is not empty (for example, owing to
+	WM_PAINT that is never removed by PeekMessage().), this message
+	loop can't stop.  Hence, we make PeekMessage() receives only WM_COMMAND
+	and then try PeekMessage() only once.
+
+1999-05-01  Horiguchi Kyotaro  <kyota@po.ntts.co.jp>
+
+	* mw32term.c (w32_drag_n_drop_handler, W32read_socket
+	  [case WM_EMACS_CREATE_WINDOW, WM_DROP_FILES],
+
+	* keyboard.c (make_lispy_event [case drag_n_drop])
+	Added support for Drag and Drop.
+
+1999-04-29  Horiguchi Kyotaro  <kyota@po.ntts.co.jp>
+
+	* callproc.c (Fcall_process)
+	* process.c (Fstart_process)
+	PROGRAM, INFILE, STDERR-FILE and cmdname are allowed to be a
+	string containing mutibyte characters (Using ENCODE_FILE to encode
+	string)
+        For argument editing, any program pathes are allowed to pass
+	argument editing program. (Addition to changes on 1999-02-24.)
+
+	* lread.c (openp)
+	str is allowed to be a string containig multibyte characters. This
+	change allows to check files correctly whose names are such strings.
+
+1999-04-27  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* mw32reg.h (w32_get_string_resource): 
+	* mw32reg.c (w32_get_string_resource):
+	Change type of arguments to LPCTSTR.
+
+	* mw32reg.h (REG_VERSION_ROOT):
+	(REG_VERSION_ENV_ROOT): 
+	(REG_COMMON_ROOT): 
+	(REG_COMMON_ENV_ROOT):
+	New macros instead of REG_ROOT and REG_ENV_ROOT.
+
+	* mw32reg.c
+	Define meadow_version_string, meadow_common_root,
+	meadow_common_env_root, meadow_version_root, and
+	meadow_version_env_root.
+	
+	(w32_get_env_resource):
+	(x_get_string_resource): 
+	Check version specific registry entry first,
+	then check common registry entry.
+
+1999-04-25  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* w32.c (init_environment):
+	When we set current directory to the invocation directory,
+	parse the path with CharNext, and copy it to tmporary area.
+	(and sync up with 20.3.8)
+
+1999-04-19  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* mw32term.c (dumpglyphs):
+	specify bytes of font.  Make it independent of charset_dimension.
+	(dumpglyphs):
+	When codepoint is encoded by CCL and encoding[charset] is 4(SJIS,
+	but which is alomost meaningless),
+	set font_unit_bytes to charset_dimension.
+
+1999-03-27  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* ccl.c (ccl_driver) <CCL_ReadMultibyteChar2>:
+	Bug fix: Skip leading byte(CHARSET_COMPOSTION)
+	of composite character
+
+1999-03-17  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* mw32bdf.c (get_quoted_string):
+	Bug fix: search length of quatation mark at tail is
+	not (end - q) but (end - p).
+
+1999-03-01  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* mw32bdf.c (cache_char_offset): 
+	(get_cached_font_char): 
+	To change codepoint range easily, rewrite the part of
+	checking codepoint range with the below macro.
+
+	* mw32bdf.h (BDF_CODEPOINT_MAX): 
+	(BDF_CODEPOINT_RANGE_COVER_P):
+	New macro.
+	
+
+1999-02-28  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* w32.c (w32_get_long_filename):
+	Bug fix: when any directory separators are found,
+	Set p to NULL pointer to distinguish from the temporary
+	mark to separate a path element.
+
+1999-02-27  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* w32.c (file_attributes_stat): Bug fix: Fix to check whether the
+	last character of path is directory separator, not to check a
+	terminator(0) of string.
+
+	* mw32ime.c (w32_set_ime_font):
+	Exclude the case that psetlf is NULL.
+
+	* mw32fns.c (syms_of_w32fns): Set Qime_font.
+
+	(w32_window):
+	(Fx_create_frame): The default font with which IME displays
+	internally is set not at w32_window() but at Fx_create_frame() and
+	it is determined also by `params' that is passed to
+	Fx_create_frame().
+
+1999-02-26  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* w32.c (open_unc_volume):
+	Change prototype of path to const char*.
+
+1999-02-25  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* w32.c (normalize_filename): 
+	(parse_root): 
+	(get_long_basename): 
+	(w32_get_long_filename): 
+	(is_unc_volume): 
+	(get_volume_info): 
+	(map_w32_filename): 
+	(readdir): 
+	(read_unc_volume): 
+	(sys_link): 
+	(sys_rename): 
+	(generate_inode_val): 
+	(stat): 
+	(file_attributes_stat): 
+	Rewrite with W32 string manipulation API.
+	(Use string type TCHAR instead char)
+	
+	(is_string_contains_chars): 
+	New function.
+
+1999-02-24  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* w32proc.c (sys_spawnve):
+	Checks whether the cmdname (that have already 
+	produced by argument editing) exists.
+
+	* callproc.c (Fcall_process):
+	For argument editing, any program pathes are allowd to
+	pass argument editing program.
+
+1999-02-23  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* keyboard.c (read_key_sequence):
+	Immerge IME_CONTROL operation again.
+
+	* w32proc.c (sys_spawnve):
+	To canonicalize cmdname, call openp to retrieve full path.
+	And remove the check of Ffile_executable_p().
+
+1999-02-21  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* mw32fns.c (w32_WndProc):
+	Change frame size in delay mode.
+
+	* mw32menu.c (free_frame_menubar):
+	To preserve window area of the frame as correctly as possible,
+	call SetWindowPos() with its before value.
+
+1999-02-20  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* mw32fns.c (w32_WndProc):
+	For visible-bell, Imprement WM_EMACS_FLASH_WINDOW.
+
+	* mw32term.c
+	(x_iconify_frame):
+	(W32clear_frame): 
+	(W32clear_end_of_line): 
+	(W32cursor_to): 
+	(W32reset_terminal_modes): 
+	(W32set_terminal_modes): 
+	(W32reassert_line_highlight): 
+	(W32frame_up_to_date): 
+	(W32update_end): 
+	(W32update_begin): 
+	(W32ring_bell): 
+	(W32insert_glyphs): 
+	(W32delete_glyphs): 
+	(W32set_terminal_window): 
+	(W32ins_del_lines): 
+	Change prototype.  Set the type of the return value to void.
+
+	* mw32term.h (WM_EMACS_FLASH_WINDOW):
+	New macro.
+
+	* mw32term.c (W32ring_bell):
+	Post WM_EMACS_FLASH_WINDOW if visible bell is enabled.
+
+	* mw32term.h:
+	Define gravity parameters.
+
+	* keyboard.c (async_handle_message):
+	Remove a critical section from read_avain_input() part.
+	(Move it to finer parts).
+
+	* mw32fns.c (w32_WndProc):
+	Set dumprectangle() part to a critical section.
+
+1999-02-18  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* mw32ime.c (Fw32_ime_undetermined_string_length):
+	Rename from Fdoes_ime_have_undetermined_strings.
+
+	* mw32fns.c (Fw32_focus_frame):
+	dummy function.
+	(syms_of_w32fns):
+	Define Sw32_focus_frame.
+
+	* mw32term.c
+	(w32_focus_on_frame): 
+	(w32_unfocus_frame): 
+	Rename x_focus_on_frame and x_unfocus_frame, respectively.
+	Write some comments.
+
+	* w32proc.c (sys_spawnve):
+	Use STRING_BYTES() instead.
+
+1999-02-04  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* mw32menu.c (single_menu_item):
+	New function from xmenu.c.
+	Disable the facility to display a mark of submenu.
+	Enable the facility to show submenu.
+	(syms_of_w32menu):
+	Remove Qmenu_alias to follow xmenu.c
+
+	* mw32fns.c (w32_WndProc): 
+	Dispatch IMM message to a specialized wndproc.
+
+	* mw32term.h:
+	Define many macros for communication between IMM Agent
+	and Lisp Interpreter.
+
+	* mw32menu.c (insertmenu_decode): 
+	(appendmenu_decode): 
+	Use '\0' instead of NULL.
+
+1998-08-09  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* mw32term.h:
+	Make classification many messages with their functions.
+
+1998-07-15  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* mw32bdf.c (get_quoted_string):
+	append new function to obtain quoted string.
+	(set_bdf_font_info):
+	initialize new font properties.
+	(mw32_get_bdf_font_info):
+	Set new font properties to alist.
+	(set_bdf_font_info):
+	Set new font properties from BDF data.
+
+1998-04-25  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* mw32term.c (dumpglyphs):
+	Bug fix: to get metrics of fonts, use cps instead of bufs.
+
+1998-04-06  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* xterm.h:
+	append extern declearation of x_find_ccl_program().
+	
+	* xterm.c (x_find_ccl_program):
+	Even if bad data type is found, not give up but try next one.
+	bug fix to the argument of resolve_symbol_ccl_program.
+
+	* xfns.c (syms_of_xfns):
+	set backend hook.(find_ccl_program_func)
+
+1998-03-28  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* mw32fns.c
+	(Fx_create_frame): 
+	(w32_set_font): 
+	 Set regexpp to Qt because of change of Fquery_fontset.
+
+1998-03-28  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* fontset.c (Fnew_fontset):
+	(Fset_fontset_font): 
+	* xfns.c (x_set_font):
+	(Fx_create_frame): 
+	 Set regexpp to Qnil because of change of Fquery_fontset.
+
+1998-03-25  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* coding.c (setup_coding_system):
+	Get a ccl program specified by SYMBOL.
+
+1998-03-23  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* xterm.c (x_find_ccl_program):
+	To convert CCL program to make it executable by using
+	resolve_symbol_ccl_program().
+
+1998-03-21  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* ccl.c (Fccl_execute): 
+	(Fccl_execute_on_string): 
+	ccl-execute and ccl-execute-on-string can handle SYMBOLized
+	CCL-PROGRAM.
+	
+1998-03-20  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* ccl.c (Fregister_ccl_program): 
+	modify to use resolve_symbol_ccl_program.
+	(resolve_symbol_ccl_program):
+	New function.
+
+1998-03-19  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* ccl.c:
+	Qunification_table:
+	Qunification_table_id: new variables.
+	(syms_of_ccl): 
+	Register Qunification_table and Qunification_table_id,
+	and protect these as static.
+	(Fregister_ccl_program): 
+	Convert a vector of ccl program.
+	Change ccl_translation_table and unification_table symbol to
+	their ID.
+	(ccl_driver): (CCL_TranslateMultipleMap)
+	modified to use	nested tables.
+	(CCL_ReadMultibyteChar2):
+	Rename CCL_ReadMultibyteCharacter into this.
+
+1998-01-23  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* w32proc.c: New variable, Vw32_get_true_file_link_count.
+	(syms_of_ntproc): New variable, Vw32_get_true_file_link_count.
+
+1998-01-12  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* w32.c (file_attributes_stat): 
+	Delete count_subdirectory.  Instead, use this function.
+
+	* dired.c (Ffile_attributes): 
+	use file_attribute_stat to know a link count of a directory.
+
+1998-01-08  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* w32.c (count_subdirectory):
+	New function.
+	(stat): set 2 + number of subdirectorys to st_nlink
+	when the specified path is a directory.
+
+1997-11-21  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* w32.c (get_emacs_configuration):
+	fix wrong use of GetVersion().
+
+1997-11-08  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* keyboard.c (read_avail_input):
+	Read input from file handle. So remove "return 0;"
+
+	* dispnew.c (init_display):
+	isatty() on Windows does not show whether the I/O is a tty.
+	So disable this code.
+
+	* termcap.c (tgetent):
+	(valid_filename_p): 
+	 change compile condition from MSDOS to DOS_NT.
+	
+	* w32.c (init_environment):
+	add TERMCAP environment.
+
+	* term.c (term_init):
+	To support various terminal on Windows, make terminal initialize code
+	selectable.
+
+1997-11-06  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* w32proc.c (sys_select): 
+	If a process can't be created by accident, cp may be NULL.
+	In this case, we should skip this handle, not abort().
+
+1997-11-04  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* w32console.c (write_glyphs):
+	encode output string.
+
+1997-11-03  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* termhooks.h (event_kind): 
+	append w32_change_keyboard_layout.
+
+	* charset.c (find_charset_in_str): 
+	If we can't valid charset in string, not set "charsets" table to 1.
+
+1997-11-2 Miyashita Hisasshi <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* w32proc.c (sys_spawnve):
+	Set process_dir to NULL.
+	(We should check whether process_dir is set by caller.)
+	(create_child): 
+	When process_dir is not set by caller, we use NULL to
+	call CreateProcess.
+
+1997-10-30  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* window.c (Fset_window_buffer):
+	add set_selected_window_buffer_functions hook.
+	(syms_of_window):
+	add select-window-functions, select-window-buffer-functions.
+
+1997-10-24  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* w32proc.c (w32_executable_type): 
+	Type of nt_header and dos_header is defferent.
+	Cast them into (char*)
+
+1997-08-31  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* w32.c (sys_read): 
+	use flag and if the ReadFile is failed by reading bloken pipe,
+	return 0.
+
+1997-08-30  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* w32.c (_sys_read_ahead):
+	If the pfn_recv() returns SOCKET_ERROR and its reason
+	is that the socket receives no data in non-blocing mode,
+	I retry pfn_recv().
+
+1997-08-20  Miyashita Hisashi  <himi@etl.go.jp>
+
+	* ccl.c (syms_of_ccl):
+	append new variable Vccl_translation_table_vector.
+	(Fregister_ccl_translation_table): New function.
+	(Fregister_ccl_program): delete unused variable int idx.
+	(syms_of_ccl): append new symbols.
+	Qccl_translation_table and Qccl_translation_table_id.
+
+1997-08-19  Miyashita Hisashi <himi@etl.go.jp>
+
+	* ccl.c: (CCL_Call) fix the comment.
+
+	* charset.h (UNIFICATION_ID_TABLE):
+	made a new macro for CCL.
+	(Vcharacter_unification_table_vector):
+	export.
+
+1997-08-16  Miyashita Hisashi  <himi@etl.go.jp>
+
+	* ccl.h: (struct ccl_program):
+	append private_state for suspending.
+
+1997-08-11  Miyashita Hisashi  <himi@etl.go.jp>
+
+	* charset.c (syms_of_charset):
+	make Vcharacter_unification_table_vector.
+
+	* ccl.c (EXCMD): add new entry for excmd.
+	(CCL_ReadMultibyteCharacter): 
+	(CCL_WriteMultibyteCharacter): 
+	(CCL_UnifyMultibyteCharacter): 
+	(CCL_IterateMultipleMap):
+	(CCL_TranslateMultipleMap): New CCL Command
+
+1997-07-22 Miyashita Hisashi   <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* termhooks.h (event_kind): add w32_mouse_wheel for intellimouse.
+
+	* keyboard.c (syms_of_keyboard): set staticpro (&mouse_wheel_syms).
+
+	* keyboard.c : Add static char *lispy_mouse_wheel_names and 
+	mouse_wheel_syms for Intellimouse.
+	(make_lispy_event): Add w32_mouse_wheel condition.
+
+1997-05-17  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* buffer.h: 
+	(struct buffer_text)
+	* buffer.c
+	(syms_of_buffer): 
+	(init_buffer_once): 
+	(reset_buffer_local_variables): 
+	(init_buffer_once): 
+	* fileio.c
+	(Finsert_file_contents):
+	(Fwrite_region):
+	(syms_of_fileio): 
+	On MULE, buffer_file_type and find-buffer-file-type is not required.
+	And file mode is fixed to O_BINARY.
+
+Thu Mar 06 14:40:23 1997  himi  <himi@etl.go.jp>
+
+	* ccl.h: add ccl-program symbol.
+
+	* ccl.c (syms_of_ccl): add ccl-program symbol.
+
+Wed Mar 05 23:54:40 1997  himi  <himi@etl.go.jp>
+
+	* dispextern.h: To add property to struct face.
+	                "Lisp_Object *property" have array of properties.
+			This array can have only Lisp_Object_Int.
+			And delete "char underline".
+
+	* xterm.c (x_find_ccl_program): move it from fontset.c.
+
+	* xfns.c (syms_of_xfns): set pointer "find_ccl_program_func" to x_find_ccl_program.
+
+	* fontset.h: add *find_ccl_program_func.
+
+	* fontset.c (fs_load_font): use (*find_ccl_program_func).
+

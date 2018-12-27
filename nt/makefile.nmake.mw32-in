@@ -1,0 +1,283 @@
+#
+#  Top level makefile for building GNU Emacs on Windows NT
+#
+#  This file is part of GNU Emacs.
+#  
+#  GNU Emacs is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2, or (at your option)
+#  any later version.
+#  
+#  GNU Emacs is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#  
+#  You should have received a copy of the GNU General Public License
+#  along with GNU Emacs; see the file COPYING.  If not, write to
+#  the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+#  Boston, MA 02111-1307, USA.
+#
+#   Geoff Voelker (voelker@cs.washington.edu)	11-20-93
+#						  9-6-94
+#   Revised for Meadow by himi(Miyashita Hisashi) 97/10/28
+
+!include makefile.def
+
+INSTALL_DIR_M   = $(INSTALL_DIR)
+
+ALL		= RunMW32 install_exe cmdproxy fiber
+!if $(MSVCNT11)
+TRES		= $(BLD)\meadow.res
+!else
+TRES		= $(BLD)\meadow.rbj
+!endif
+
+.c{$(BLD)}.obj:
+		  $(CC) $(CFLAGS) -Fo$@ $<
+
+install_exe:	$(BLD) $(BLD)\install.exe
+$(BLD)\install.exe: $(BLD)\install.obj
+	$(LINK) -out:$@ -subsystem:console -entry:mainCRTStartup \
+	$(SYS_LDFLAGS) $** $(BASE_LIBS) user32.lib
+$(BLD)\install.obj: install.c
+
+fiber:		$(BLD) $(BLD)\fiber.exe
+$(BLD)\fiber.exe: $(BLD)\fiber.obj
+	$(LINK) -out:$@ -subsystem:console -entry:mainCRTStartup \
+	$(SYS_LDFLAGS) $** libc.lib advapi32.lib oldnames.lib shell32.lib
+$(BLD)\fiber.obj: fiber.c
+
+RunMW32:		$(BLD) $(BLD)\RunMW32.exe
+$(BLD)\RunMW32.exe: $(BLD)\RunMW32.obj $(TRES)
+	$(LINK) -out:$@ -subsystem:windows \
+	$(SYS_LDFLAGS) $** $(BASE_LIBS) user32.lib
+$(BLD)\RunMW32.obj: RunMW32.c
+
+cmdproxy:	  $(BLD) $(BLD)\cmdproxy.exe
+$(BLD)\cmdproxy.obj: cmdproxy.c
+$(BLD)\cmdproxy.exe: $(BLD)\cmdproxy.obj
+		  $(LINK) -out:$@ -subsystem:console -entry:mainCRTStartup \
+		  $(SYS_LDFLAGS) $** $(BASE_LIBS) user32.lib
+
+#
+# The resource file.  NT 3.10 requires the use of cvtres; even though
+# it is not necessary on later versions, it is still ok to use it.
+#
+$(TRES):	meadow.rc
+		$(RC) -Fo$*.res $**
+!if !$(MSVCNT11)
+		$(CVTRES) -r -$(ARCH) -o $@ $(BLD)\meadow.res
+!endif
+
+# Since Windows 95 does not support multiple commands on one command line
+# (e.g., in for loops), we cannot use for loops any more.
+# SUBDIRS	      = lib-src src lisp
+
+#
+# Build emacs
+#
+BUILD_CMD	= $(MAKE) $(MFLAGS) all
+all:		$(BLD) $(ALL)
+		cd ..\lib-src
+		$(BUILD_CMD)
+		cd ..\src
+		$(BUILD_CMD)
+		cd ..\lisp
+		$(BUILD_CMD)
+		- cd ..\leim
+		if exist ..\leim\makefile $(BUILD_CMD)
+		cd ..\nt
+
+BOOTSTRAP_CMD	= $(MAKE) $(MFLAGS) bootstrap
+bootstrap:	$(BLD) $(ALL)
+		-mkdir ..\bin
+		copy $(BLD)\cmdproxy.exe ..\bin
+		cd ..\src
+		$(BOOTSTRAP_CMD)
+		$(BOOTCLEAN_CMD)
+		cd ..\lisp
+		$(BOOTSTRAP_CMD)
+		cd ..\nt
+
+BOOTCLEAN_CMD	= $(MAKE) $(MFLAGS) bootstrap-clean
+bootstrap-clean:
+		cd ..\src
+		$(BOOTCLEAN_CMD)
+		cd ..\lisp
+		$(BOOTCLEAN_CMD)
+
+Meadow.bat:	Meadow.bat.in
+		echo @echo off > $@
+		echo REM !!! Warning: This file automatically generated !!! >> $@
+		echo set emacs_dir=$(INSTALL_DIR_M)>> $@
+		echo set EMACSLOADPATH=$(INSTALL_DIR_M)\site-lisp;$(INSTALL_DIR)\site-lisp;$(INSTALL_DIR_M)\lisp>> $@
+		type $** >> $@
+
+################################
+# debug.bat:	debug.bat.in
+#		echo @echo off > debug.bat
+#		echo REM !!! Warning: This file automatically generated !!! >> debug.bat
+#		echo set emacs_dir=$(INSTALL_DIR)>> debug.bat
+#		type debug.bat.in >> debug.bat
+################################
+
+#
+# Build and install emacs in INSTALL_DIR
+#
+INSTALL_CMD	= $(MAKE) INSTALL_DIR=$(INSTALL_DIR_M) install
+install:	all Meadow.bat
+		- mkdir $(INSTALL_DIR)
+		- mkdir $(INSTALL_DIR_M)
+		- mkdir $(INSTALL_DIR)\site-lisp
+		cd ..\lib-src
+		$(INSTALL_CMD)
+		cd ..\src
+		$(INSTALL_CMD)
+		cd ..\lisp
+		$(INSTALL_CMD)
+#		cd ..\site-lisp
+#		$(CP_DIR) . $(INSTALL_DIR)\site-lisp
+		- cd ..\leim
+		if exist ..\leim\makefile $(INSTALL_CMD)
+		cd ..\nt
+		- $(CP) README.Meadow $(INSTALL_DIR)
+		- $(CP) INSTALL.Meadow $(INSTALL_DIR)
+		- $(CP) README.Meadow.ja $(INSTALL_DIR)
+		- $(CP) INSTALL.Meadow.ja $(INSTALL_DIR)
+		- $(CP) Meadow.plan $(INSTALL_DIR)
+		- $(CP) dot.emacs.ja $(INSTALL_DIR)
+		- $(CP) fiber.txt $(INSTALL_DIR_M)\bin
+		- $(CP) Meadow.bat $(INSTALL_DIR_M)\bin
+		- $(CP) dump.bat $(INSTALL_DIR_M)\bin
+#		- $(CP) debug.bat $(INSTALL_DIR_M)\bin
+#		- $(CP) ..\lib-src\fns-*.el $(INSTALL_DIR_M)\bin
+		- $(CP) $(BLD)\cmdproxy.exe $(INSTALL_DIR_M)\bin
+		- $(CP) $(BLD)\RunMW32.exe $(INSTALL_DIR_M)\bin
+		- $(CP) meadow.ico $(INSTALL_DIR_M)\bin
+		- $(CP) $(BLD)\install.exe $(INSTALL_DIR_M)
+		- $(CP) $(BLD)\fiber.exe $(INSTALL_DIR_M)\bin
+		- mkdir $(INSTALL_DIR_M)\site-lisp
+		- $(CP) ..\site-lisp\subdirs.el $(INSTALL_DIR_M)\site-lisp
+		if not exist $(INSTALL_DIR)\site-lisp\subdirs.el $(CP) ..\site-lisp\subdirs.el $(INSTALL_DIR)\site-lisp
+		- $(DEL) ..\same-dir.tst
+		- $(DEL) $(INSTALL_DIR_M)\same-dir.tst
+		echo SameDirTest > $(INSTALL_DIR_M)\same-dir.tst
+		if not exist ..\same-dir.tst $(MAKE) real_install
+		- $(DEL) ..\same-dir.tst
+		- $(DEL) $(INSTALL_DIR_M)\same-dir.tst
+
+#
+# This installs executables from ..\bin into the installation directory
+# without building anything.
+#
+fast_install:
+		- mkdir $(INSTALL_DIR_M)\data
+		$(CP) ..\lib-src\DOC $(INSTALL_DIR_M)\etc
+		- mkdir $(INSTALL_DIR_M)\bin
+		- $(CP) Meadow.bat $(INSTALL_DIR_M)\bin
+#		- $(CP) debug.bat $(INSTALL_DIR_M)\bin
+		- $(DEL) ..\same-dir.tst
+		- $(DEL) $(INSTALL_DIR_M)\same-dir.tst
+		echo SameDirTest > $(INSTALL_DIR_M)\same-dir.tst
+		if not exist ..\same-dir.tst $(CP) ..\bin\emacs.exe $(INSTALL_DIR_M)\bin
+		if not exist ..\same-dir.tst $(CP) ..\bin\etags.exe $(INSTALL_DIR_M)\bin
+		if not exist ..\same-dir.tst $(CP) ..\bin\ctags.exe $(INSTALL_DIR_M)\bin
+		if not exist ..\same-dir.tst nmake real_install
+		- $(DEL) ..\same-dir.tst
+		- $(DEL) $(INSTALL_DIR_M)\same-dir.tst
+
+real_install:
+		- $(DEL) ..\same-dir.tst
+		- $(DEL) $(INSTALL_DIR_M)\same-dir.tst
+		echo SameDirTest > $(INSTALL_DIR_M)\same-dir.tst
+		- mkdir $(INSTALL_DIR_M)\etc
+		- mkdir $(INSTALL_DIR_M)\info
+		- mkdir $(INSTALL_DIR_M)\bitmap
+		- mkdir $(INSTALL_DIR_M)\lock
+		- mkdir $(INSTALL_DIR_M)\data
+		- mkdir $(INSTALL_DIR_M)\site-lisp
+		if not exist ..\same-dir.tst $(CP_DIR) ..\etc $(INSTALL_DIR_M)\etc
+		if not exist ..\same-dir.tst $(CP_DIR) ..\info $(INSTALL_DIR_M)\info
+		if not exist ..\same-dir.tst $(CP_DIR) ..\nt\bitmap $(INSTALL_DIR_M)\bitmap
+		- $(DEL) ..\same-dir.tst
+		- $(DEL) $(INSTALL_DIR_M)\same-dir.tst
+
+#
+# Release
+#
+
+CD_CMD = cd 
+
+release: bin_release src_release
+
+bin_release: $(BIN_TARBALL_GZIP_TARGET)
+
+bin_release_directory: $(BIN_RELEASE_TARGET_DIRECTORY)
+
+$(BIN_TARBALL_GZIP_TARGET): $(BIN_RELEASE_TARGET_DIRECTORY)
+!if "$(BIN_RELEASE_DRIVE)" != ""
+		- $(BIN_RELEASE_DRIVE)
+!endif
+		- cd $(BIN_RELEASE_DIRECTORY)
+		- tar cvf - Meadow | gzip -9c > $(BIN_TARBALL_GZIP_TARGET)
+
+$(BIN_RELEASE_TARGET_DIRECTORY): $(SRC_RELEASE_TARGET_DIRECTORY)
+!if "$(SRC_RELEASE_DRIVE)" != ""
+		- $(SRC_RELEASE_DRIVE)
+!endif
+		- cd $(SRC_RELEASE_TARGET_DIRECTORY)\nt
+		- $(MAKE) INSTALL_DIR=$(BIN_RELEASE_TARGET_DIRECTORY) install
+		- $(MAKE) INSTALL_DIR=$(BIN_RELEASE_TARGET_DIRECTORY) clean
+
+src_release: $(SRC_TARBALL_GZIP_TARGET)
+
+$(SRC_TARBALL_GZIP_TARGET): $(SRC_RELEASE_TARGET_DIRECTORY)
+!if "$(SRC_RELEASE_DRIVE)" != ""
+		- $(SRC_RELEASE_DRIVE)
+!endif
+		- cd $(SRC_RELEASE_DIRECTORY)
+		- tar cvf - $(RELEASE_NAME) | gzip -9c > $(SRC_TARBALL_GZIP_TARGET)
+
+$(SRC_RELEASE_TARGET_DIRECTORY):
+		- $(CP_DIR) ..\lisp\*.elc $(SRC_RELEASE_TARGET_DIRECTORY)\lisp-compiled
+!if "$(SRC_RELEASE_DRIVE)" != ""
+		- $(SRC_RELEASE_DRIVE)
+!endif
+		- cd $(SRC_RELEASE_DIRECTORY)
+		- cvs export -d $(RELEASE_NAME) -r $(CVS_RELEASE_TAG) Meadow
+		- cd $(SRC_RELEASE_TARGET_DIRECTORY)
+		- rm -f $(NO_RELEASE_FILE_LIST)
+		- $(CP_DIR) lisp-compiled\*.elc $(SRC_RELEASE_TARGET_DIRECTORY)\lisp
+		- $(DEL_TREE) lisp-compiled
+
+#
+# Maintenance
+# 
+CLEAN_CMD	= $(MAKE) clean
+clean:;		- $(DEL) *~ *.pdb
+		- $(DEL_TREE) deleted
+		- $(DEL_TREE) $(OBJDIR)
+		- $(DEL_TREE) ..\bin
+		- $(DEL) ..\etc\DOC ..\etc\DOC-X
+		- $(DEL) meadow.bat
+		- $(DEL) debug.bat
+		cd ..\lib-src
+		$(CLEAN_CMD)
+		cd ..\src
+		$(CLEAN_CMD)
+		cd ..\lisp
+		$(CLEAN_CMD)
+		- cd ..\leim
+		if exist ..\leim\makefile $(CLEAN_CMD)
+		cd ..\nt
+#
+# Documentation
+#
+SDOC=sdoc
+DOCS = Meadow-Manual.html Meadow-Manual_ja.html
+
+$(DOCS): Meadow-Manual.sdoc
+	$(SDOC) -toc "-locale:ja,en" -masterLocale:en $?
+
+doc: $(DOCS)

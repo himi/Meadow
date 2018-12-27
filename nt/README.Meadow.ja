@@ -1,0 +1,35 @@
+-*- coding: sjis-dos -*-
+***************************************************************************
+     Meadow 2.10 に関する基本的かつ簡単なマニュアル
+       (Multilingual enhancement to gnu Emacs with ADvantages Over Windows)
+	著: Miyashita Hisashi <himi@bird.scphys.kyoto-u.ac.jp>
+	編集: Takeyori Hara <takeyori@mechatro2.ME.Berkeley.EDU>
+        日本語訳: Yoshiki Hayashi <t90553@mail.ecc.u-tokyo.ac.jp>
+***************************************************************************
+
+1..... イントロダクション
+
+Meadow は GNU Emacs に多言語拡張をしたもので、Windows9X/NT/2000/XP で
+動作可能です。との題目で進められていたのですが、GNU Emacs 自身 Mule と
+統合され、また、一部 Meadow 由来のコードが導入されたりして、GNU
+Emacs20.4 で Windows 向けにも多言語処理機能が一応のことながら実装され
+るようになったので、上の記述は最近では不正確になってしまいました。
+
+そもそも Meadow はある時を境に GNU Emacs における Windows 実装とは、異
+なった実装を歩み始めました。現状になってもその違いは残っており、さまざ
+まな機能が付加されています。基本的には GNU Emacs 21.1 を base にしてお
+りますが、積極的に maintainer 達の好みで改良が施されています。将来的に
+は基となった GNU Emacs とは違ったものになるかもしれませんし、そうでな
+いかもしれません。 :-)
+
+2..... インストール
+
+インストールは非常に簡単です。`INSTALL.Meadow.ja' を読んでください。
+
+3..... より詳しい情報
+
+Meadowのホームページを参照してください。
+
+    http://www.meadowy.org/meadow/
+
+------------------------------------------------------

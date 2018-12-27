@@ -1,0 +1,988 @@
+2005-09-06  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* meadow.defs (MEADOW_VERSION): Set it 2.11.
+	(MEADOW_RELEASE_TAG): Set it ASAGAO-2.11.
+	(MEADOW_VERSION_STRING): Set it Meadow-2.11-pre (ASAGAO).
+
+2005-08-28  KOSEKI Yoshinori  <kose@meadowy.org>
+
+	* Meadow-2.10 (ASAGAO) Release.
+
+2005-08-28  KOSEKI Yoshinori  <kose@meadowy.org>
+
+	* INSTALL.Meadow.ja: Set ImageMagick version to 6.2.4.
+	* INSTALL.Meadow: Ditto.
+
+2005-03-26  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* install.c (set_registry_data): Add `site-lisp' in main_top_root
+	directory to `EMACSLOADPATH'.
+
+2005-03-22  KOSEKI Yoshinori  <kose@meadowy.org>
+
+	* Meadow-2.10 (ASAGAO) Release. (not Released)
+
+	* meadow.defs (MEADOW_VERSION_STRING): Set version to Meadow-2.10 (ASAGAO).
+	(MEADOW_SVN_URL): Set URL to http://svn.meadowy.org/Meadow/branches/2.1/.
+
+2005-03-19  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* README.Meadow.ja: Update for Meadow 2.10.
+
+	* README.Meadow: Ditto.
+
+	* makefile.nt: Do not install `mkdir', `lock' and `data'.
+
+2005-03-16  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* makefile.def (CFLAGS): Increase PDUMP_OBJECT_ARRAY_SIZE up to
+	205000.
+
+2005-03-16  KOSEKI Yoshinori  <kose@meadowy.org>
+
+	* INSTALL.Meadow: Update for Meadow2.10.
+	* INSTALL.Meadow.ja: Ditto.
+
+	* README.Meadow.ja: Update.
+	* README.Meadow: Ditto.
+
+	* makefile.meadow.w32-in: Do not mkdir lock, data.
+	Do not install Meadow.plan.
+
+2005-03-13  Shuichi KITAGUCHI  <kit@meadowy.org>
+
+	* makefile.def: Sync up with Emacs 21.4.
+
+	* ebuild.bat: Ditto.
+
+	* makefile.nmake.mw32-in (INSTALL_DIR_M): do not use MEADOW_VERSION.
+
+	* cmdproxy.c: Sync up with Emacs 21.4.
+
+	* emacs.bat: Ditto.
+
+	* configure.meadow.bat: correct to check "--magick" argument.
+
+	* emacs.bat: delete unused file.
+
+	* meadowrc.h: Ditto.
+
+	* install.c (set_registry_data): add packages/lisp to EMACSLOADPATH.
+
+	* gmake.meadow.defs (INSTALL_DIR_M): do not use MEADOW_VERSION.
+
+2005-03-06  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* configure.meadow.bat: Fix typos around `rem'.
+
+2005-03-06  Shuichi KITAGUCHI  <kit@meadowy.org>
+
+	* configure.meadow.bat: add --magick option.
+
+	* INSTALL.Meadow.ja: Ditto.
+
+	* INSTALL.Meadow: Ditto.
+
+2004-11-28  Shuichi KITAGUCHI  <kit@meadowy.org>
+
+	* Meadow.mak: removed.
+
+	* dump95.bat: Ditto.
+
+	* dumpNT.bat: Ditto.
+
+	* Meadow.plan: Ditto.
+
+	* Meadow-Manual.sdoc: Ditto.
+
+	* gmake.meadow.defs (CP_DIR): add /y option to xcopy.
+
+	* configure.meadow.bat: correct compile operation.
+
+	* INSTALL.Meadow: correct install operation.
+
+	* makefile.def (SYS_LDFLAGS): remove -pdf:none option.
+	(CP_DIR): add /y option to xcopy.
+
+2004-08-31  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* config.nt (HAVE_MULTILINGUAL_MENU): Define the macro to avoid
+	multiple encoding.
+
+2004-07-20  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* dot.emacs.ja: Use low level font APIs instead of high level
+	ones.
+
+2004-07-10  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* meadow.defs (MEADOW_SVN_URL): Update.
+	(MEADOW_RELEASE_TAG): Ditto.
+
+2004-07-07  KOSEKI Yoshinori  <kose@meadowy.org>
+
+	* Meadow 2.00 (KIKYOU) Release.
+
+2004-07-04  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* makefile.meadow.w32-in (doc): New dependancy.
+
+	* makefile.nmake.mw32-in (doc): Ditto.
+
+	* Meadow-Manual.sdoc: Update contents.
+
+	* README.Meadow.ja: Ditto.
+
+2004-06-29  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* README.Meadow.ja: Update description for 2.00.
+
+	* README.Meadow: Update description for 2.00.
+
+2004-06-05  MIYOSHI Masanori  <miyoshi@meadowy.org>
+
+	* Merge changes from 2.00 branch.
+
+2004-05-17  Kyotaro HORIGUCHI <horiguti@meadowy.org>
+
+	* INSTALL.Meadow.ja: Update description abount ImageMagick.
+
+	* INSTALL.Meadowa: Update description abount ImageMagick and
+	correct description of how to make from source with msvc.
+
+2004-05-11  KOSEKI Yoshinori  <kose@meadowy.org>
+
+	* meadow.defs (MEADOW_VERSION_STRING): Set version to Meadow-2.00pre2
+	(KIKYOU).
+
+2004-05-04  MIYASHITA Hisashi  <himi@meadowy.org>
+
+	* Meadow-Manual.sdoc: New file.
+
+2004-01-06  KOSEKI Yoshinori  <kose@meadowy.org>
+
+	* meadow.defs (MEADOW_VERSION): Set it to 2.00.
+	(MEADOW_CVS_TAG_NAME): Set it to KIKYOU-2_00.
+	(MEADOW_VERSION_STRING): Set version to Meadow-2.00pre1 (KIKYOU).
+
+2004-01-05  KOSEKI Yoshinori  <kose@meadowy.org>
+
+	* meadow.defs (MEADOW_VERSION_STRING): Set version to Meadow-2.00Beta2 (WOMINAHESHI).
+
+2004-01-05  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* config.nt (ftime): Define ftime as _ftime.
+
+2004-01-02  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* makefile.def (CFLAGS): Decrease PDUMP_OBJECT_ARRAY_SIZE down to
+	203622.
+
+2003-12-31  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* makefile.def (CFLAGS): Increase PDUMP_OBJECT_ARRAY_SIZE up to
+	250000.
+
+2003-12-29  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* makefile.def (CFLAGS): Increase PDUMP_OBJECT_ARRAY_SIZE up to
+	203622.
+
+	* Sync up with Emacs-21.3.
+
+2003-12-28  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* meadow.defs (MEADOW_VERSION): Set it to 2.10 tentatively.
+	(MEADOW_CVS_TAG_NAME): Set it to ASAGAO-2_10 tentatively.
+	(MEADOW_VERSION_STRING): Set version to Meadow-2.10-dev (ASAGAO)
+	tentatively.
+
+	* Sync up with Emacs-21.2.
+
+2003-12-23  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* config.nt: Enable alias to old names for compiling with VC6.
+	(fstat): New alias fstat for _fstat.
+
+2003-11-28  KOSEKI Yoshinori  <kose@meadowy.org>
+
+	* dot.emacs.ja: Fix global-font-lock-mode, coding-system, browse-url.
+	Rewrite BDF font setting.
+
+2003-10-15  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* makefile.meadow.w32-in (install): Modify path separators for
+	xcopy.
+
+2003-10-15  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* makefile.meadow.w32-in (install): Modify path separators for
+	xcopy.
+
+	* gmake.meadow.defs: Use xcopy instead of rsync.
+
+	* configure.meadow.bat: Remove codes for rsync.
+
+2003-08-22  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* README.Meadow: Add description of the MCI feature.
+
+	* README.Meadow.ja: Ditto.
+
+2003-07-08  Koichiro Ohba  <koichiro@meadowy.org>
+
+	* excludes.Meadow : Removed `CVS' directory.
+
+2003-07-01  KOSEKI Yoshinori  <kose@meadowy.org>
+
+	* meadow.defs (MEADOW_VERSION): Set it to 2.00b2.
+	(MEADOW_CVS_TAG_NAME): Set it to WOMINAHESHI-2_00b2.
+	(MEADOW_VERSION_STRING): Set version to Meadow-2.00 Beta2-dev (WOMINAHESHI).
+
+2003-06-18  MIYASHITA Hisashi  <himi@meadowy.org>
+
+	* Meadow 2.00 Beta 1 (NADESHIKO) Release.
+
+	* makefile.def: In include directive for meadow.defs,
+	enclose the file name with "<>".
+	(SRC_RELEASE_DRIVE, SRC_RELEASE_DIRECTORY, BIN_RELEASE_DRIVE) 
+	(BIN_RELEASE_DIRECTORY): Define it only if it has not been
+	defined yet.
+
+	* meadow.defs (MEADOW_SVN_URL): Use the public URL.
+
+	* Meadow.mak (BIN_RELEASE_TARGET_DIRECTORY): Made it not depend
+	on $(SRC_RELEASE_TARGET_DIRECTORY).  Made the release image
+	from the current source.
+	(src_release): Don't copy *.elc files.
+
+	* gmake.meadow.defs (INSTALL_DIR): Set INSTALL_DIR to c:/Meadow.
+	* makefile.def (INSTALL_DIR): Ditto.
+	
+
+2003-06-15  MIYASHITA Hisashi  <himi@meadowy.org>
+
+	* meadow.defs (MEADOW_SVN_URL): New option.
+	(MEADOW_RELEASE_TAG): Renamed from MEADOW_CVS_TAG_NAME.
+
+	* makefile.def (SVN_RELEASE_URL): Substitute it for CVS_RELEASE_TAG.
+	(CVS_RELEASE_TAG): Removed.
+
+	* Meadow.mak (src_release): For exporting, use svn instead of cvs.
+
+	* meadow.defs (MEADOW_VERSION): Set it to 2.00b1.
+	(MEADOW_CVS_TAG_NAME): Set it to NADESHIKO-2_00b1.
+	(MEADOW_VERSION_STRING): Set version to Meadow-2.00 Beta1 (NADESHIKO).
+
+2003-06-13  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* configure.meadow.bat: Check availability of rsync.
+	Set USE_RSYNC `Y ' if rsync is available.
+
+	* gmake.meadow.defs (INSTALL_DIR_M): Convert the path name to UNIX
+	format for rsync.
+	(CP_DIR): Use rsync if USE_RSYNC is `Y'.
+
+2003-06-12  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* makefile.def (CP_DIR): Use /EXCLUDE option for xcopy command on
+	non-Windows95 environment.
+
+	* excludes.Meadow: New file.
+
+2003-06-08  MIYASHITA Hisashi  <himi@meadowy.org>
+
+	* README.Meadow: Add a new section for MCI feature.
+
+2003-06-07  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* README.Meadow: Fix typo.
+	Improve expressions. Thanks to Kenichi Handa (handa@m17n.org).
+
+2003-06-01  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* README.Meadow.ja: Update the contents.
+
+	* README.Meadow: Ditto.
+
+2003-05-19  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* dot.emacs.ja: Add the setting of bitmap-alterable-charset.
+	Correct the setting of ime-font.
+
+	* README.Meadow.ja: Update the contents.
+
+	* README.Meadow: Ditto.
+
+2003-04-28  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* INSTALL.Meadow: Update the contents.
+
+	* INSTALL.Meadow.ja: Ditto. 
+
+
+2003-03-19  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* configure.meadow.bat: Don't generate Makefile.unix.
+
+2003-02-20  KOSEKI Yoshinori  <kose@meadowy.org>
+
+	* meadow.defs (MEADOW_VERSION): Set it to 1.99a6.
+	(MEADOW_CVS_TAG_NAME): Set it to IKADUCHI-1_99a6.
+	(MEADOW_VERSION_STRING): Set version to Meadow-1.99 Alpha6-dev (IKADUCHI).
+
+	* Meadow 1.99 Alpha 5 (TSUCHIKURE) Release.
+
+	* meadow.defs (MEADOW_VERSION): Set it to 1.99a5.
+	(MEADOW_CVS_TAG_NAME): Set it to TSUCHIKURE-1_99a5.
+	(MEADOW_VERSION_STRING): Set version to Meadow-1.99 Alpha5 (TSUCHIKURE).
+
+2003-01-25  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* INSTALL.Meadow.ja: Update the procedure to install the source
+	archive.
+
+2003-01-24  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* meadow.defs: New file.
+
+	* makefile.nmake.mw32-in: Ditto.
+
+	* makefile.meadow.w32-in: Generate Meadow.bat with dos path
+	separators.
+
+	* makefile.def: Exclude Meadow specific definitions. They are
+	now in meadow.defs.
+
+	* gmake.meadow.defs: Exclude Meadow specific definitions. They are
+	now in meadow.defs.
+	Set default install directory to "C:/Meadow2".
+	Add -u option to cp.
+
+	* configure.meadow.bat: Avoid checking rm and cp when MSVC is
+	chosen.
+	Generate makefiles for MSVC.
+
+2003-01-24  KOSEKI Yoshinori  <kose@meadowy.org>
+
+	* makefile.meadow.w32-in: Fix path of site-lisp/subdirs.el.
+
+2003-01-22  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* makefile.meadow.w32-in: Suppress compilation warnings.
+
+	* install.c (r_convert_path_separator): Ditto.
+
+	* gmake.meadow.defs: Ditto.
+
+	* fiber.c: Ditto.
+
+	* RunMW32.c (WinMain): Ditto.
+
+2003-01-19  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* makedepend.pl: Support gcc with new option `-cc'.
+
+2002-11-29  KOSEKI Yoshinori  <kose@meadowy.org>
+
+	* gmake.meadow.defs (MEADOW_TEST_VERSION): Get it from makefile.def.
+	(MEADOW_VERSION): Ditto.
+	(MEADOW_CVS_TAG_NAME): Ditto.
+	(MEADOW_VERSION_STRING): Ditto.
+
+2002-11-27  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* makefile.meadow.w32-in (install): Use $(CP_DIR) instead of $(CP)
+	-pR. Thanks to Masayuki FUJII (boochang@m4.kcn.ne.jp).
+	($(BLD)/RunMW32.exe): Add dependancy on $(TRES). Thanks to
+	Masayuki FUJII (boochang@m4.kcn.ne.jp).
+
+2002-11-27  Koichiro Ohba  <koichiro@meadowy.org>
+
+	* Meadow 1.99 Alpha 4 (KUROGANE) Release.
+
+2002-11-27  Koichiro Ohba  <koichiro@meadowy.org>
+
+	* gmake.meadow.defs (MEADOW_VERSION): Set it to 1.99a4.
+	(MEADOW_CVS_TAG_NAME): Set it to KUROGANE-1_99a4.
+	(MEADOW_VERSION_STRING): Set version to Meadow-1.99 Alpha4 (KUROGANE).
+
+2002-11-25  Koichiro Ohba  <koichiro@meadowy.org>
+
+	* makefile.def (MEADOW_VERSION): Set it to 1.99a4.
+	(MEADOW_CVS_TAG_NAME): Set it to KUROGANE-1_99a4.
+	(MEADOW_VERSION_STRING): Set version to Meadow-1.99 Alpha4 (KUROGANE).
+
+2002-10-23  Yoshiki Hayashi  <yoshiki@meadowy.org>
+
+	* config.nt: Do not define GC_MARK_STACK and GC_SETJMP_WORKS.
+	Meadow should not use conservative GC.
+
+2002-10-20  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* makefile.meadow.w32-in: Change name of executable for Meadow 2
+	featuring portable-dumper.
+
+	* install.c (register_to_shell): Make an entry of RunMW32.exe in
+	stead of Meadow.exe.
+
+2002-10-13  Shun-ichi GOTO  <gotoh@taiyo.co.jp>
+
+	* install.c (usage): Obsoleted -d (no-dump) option.
+	(call_dumpprog): No need any more with portable dumper.
+	(main): Obsoleted -d (no-dump) option.
+
+	* RunMW32.c (WinMain): Removed unused variables.
+
+2002-10-12  Shun-ichi GOTO  <gotoh@taiyo.co.jp>
+
+	* Meadow.mak: Change name of executable for Meadow 2 featuring
+	portable-dumper.
+
+	* makefile.def (MFLAGS): Pass BUILD_TYPE and DEBUG_MODE to
+	child nmake.
+
+	* dump.bat: New file (succeeded to dumpNT.bat and dump95.bat)
+
+	* RunMW32.c: New file (succeeded to meadow.c).
+
+	* meadow.c: Removed.
+
+	* Meadow.bat.in: New file.
+
+	* Meadow95.bat.in: Removed.
+
+	* MeadowNT.bat.in: Removed.
+
+2002-10-01  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* INSTALL.Meadow: Update the procedure to install the source
+	archive.
+
+	* INSTALL.Meadow.ja: Ditto.
+
+2002-09-30  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* gmake.meadow.defs: Support compilation in unmounted Cygwin
+	environment.
+
+	* makefile.meadow.w32-in: Modify install directory of some
+	documents. Thanks to Masayuki FUJII (boochang@m4.kcn.ne.jp).
+
+2002-09-29  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* gmake.meadow.defs: Change install directory in Meadow's way.
+
+	* makefile.meadow.w32-in: Ditto.
+
+2002-09-28  Shun-ichi GOTO  <gotoh@taiyo.co.jp>
+
+	* install.c (stricmp): Defined alias to old names for compiling
+	with VC7.
+	(access): Likewise.
+	(chdir): Likewise.
+	(remove_registry_data): Removed unused variable.
+	(main): Likewise.
+
+	* fiber.c: Fixed to compile without warning.
+
+	* config.nt (chdir): Defined alias to old names for compiling with
+	VC7.
+	(getcwd): Likewise.
+	(setmode): Likewise.
+	(stat): Likewise.
+	(putenv): Likewise.
+	(memicmp): Likewise.
+	(stricmp): Likewise.
+	(strdup): Likewise.
+
+	* cmdproxy.c (stricmp): Defined alias to old names for compiling
+	with VC7.
+	(strdup): Likewise
+	(make_absolute): Removed unused variable.
+
+2002-09-28  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* configure.meadow.bat: New file. Apply Cygwin/Mingw support patch
+	from Masayuki FUJII (boochang@m4.kcn.ne.jp).
+
+	* gmake.meadow.defs: Ditto.
+
+	* makefile.meadow.w32-in: Ditto.
+
+	* install.c: Apply Cygwin/Mingw support patch from Masayuki FUJII
+	(boochang@m4.kcn.ne.jp).
+
+	* meadow.rc: Ditto.
+
+2002-09-25  Koichiro Ohba  <koichiro@meadowy.org>
+
+	* Meadow 1.99 Alpha 3 (HATAITA) Release.
+
+	* makefile.def (MEADOW_VERSION): Set it to 1.99a3.
+	(MEADOW_CVS_TAG_NAME): Set it to HATAITA-1_99a3.
+	(MEADOW_VERSION_STRING): Set version to Meadow-1.99 Alpha3 (HATAITA).
+
+2002-04-16  Shun-ichi GOTO  <gotoh@taiyo.co.jp>
+
+	* Meadow.mak: Added bootstrap targets.
+
+2002-04-15  Keiichiro Nagano  <knagano@sodan.org>
+
+	* Meadow 1.99 Alpha 2 (AWOFUCHI) Release.
+
+	* makefile.def (CFLAGS): Give PDUMP_HASH_SIZE and
+	PDUMP_OBJECT_ARRAY_SIZE instead of PURESIZE when BOOTSTRAP.
+
+2002-04-14  Keiichiro Nagano  <knagano@sodan.org>
+
+	* config.nt (HAVE_MMAP): New #undef.
+	(PDUMP): New #define.
+	(PDUMP_DEBUG, PDUMP_CHECK_OBJECT_VALIDITY_ON_GC): New #undef.
+
+	* makefile.def (MEADOW_VERSION): Set it to 1.99a2.
+	(MEADOW_CVS_TAG_NAME): Set it to TANINOHORA-1_99a2.
+	(MEADOW_VERSION_STRING): Set version to Meadow-1.99 Alpha2
+	(TANINOHORA).
+
+	* dump95.bat, dumpNT.bat: Change '.\temacs' to '.\temacs -nd'
+
+2002-01-26  MIYASHITA Hisashi  <himi@m17n.org>
+
+	* Meadow 1.99 Alpha 1 (AWOFUCHI) Release.
+
+	* makefile.def (MEADOW_VERSION): Set it to 1.99a1.
+	(MEADOW_CVS_TAG_NAME): Set it to AWOFUCHI-1_99a1.
+	(MEADOW_VERSION_STRING): Set version to Meadow-1.99 Alpha1 (AWOFUCHI).
+
+2002-01-26  MIYASHITA Hisashi  <himi@m17n.org>
+
+	* makefile.def (MEADOW_CVS_TAG_NAME, MEADOW_VERSION_STRING):
+	Set version to "Meadow-1.99 Preliminary-Alpha--1 (AKUTOU)".
+
+2002-01-25  MIYASHITA Hisashi  <himi@m17n.org>
+
+	* makefile.def (MEADOW_VERSION_STRING): 
+	Set version to "Meadow-1.99 Preliminary-Alpha--2 (AKUTOU)".
+
+2002-01-24  MIYASHITA Hisashi  <himi@m17n.org>
+
+	* makefile.def (MEADOW_CVS_TAG_NAME, MEADOW_VERSION_STRING):
+	Set version to "Meadow-1.99 Preliminary-Alpha--3 (AKUTOU)".
+
+2002-01-22  MIYASHITA Hisashi  <himi@m17n.org>
+
+	* makefile.def (MEADOW_VERSION_STRING): Set version to
+	"Meadow-1.99 Preliminary-Alpha--4 (AKUTOU)".
+	(MEADOW_CVS_TAG_NAME): Set it to AKUTOU-1_99-PA--4.
+
+	* makedepend.pl: New file for generating dependency rules
+	of Makefile.
+
+2002-01-17  MIYASHITA Hisashi  <himi@m17n.org>
+
+	* Meadow.mak (real_install): Install bitmaps too.
+
+	* makefile.def (DEBUG_MODE): Define only if DEBUG_MODE is not
+	defined yet.
+	(BOOTSTRAP): New variable.
+	(SYS_LDFLAGS): Add -nologo option.
+	(CFLAGS_COMMON): Add -DGLYPH_DEBUG for debugging.
+	(CFLAGS): When BOOTSTRAP is enabled, set PURESIZE to 5000000.
+	(EMACS_ICON_PATH): Removed.
+
+	* paths.h (PATH_BITMAPS): Defined.
+
+	* install.c: Configure BITMAPPATH environment
+	variable for mw32-bitmap-search-path.
+
+	* addsection.c: Sync up with 21.0.104.
+	* config.nt: Likewise.
+	* makefile.def: Likewise.
+	* makefile.nt: Likewise.
+	* paths.h: Likewise.
+
+	* INSTALL.Meadow: Merged from Meadow-1_X branch.
+	* INSTALL.Meadow.ja: Likewise.
+	* README.Meadow: Merged from Meadow-1_X branch.
+	* README.Meadow.ja: Likewise.
+	* Meadow.plan: Likewise.
+	* dot.emacs.ja: Likewise.
+	* dump95.bat: Likewise.
+	* dumpNT.bat: Likewise.
+	* install.c: Likewise.
+	* Meadow.mak: Likewise.
+
+2001-08-29  KOSEKI Yoshinori  <kose@meadowy.org>
+
+	* Meadow.plan (abort at MARK_INTERVAL_TREE): New.
+
+2001-08-05  Shuichi KITAGUCHI  <kit@Mew.org>
+
+	* install.c: add -v flag and checking for existence of COMSPEC on
+	NT system.
+
+2001-05-11  Hideyuki SHIRAI  <shirai@meadowy.org>
+
+	* dot.emacs.ja: Modify w32-print-region().
+
+2001-05-09  Shun-ichi GOTO  <gotoh@taiyo.co.jp>
+
+	* makefile.def (TOP): Set DEBUG_MODE variable only if it is not
+	yet set.
+
+2001-04-24  KOSEKI Yoshinori  <kose@meadowy.org>
+
+	* dot.emacs.ja: Use bash, sh insted of bash.exe, sh.exe.
+	(Report from Motohiko Minakuchi)
+
+2001-03-31  Shun-ichi GOTO  <gotoh@taiyo.co.jp>
+
+	* makefile.def (MEADOW_VERSION_STRING): set version string as
+	"Meadow-1.14 (AWSAKA:62)" for real release.
+	
+2001-03-30  KOSEKI Yoshinori  <kose@meadowy.org>
+
+	* dot.emacs.ja: add Copyright, font-lock setup.
+	Modify comment-format, browse-url setup.
+	Remove bobcat.
+
+2001-03-30  Hideyuki SHIRAI  <shirai@meadowy.org>
+
+	* dot.emacs.ja: Modify print setup.
+
+2001-03-30  Shuichi KITAGUCHI  <kit@Mew.org>
+
+	* INSTALL.Meadow: Update for Meadow 1.14.
+
+	* INSTALL.Meadow.ja: Likewise.
+
+	* README.Meadow: Likewise.
+
+	* README.Meadow.ja: Likewise.
+
+2001-03-29  Kyotaro HORIGUCHI  <horiguti@meadowy.org>
+
+	* dot.emacs.ja: Add print setup.
+	Modify default frame size to 80x40 in default-frame-alist.
+	Remove excessive right parenthesis.
+
+2001-03-27  Koichiro OHBA  <koichiro@meadowy.org>
+
+	* dot.emacs.ja: Modify description about bdf font setup.
+	Add about cursor-type and Mule-UCS setup.
+
+2001-03-26  Shun-ichi GOTO  <gotoh@taiyo.co.jp>
+
+	* Meadow.mak (SRC_RELEASE_TARGET_DIRECTORY): Fix module name of
+	meadow for recent development on park.meadowy.org.
+
+	* install.c (check_files): Check .elc file instead of source for
+	binary package distribution.
+
+2001-03-25  KOSEKI Yoshinori  <kose@meadowy.org>
+
+	* makefile.def (MEADOW_VERSION): set 1.14.
+	(MEADOW_CVS_TAG_NAME):  set AWSAKA-1_14.
+	(MEADOW_VERSION_STRING): set Meadow-1.14pre1 (AWSAKA:62).
+
+	* Meadow.mak (install): install dot.emacs.ja, Meadow.plan to $MEADOW
+
+2001-03-25  Koichiro OHBA  <koichiro@meadowy.org>
+
+	* dot.emacs.ja: New File.
+
+2001-03-24  Koichiro OHBA  <koichiro@meadowy.org>
+
+	* dumpNT.bat: Add it checks, before deleting MeadowNT.exe.
+
+	* dump95.bat: Likewise.
+
+2001-03-24  Shuichi KITAGUCHI  <kit@Mew.org>
+
+	* install.c (main): set HOME environment variable when dump.
+
+2001-03-20  Shuichi KITAGUCHI  <kit@meadowy.org>
+
+	* install.c: use HOME environment as default home directory.
+	options are changed. and so on.
+
+2001-02-24  Hideyuki SHIRAI  <shirai@meadowy.org>
+
+	* README.Meadow.ja: Add description about set-cursor-type(),
+	set-cursor-height().
+
+	* README.Meadow: Likewise.
+
+2001-02-22  Kyotaro HORIGUCHI <horiguti@meadowy.org>
+
+	* README.Meadow.ja: Add description about cursor-height.
+
+	* README.Meadow: Likewise.
+
+2001-02-22  Kyotaro HORIGUCHI <horiguti@meadowy.org>
+
+	* README.Meadow.ja: Add description of more cursor types.
+
+	* README.Meadow: Likewise.
+
+2001-02-22  Shun-ichi GOTO  <gotoh@taiyo.co.jp>
+
+	* README.Meadow.ja: Add description of cursor types.
+
+	* README.Meadow: Likewise.
+
+2001-01-06  MIYASHITA Hisashi  <himi@m17n.org>
+
+	* README.Meadow.ja: Correct the name.
+
+2001-01-05  MIYASHITA Hisashi  <himi@m17n.org>
+
+	* makefile.def (MEADOW_CVS_TAG_NAME): Fixed.
+
+2001-01-04  MIYASHITA Hisashi  <himi@m17n.org>
+
+	* INSTALL.Meadow.ja: Change the coding-system to sjis.
+	* README.Meadow.ja: Ditto.
+
+	* README.Meadow: Change mailing list addresses.
+	* README.Meadow.ja: Change mailing list addresses.
+
+	* README.Meadow: Fix many typo.
+
+	* makefile.def (MEADOW_CVS_TAG_NAME):
+	(MEADOW_VERSION_STRING): 
+	(MEADOW_VERSION): 
+	Set version to Meadow-1.13 Beta2 (UKIHASHI:61).
+
+	* meadow.rc: Change the version name.
+
+	* makefile.def (SPECIAL_EXEC): New variable.
+	(CFLAGS): If SPECIAL_EXEC is enabled, Add -DSPECIAL_EXEC -DCANNOT_DUMP.
+
+2000-11-26  MIYASHITA Hisashi  <himi@m17n.org>
+
+	* meadow.c (WinMain): Use the macro of `MEADOW' instead of directly
+	putting a version string.
+
+2000-04-11  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* Meadow 1.13 Beta 1 (TANAHASHI:61) Release.
+
+	* makefile.def (MEADOW_CVS_TAG_NAME):
+	(MEADOW_VERSION_STRING): 
+	(MEADOW_VERSION): 
+	Set version to Meadow-1.13 Beta 1 (TANAHASHI:61).
+
+	* Sync up with Emacs 20.6.
+
+2000-01-29  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* Meadow 1.12 Beta 1 (SASHINUKI:60) Release.
+
+	* makefile.def (MEADOW_CVS_TAG_NAME):
+	(MEADOW_VERSION_STRING): 
+	(MEADOW_VERSION): 
+	Set version to Meadow-1.12 Beta 1 (SASHINUKI:60).
+
+	* Sync up with Emacs 20.5.
+
+	* meadow.c:
+	Include resource.h for cd-bootable meadow.exe.
+	(startdialog_wndproc):
+	New function for cd-bootable meadow.exe.
+	(WinMain):
+	Show DialogBox and set main_root for cd-bootable.
+
+	* meadow.rc: 
+	* resource.h:
+	New resouces for cd-bootable meadow.exe.
+
+	* paths.h (PATH_EXEC): 
+	(PATH_DATA): 
+	(PATH_DOC): 
+	(PATH_LOCK): 
+	(PATH_INFO): 
+	(cd_lock_path): 
+	(cd_lock_path): 
+	(cd_lock_path): 
+	(cd_lock_path): 
+	(cd_lock_path):
+	For cd-bootable Meadow, define or redefine these.
+
+	* README.Meadow:
+	Fix a little on package instrucions.
+
+1999-10-16  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* Meadow 1.10 (TSUYU) Release.
+	
+1999-10-10  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* makefile.def (MEADOW_VERSION_STRING): 
+	(MEADOW_CVS_TAG_NAME): 
+	(MEADOW_VERSION):
+	Set version to Meadow-1.10 (TSUYU).
+
+	* fiber.txt:
+	New text file.
+
+	* fiber.c:
+	05 Oct, 1999 : Version 1.2.1 - brush up English text
+	from Shuichi Kitaguchi.
+
+	* README.Meadow.ja :
+	Append some comments in Section 6.
+
+1999-10-02  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* Meadow.mak (src_release):
+	Remove -ko option to treat binary files.
+
+1999-09-28  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* Meadow 1.07b1(HACHISU) Release.
+	
+	* README.Meadow:
+	* README.Meadow.ja:
+	In section 3.4, explain as to keyboard-coding-system.
+
+	* makefile.def (MEADOW_VERSION_STRING): 
+	(MEADOW_CVS_TAG_NAME): 
+	(MEADOW_VERSION):
+	Set version to Meadow-1.07 Beta1 (HACHISU)
+
+1999-09-12  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* Meadow 1.06b3(EBIZOME:27) Release.
+
+	* Meadow.mak (clean):
+	Clean LEIM directory if it exists.
+
+	* README.Meadow.ja: 
+	* README.Meadow: 
+	* INSTALL.Meadow.ja: 
+	* INSTALL.Meadow: 
+	Modify for 1.10. Thanks Hayashi Yoshiki!
+
+1999-09-09  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* Meadow.mak (install):
+	Install README.Meadow.ja and INSTALL.Meadow.ja.
+
+1999-09-08  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* Meadow.mak (install): 
+	Install leim if it exists.
+
+1999-09-04  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* Meadow.mak (all):
+	Build leim if it exists.
+
+1999-09-03  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* makefile.def (MEADOW_VERSION_STRING): 
+	(MEADOW_CVS_TAG_NAME): 
+	(MEADOW_VERSION):
+	Set version to Meadow-1.06 Beta3 (EBIZOME:27).
+
+	* install.c (set_registry_data):
+	Add Meadow/<VERSION>/leim to EMACSLOADPATH.
+
+1999-08-29  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* Meadow 1.06b2(FUTAAWI:27) Release.
+	
+	* Meadow.mak (install):
+	Make site-lisp directory.
+
+	* makefile.def (MEADOW_VERSION_STRING): 
+	(MEADOW_CVS_TAG_NAME): 
+	(MEADOW_VERSION):
+	Set version to Meadow-1.06 Beta2 (FUTAAWI:27).
+
+1999-08-15  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* Meadow.mak (install):
+	Copy subdirs.el to $(INSTALL_DIR_M)\site-lisp.
+	Copy subdirs.el to $(INSTALL_DIR)\site-lisp if subdirs.el
+	doesn't exist there.
+
+1999-08-11  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* Meadow 1.06b1(HIINA:27) Release.
+
+	* README.Meadow:
+	Modify section 3.4, 4, and 5.
+
+	* makefile.def (MEADOW_VERSION_STRING): 
+	(MEADOW_CVS_TAG_NAME): 
+	(MEADOW_VERSION):
+	Set version to Meadow-1.06 Beta1 (HIINA:27).
+
+	* Meadow.mak (bin_release_directory):
+	Add new target.
+
+1999-08-09  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* fiber.c: sync up :-) with 1.2.0
+
+1999-07-19  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* Meadow 1.05b1(TACHIBANA) Release.
+
+	* makefile.def
+	(BIN_RELEASE_ADDONS):
+	(MEADOW_TEST_VERSION): 
+	New macros.
+	(BIN_RELEASE_DRIVE): 
+
+1999-07-17  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* Sync up with Emacs 20.4
+	
+	* makefile.def (MEADOW_VERSION):
+	Set version to 1.05b1.
+
+	* Meadow.mak (src_release):
+	copy *.elc to temporary directory.
+	(src_release):
+	cvs export with -ko option.
+
+	* makefile.def (CFLAGS_COMMON):
+	Set options for precompiled header.
+
+1999-05-21  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* makefile.def (ARCH_CFLAGS):
+	Remove excess -nologo option.
+
+1999-05-09  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* makefile.def (ARCH_CFLAGS):
+	Change optimization flag from -G6 to -GB.
+
+1999-04-27  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* install.c (main):
+	Split main(), and move some parts to
+	set_registry_data() and register_to_shell.
+
+	Mofify the way to parse argv[].
+
+	* makefile.def (CFLAGS):
+	Quote $(MEADOW_VERSION) on CFLAGS.
+
+1999-04-20  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* fiber.c:
+	Replace with fiber 1.1.3.
+
+1999-02-28  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* Meadow.mak
+	(MeadowNT.bat):
+	(Meadow95.bat):
+	truncate spaces at tail of EMACSLOADPATH string.
+

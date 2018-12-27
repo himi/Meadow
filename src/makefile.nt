@@ -1,0 +1,1758 @@
+#  Makefile for GNU Emacs on Windows NT
+#  Modified for MEADOW
+#  Copyright (c) 1992, 1993, 1994, 1995 Free Software Foundation, Inc.
+#   Tim Fleehart (apollo@online.com)            17-Apr-92
+#   Geoff Voelker (voelker@cs.washington.edu)   11-20-93
+#   Hisashi Miyashita (himi@bird.scphys.kyoto-u.ac.jp)
+#
+#  This file is part of GNU Emacs.
+#
+#  GNU Emacs is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2, or (at your option)
+#  any later version.
+#
+#  GNU Emacs is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with GNU Emacs; see the file COPYING.  If not, write to the
+#  Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+#  Boston, MA 02111-1307, USA.
+#
+
+#
+# Sets up the system dependent macros.
+#
+!include ..\nt\makefile.def
+
+#
+# Sets up fundamental macros.
+#
+
+EMACS_ROOT	= ..
+SRC		= .
+
+SUBSYSTEM=console
+
+#
+# HAVE_CONFIG_H is required by some generic gnu sources stuck into
+# the emacs source tree.
+#
+LOCAL_FLAGS     = -Demacs=1 -DWINDOWSNT -DDOS_NT -DHAVE_CONFIG_H -I..\nt\inc \
+	-I$(MAGICKDIR)\include
+!ifdef NTGUI
+LOCAL_FLAGS     = $(LOCAL_FLAGS) -DHAVE_NTGUI=1
+!endif
+!ifdef USE_CRT_DLL
+LOCAL_FLAGS     = $(LOCAL_FLAGS) -DUSE_CRT_DLL=1 -MD
+libc            = msvcrt.lib
+LINK_FLAGS      = -nodefaultlib
+!endif
+
+# From MSVC 5.0 onwards, it seem base relocation information is not included,
+# at least in release builds.  We need to ensure the reloc info is included
+# in order to use the MSVC profiler.
+!IF ("$(_NMAKE_VER)" == "$(_NMAKE_VER_4)")
+EXTRA_LINK      =
+!ELSE
+EXTRA_LINK      = -profile
+!ENDIF
+
+!if defined(MEADOW)
+EMACS           = $(BLD)\Meadow.exe
+EMACS_DMP       = $(BLD)\Meadow.dmp
+!else
+EMACS           = $(BLD)\emacs.exe
+EMACS_DMP       = $(BLD)\emacs.dmp
+!endif
+TEMACS          = $(BLD)\temacs.exe
+TEMACS_TMP      = $(BLD)\temacs.bin
+TLIB0           = $(BLD)\temacs0.lib
+TLIB1           = $(BLD)\temacs1.lib
+TLIB2           = $(BLD)\temacs2.lib
+!IFDEF NTGUI
+TLIBW32         = $(BLD)\temacw32.lib
+!ELSE
+TLIBW32		=
+!ENDIF
+!if $(MEADOW)
+TOBJ            =
+!else
+TOBJ            = $(BLD)\firstfile.obj
+!endif
+!if $(MSVCNT11)
+TRES		= $(BLD)\emacs.res
+!else
+TRES		= $(BLD)\emacs.rbj
+!endif
+TLASTLIB	= $(BLD)\lastfile.lib
+
+# see comments in allocate_heap in w32heap.c before changing any of the
+# -stack, -heap, or -base settings.
+
+!if defined(MEADOW)
+STARTUP_ENTRY = mw32_start
+!else
+STARTUP_ENTRY = _start
+!endif
+
+## Note: To imprement redump feature, set -swaprun:net -swaprun:cd not to lock image.
+#LINK_FLAGS      = $(ARCH_LDFLAGS) -stack:0x00A00000 -base:0x3800000 -debug:full -debugtype:cv -machine:$(ARCH) -subsystem:$(SUBSYSTEM),4.00 -entry:$(STARTUP_ENTRY) -map:$(BLD)\temacs.map -swaprun:net -swaprun:cd
+LINK_FLAGS      = $(ARCH_LDFLAGS) -stack:0x00900000 -base:0x400000 -machine:$(ARCH) -subsystem:$(SUBSYSTEM),4.00 -entry:$(STARTUP_ENTRY) -map:$(BLD)\temacs.map
+!if "$(BUILD_TYPE)" != "spd"
+LINK_FLAGS      = $(LINK_FLAGS) $(EXTRA_LINK)
+!endif
+
+#
+# Split up the objects into two sets so that we don't run out of
+# command line space when we link them into a library.
+#
+# Put emacs.obj in a separate lib, since we need to have firstfile.obj
+# as the "main" object file when linking.
+#
+OBJ0 =  $(BLD)\emacs.obj
+
+OBJ1 =  $(BLD)\abbrev.obj       \
+	$(BLD)\alloc.obj        \
+	$(BLD)\alloca.obj       \
+!if defined(MEADOW)
+	$(BLD)\mw32atimer.obj   \
+!else
+	$(BLD)\atimer.obj       \
+!endif
+	$(BLD)\buffer.obj       \
+	$(BLD)\bytecode.obj     \
+	$(BLD)\callint.obj      \
+	$(BLD)\callproc.obj     \
+	$(BLD)\casefiddle.obj	\
+	$(BLD)\cm.obj           \
+	$(BLD)\cmds.obj         \
+	$(BLD)\data.obj         \
+	$(BLD)\dired.obj        \
+	$(BLD)\dispnew.obj      \
+	$(BLD)\doc.obj          \
+	$(BLD)\doprnt.obj       \
+	$(BLD)\editfns.obj      \
+	$(BLD)\eval.obj         \
+	$(BLD)\fileio.obj       \
+	$(BLD)\filelock.obj     \
+	$(BLD)\filemode.obj     \
+	$(BLD)\fns.obj          \
+	$(BLD)\indent.obj       \
+	$(BLD)\insdel.obj       \
+	$(BLD)\keyboard.obj     \
+	$(BLD)\keymap.obj       \
+	$(BLD)\lread.obj        \
+	$(BLD)\macros.obj       \
+	$(BLD)\marker.obj       \
+        $(BLD)\md5.obj          \
+	$(BLD)\minibuf.obj      \
+	$(BLD)\mocklisp.obj
+
+OBJ2 =  $(BLD)\w32.obj           \
+!if defined(MEADOW)
+	$(BLD)\mw32mem.obj      \
+!else
+	$(BLD)\w32heap.obj       \
+!endif
+	$(BLD)\w32inevt.obj      \
+	$(BLD)\w32proc.obj       \
+	$(BLD)\w32console.obj       \
+	$(BLD)\print.obj        \
+	$(BLD)\process.obj      \
+	$(BLD)\regex.obj        \
+	$(BLD)\scroll.obj       \
+	$(BLD)\search.obj       \
+	$(BLD)\syntax.obj       \
+	$(BLD)\sysdep.obj       \
+	$(BLD)\term.obj         \
+	$(BLD)\termcap.obj      \
+	$(BLD)\tparam.obj       \
+	$(BLD)\undo.obj         \
+!if !defined(MEADOW)
+	$(BLD)\unexw32.obj       \
+!endif
+	$(BLD)\window.obj       \
+	$(BLD)\xdisp.obj        \
+	$(BLD)\casetab.obj      \
+	$(BLD)\floatfns.obj     \
+	$(BLD)\frame.obj        \
+	$(BLD)\gmalloc.obj      \
+	$(BLD)\intervals.obj    \
+	$(BLD)\composite.obj    \
+	$(BLD)\ralloc.obj       \
+	$(BLD)\textprop.obj     \
+	$(BLD)\vm-limit.obj	\
+	$(BLD)\region-cache.obj	\
+	$(BLD)\strftime.obj	\
+	$(BLD)\charset.obj	\
+	$(BLD)\coding.obj	\
+	$(BLD)\category.obj	\
+	$(BLD)\ccl.obj		\
+	$(BLD)\fontset.obj
+
+
+WIN32OBJ = $(BLD)\mw32term.obj	\
+!if !defined(MEADOW)
+	   $(BLD)\w32xfns.obj	\
+!endif
+	   $(BLD)\mw32fns.obj	\
+	   $(BLD)\mw32clpbd.obj \
+	   $(BLD)\mw32menu.obj	\
+!if $(W32_VER4)
+	   $(BLD)\mw32ime.obj	\
+!else
+	   $(BLD)\mw32oime.obj	\
+!endif
+	   $(BLD)\mw32font.obj	\
+!if $(MW32_BDF)
+	   $(BLD)\mw32bdf.obj	\
+!endif
+	   $(BLD)\mw32reg.obj   \
+	   $(BLD)\mw32dl.obj    \
+	   $(BLD)\mw32mci.obj   \
+	   $(BLD)\xfaces.obj
+
+LIBS =  $(TLIB0)	\
+	$(TLIB1)	\
+	$(TLIB2)	\
+!IFDEF NTGUI
+	$(TLIBW32)      \
+!ENDIF
+	$(TLASTLIB)	\
+!IFDEF NTGUI
+	gdi32.lib       \
+	comdlg32.lib    \
+!ENDIF
+#	libcmt.lib      \
+	$(BASE_LIBS)	\
+	$(ADVAPI32)	\
+	user32.lib	\
+	mpr.lib		\
+	shell32.lib	\
+	setargv.obj
+
+ALLOBJS = $(OBJ0) $(OBJ1) $(OBJ2) $(WIN32OBJ)
+MAKEDEPEND = perl $(EMACS_ROOT)\nt\makedepend.pl
+
+#
+# Build the executable and dump it.
+#
+all:            $(BLD) $(EMACS)
+
+#
+# Automatic dependency generation.
+#
+
+depend: $(BLD) $(ALLOBJS:.obj=.po)
+	$(MAKEDEPEND) -D -DO -E -ra -f $(SRC)/Makefile.nt \
+                      -rp "^$(EMACS_ROOT:.=\.)/=\$$\(EMACS_ROOT\)/" \
+                      -rp "^$(SRC:.=\.)/=\\$$\(SRC\)/" \
+                      -rp "(^[^./\\$$\\\\].+$$)=\\$$\(SRC\)/$$1" \
+                      -rp "(.*/)?([^/]*)\.po$$=\$$\(BLD\)/$$2.obj" \
+	              $(ALLOBJS:.obj=.po)
+
+#
+# Headers we would preprocess if we could.
+#
+PREPARED_HEADERS = config.h epaths.h
+config.h:	..\nt\$(CONFIG_H)
+		$(CP) $** $@
+epaths.h:	..\nt\paths.h
+		$(CP) $** $@
+
+#
+# Make sure we have the DOC file in the right place.
+#
+DOC		= $(OBJDIR)\etc\DOC-X
+$(DOC):;	cd ..\lib-src
+		- $(DEL) DOC-X
+		$(MAKE) $(MFLAGS) -f makefile all
+		cd ..\src
+
+#
+# For Profiling
+#
+profile_t:	emacs emacs.map
+		cd $(BLD)
+		prep /OM /FT temacs.exe
+		\wen32\msdev\bin\profile temacs.exe -nd -batch -l loadup dump
+		prep /M temacs
+		plist /SC temacs > temacs.pf
+		prep /OM /FT emacs.exe
+		\wen32\msdev\bin\profile emacs.exe
+		prep /M emacs
+		plist /SC emacs.exe > emacs.pf
+		cd ..\..
+
+profile:	emacs emacs.map
+		cd $(BLD)
+		prep /OM /FT temacs.exe
+		\wen32\msdev\bin\profile temacs.exe -l loadup
+		prep /M temacs
+		plist /SC temacs > temacs.pf
+		cd ..\..
+
+profile_e:
+		cd $(BLD)
+		prep /OM /FT emacs.exe
+		\wen32\msdev\bin\profile emacs.exe
+		prep /M emacs
+		plist /SC emacs > emacs.pf
+		cd ..\..
+
+#
+# The undumped executable
+# Note the extra post-link step to insert a static preload heap section.
+# If preload runs out of memory, increase the last argument to addsection
+# (it is the preload heap size in MB).
+#
+temacs:         $(BLD) $(TEMACS)
+$(TEMACS):      $(PREPARED_HEADERS) $(TLIB0) $(TLIB1) $(TLIB2) $(TLIBW32) $(TLASTLIB) $(TOBJ) $(TRES)
+!if defined(MEADOW)
+		$(LINK) -out:$(TEMACS) $(LINK_FLAGS) $(TOBJ) $(TRES) $(LIBS)
+!else
+		$(LINK) -out:$(TEMACS_TMP) $(LINK_FLAGS) $(TOBJ) $(TRES) $(LIBS)
+		..\nt\$(BLD)\addsection $(TEMACS_TMP) $(TEMACS) EMHEAP 16
+!endif
+
+emacs.map: temacs
+		copy $(BLD)\temacs.map $(BLD)\emacs.map
+
+#
+# The dumped executable
+#
+emacs:          $(EMACS)
+$(EMACS):       $(PREPARED_HEADERS) $(DOC) $(TEMACS)
+		cd $(BLD)
+		.\temacs.exe -nd -batch -l loadup dump
+!if defined(MEADOW)
+		if exist Meadow.dmp del Meadow.dmp
+		ren emacs.dmp Meadow.dmp
+		if exist Meadow.exe del Meadow.exe
+		ren emacs.exe Meadow.exe
+		copy temacs.map meadow.map
+!else
+		copy temacs.map emacs.map
+!endif
+		cd ..\..
+
+
+bootstrap: bootstrap-emacs
+
+#
+# Build a temacs with a sufficiently large PURESIZE to load the
+# Lisp files from loadup.el in source form.
+#
+bootstrap-temacs: bootstrap-clean
+		$(MAKE) $(MFLAGS) -f makefile temacs BOOTSTRAP=1
+
+#
+# Dump an Emacs executable named bootstrap-emacs containing the
+# files from loadup.el in source form.
+#
+bootstrap-emacs: bootstrap-temacs
+		cd $(BLD)
+		.\temacs.exe -nd -batch -l loadup bootstrap
+		if exist Meadow.dmp del Meadow.dmp
+		ren emacs.dmp Meadow.dmp
+		if exist Meadow.exe del Meadow.exe
+		ren emacs.exe Meadow.exe
+		cd ..\..
+		- mkdir ..\bin
+		$(CP) $(EMACS) ..\bin
+		$(CP) $(EMACS_DMP) ..\bin
+
+#
+# Force recompile of files that depend on PURESIZE
+#
+bootstrap-clean:
+		- $(DEL) $(BLD)\alloc.obj
+		- $(DEL) $(BLD)\data.obj
+		- $(DEL) $(BLD)\intervals.obj
+		- $(DEL) $(BLD)\keyboard.obj
+		- $(DEL) $(BLD)\keymap.obj
+		- $(DEL) $(EMACS_DMP)
+
+#
+# The resource file.  NT 3.10 requires the use of cvtres; even though
+# it is not necessary on later versions, it is still ok to use it.
+#
+$(TRES):	..\nt\meadow.rc
+		$(RC) -i..\nt -Fo$(BLD)\meadow.res $**
+!if !$(MSVCNT11)
+		$(CVTRES) -r -$(ARCH) -o $@ $(BLD)\meadow.res
+!endif
+
+#
+# Build the library.  Split up the build into two phases...otherwise we
+# run out of command line space.
+#
+$(TLIB0):       $(OBJ0)
+		@- $(AR) -out:$@ $**
+$(TLIB1):       $(OBJ1)
+		@- $(AR) -out:$@ $**
+$(TLIB2):	$(OBJ2)
+		@- $(AR) -out:$@ $**
+!IFDEF NTGUI
+$(TLIBW32):	$(WIN32OBJ)
+		@- $(AR) -out:$@ $**
+!ENDIF
+
+#
+# Place lastfile.obj in its own library so that it can be loaded after
+# the source libraries but before any system libraries.  Doing so defines
+# the end of Emacs' data section portably across compilers and systems.
+#
+$(TLASTLIB):	$(BLD)\lastfile.obj
+		@- $(AR) -out:$@ $**
+
+#
+# Object files.
+#
+.c{$(BLD)}.obj:
+		$(CC) $(CFLAGS) -Fo$@ $<
+
+#
+# preprocessed objects.
+#
+.c{$(BLD)}.po:
+		$(CC) -E $(CFLAGS) -Fo$@ $< > $*.po
+
+#
+# Assuming INSTALL_DIR is defined, build and install emacs in it.
+#
+install:        all
+		- mkdir $(INSTALL_DIR)\bin
+!if defined(MEADOW)
+		$(CP) $(EMACS) $(INSTALL_DIR)\bin
+!else
+		$(CP) $(TEMACS) $(INSTALL_DIR)\bin
+!endif
+		$(CP) $(EMACS_DMP) $(INSTALL_DIR)\bin
+		$(CP) $(BLD)\fns-*.el $(INSTALL_DIR)\bin
+!if $(MEADOW_TEST_VERSION)
+		$(CP) $(BLD)\vc.pdb $(INSTALL_DIR)\bin
+!endif
+
+#
+# Maintenance
+#
+clean:;         - $(DEL) *~ s\*~
+		- $(DEL) *.pdb config.h epaths.h
+		- $(DEL) *.orig *.rej *.crlf
+		- $(DEL) s\*.orig s\*.rej s\*.crlf
+		- $(DEL_TREE) deleted
+		- $(DEL_TREE) $(OBJDIR)
+
+#
+# These files are the ones that compile conditionally on CANNOT_DUMP...
+# this target is mostly used for debugging.
+#
+cleandump:;     cd $(BLD)
+		- $(DEL) callproc.obj data.obj dispnew.obj doc.obj editfns.obj emacs.obj lread.obj process.obj sysdep.obj term.obj w32heap.obj unexw32.obj
+		cd ..\..
+
+
+### DEPENDENCIES ###
+
+### automatically generated dependency start
+
+$(BLD)\emacs.obj: \
+    $(SRC)\emacs.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(EMACS_ROOT)\nt\inc\sys\file.h \
+    $(EMACS_ROOT)\nt\inc\unistd.h \
+    $(SRC)\lisp.h \
+    $(SRC)\commands.h \
+    $(SRC)\intervals.h \
+    $(SRC)\dispextern.h \
+    $(SRC)\w32gui.h \
+    $(SRC)\mw32font.h \
+    $(SRC)\composite.h \
+    $(SRC)\buffer.h \
+    $(SRC)\systty.h \
+    $(SRC)\blockinput.h \
+    $(SRC)\atimer.h \
+    $(SRC)\systime.h \
+    $(EMACS_ROOT)\nt\inc\sys\time.h \
+    $(SRC)\syssignal.h \
+    $(SRC)\process.h \
+    $(SRC)\termhooks.h \
+    $(SRC)\keyboard.h
+
+$(BLD)\abbrev.obj: \
+    $(SRC)\abbrev.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\commands.h \
+    $(SRC)\buffer.h \
+    $(SRC)\window.h \
+    $(SRC)\dispextern.h \
+    $(SRC)\w32gui.h \
+    $(SRC)\mw32font.h \
+    $(SRC)\charset.h \
+    $(SRC)\syntax.h
+
+$(BLD)\alloc.obj: \
+    $(SRC)\alloc.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\process.h \
+    $(SRC)\intervals.h \
+    $(SRC)\dispextern.h \
+    $(SRC)\w32gui.h \
+    $(SRC)\mw32font.h \
+    $(SRC)\composite.h \
+    $(SRC)\puresize.h \
+    $(SRC)\buffer.h \
+    $(SRC)\window.h \
+    $(SRC)\keyboard.h \
+    $(SRC)\frame.h \
+    $(SRC)\blockinput.h \
+    $(SRC)\atimer.h \
+    $(SRC)\systime.h \
+    $(EMACS_ROOT)\nt\inc\sys\time.h \
+    $(SRC)\charset.h \
+    $(SRC)\syssignal.h \
+    $(EMACS_ROOT)\nt\inc\unistd.h \
+    $(EMACS_ROOT)\nt\inc\sys\file.h \
+    $(SRC)\coding.h \
+    $(SRC)\ccl.h \
+    $(EMACS_ROOT)\nt\inc\sys\param.h
+
+$(BLD)\alloca.obj: \
+    $(SRC)\alloca.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\blockinput.h \
+    $(SRC)\atimer.h \
+    $(SRC)\systime.h \
+    $(EMACS_ROOT)\nt\inc\sys\time.h
+
+$(BLD)\mw32atimer.obj: \
+    $(SRC)\mw32atimer.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\systime.h \
+    $(EMACS_ROOT)\nt\inc\sys\time.h \
+    $(SRC)\blockinput.h \
+    $(SRC)\atimer.h \
+    $(SRC)\mw32term.h \
+    $(SRC)\frame.h \
+    $(SRC)\mw32font.h
+
+$(BLD)\buffer.obj: \
+    $(SRC)\buffer.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(EMACS_ROOT)\nt\inc\sys\param.h \
+    $(EMACS_ROOT)\nt\inc\unistd.h \
+    $(SRC)\lisp.h \
+    $(SRC)\intervals.h \
+    $(SRC)\dispextern.h \
+    $(SRC)\w32gui.h \
+    $(SRC)\mw32font.h \
+    $(SRC)\composite.h \
+    $(SRC)\window.h \
+    $(SRC)\commands.h \
+    $(SRC)\buffer.h \
+    $(SRC)\charset.h \
+    $(SRC)\region-cache.h \
+    $(SRC)\indent.h \
+    $(SRC)\blockinput.h \
+    $(SRC)\atimer.h \
+    $(SRC)\systime.h \
+    $(EMACS_ROOT)\nt\inc\sys\time.h \
+    $(SRC)\keyboard.h \
+    $(SRC)\frame.h
+
+$(BLD)\bytecode.obj: \
+    $(SRC)\bytecode.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\buffer.h \
+    $(SRC)\charset.h \
+    $(SRC)\syntax.h
+
+$(BLD)\callint.obj: \
+    $(SRC)\callint.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\buffer.h \
+    $(SRC)\commands.h \
+    $(SRC)\keyboard.h \
+    $(SRC)\window.h \
+    $(SRC)\dispextern.h \
+    $(SRC)\w32gui.h \
+    $(SRC)\mw32font.h \
+    $(SRC)\mocklisp.h
+
+$(BLD)\callproc.obj: \
+    $(SRC)\callproc.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(EMACS_ROOT)\nt\inc\unistd.h \
+    $(EMACS_ROOT)\nt\inc\sys\file.h \
+    $(SRC)\w32.h \
+    $(SRC)\lisp.h \
+    $(SRC)\commands.h \
+    $(SRC)\buffer.h \
+    $(SRC)\charset.h \
+    $(SRC)\ccl.h \
+    $(SRC)\coding.h \
+    $(SRC)\composite.h \
+    $(SRC)\epaths.h \
+    $(SRC)\process.h \
+    $(SRC)\syssignal.h \
+    $(SRC)\systty.h
+
+$(BLD)\casefiddle.obj: \
+    $(SRC)\casefiddle.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\buffer.h \
+    $(SRC)\charset.h \
+    $(SRC)\commands.h \
+    $(SRC)\syntax.h \
+    $(SRC)\composite.h
+
+$(BLD)\cm.obj: \
+    $(SRC)\cm.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\cm.h \
+    $(SRC)\termhooks.h
+
+$(BLD)\cmds.obj: \
+    $(SRC)\cmds.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\commands.h \
+    $(SRC)\buffer.h \
+    $(SRC)\charset.h \
+    $(SRC)\syntax.h \
+    $(SRC)\window.h \
+    $(SRC)\dispextern.h \
+    $(SRC)\w32gui.h \
+    $(SRC)\mw32font.h \
+    $(SRC)\keyboard.h
+
+$(BLD)\data.obj: \
+    $(SRC)\data.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\puresize.h \
+    $(SRC)\charset.h \
+    $(SRC)\buffer.h \
+    $(SRC)\keyboard.h \
+    $(SRC)\frame.h \
+    $(SRC)\syssignal.h
+
+$(BLD)\dired.obj: \
+    $(SRC)\dired.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\systime.h \
+    $(EMACS_ROOT)\nt\inc\sys\time.h \
+    $(EMACS_ROOT)\nt\inc\unistd.h \
+    $(EMACS_ROOT)\nt\inc\sys\dir.h \
+    $(EMACS_ROOT)\nt\inc\sys\..\..\..\src\ndir.h \
+    $(SRC)\lisp.h \
+    $(SRC)\buffer.h \
+    $(SRC)\commands.h \
+    $(SRC)\charset.h \
+    $(SRC)\coding.h \
+    $(SRC)\ccl.h \
+    $(SRC)\regex.h
+
+$(BLD)\dispnew.obj: \
+    $(SRC)\dispnew.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(EMACS_ROOT)\nt\inc\unistd.h \
+    $(SRC)\mw32sync.h \
+    $(SRC)\lisp.h \
+    $(SRC)\termchar.h \
+    $(SRC)\termopts.h \
+    $(SRC)\termhooks.h \
+    $(SRC)\dispextern.h \
+    $(SRC)\w32gui.h \
+    $(SRC)\mw32font.h \
+    $(SRC)\cm.h \
+    $(SRC)\buffer.h \
+    $(SRC)\charset.h \
+    $(SRC)\keyboard.h \
+    $(SRC)\frame.h \
+    $(SRC)\window.h \
+    $(SRC)\commands.h \
+    $(SRC)\disptab.h \
+    $(SRC)\indent.h \
+    $(SRC)\intervals.h \
+    $(SRC)\composite.h \
+    $(SRC)\blockinput.h \
+    $(SRC)\atimer.h \
+    $(SRC)\systime.h \
+    $(EMACS_ROOT)\nt\inc\sys\time.h \
+    $(SRC)\process.h \
+    $(SRC)\syssignal.h \
+    $(SRC)\mw32term.h
+
+$(BLD)\doc.obj: \
+    $(SRC)\doc.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(EMACS_ROOT)\nt\inc\sys\file.h \
+    $(EMACS_ROOT)\nt\inc\unistd.h \
+    $(SRC)\lisp.h \
+    $(SRC)\buffer.h \
+    $(SRC)\keyboard.h \
+    $(SRC)\charset.h
+
+$(BLD)\doprnt.obj: \
+    $(SRC)\doprnt.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(EMACS_ROOT)\nt\inc\unistd.h \
+    $(SRC)\lisp.h \
+    $(SRC)\charset.h
+
+$(BLD)\editfns.obj: \
+    $(SRC)\editfns.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(EMACS_ROOT)\nt\inc\pwd.h \
+    $(EMACS_ROOT)\nt\inc\unistd.h \
+    $(SRC)\lisp.h \
+    $(SRC)\intervals.h \
+    $(SRC)\dispextern.h \
+    $(SRC)\w32gui.h \
+    $(SRC)\mw32font.h \
+    $(SRC)\composite.h \
+    $(SRC)\buffer.h \
+    $(SRC)\charset.h \
+    $(SRC)\coding.h \
+    $(SRC)\ccl.h \
+    $(SRC)\frame.h \
+    $(SRC)\window.h \
+    $(SRC)\systime.h \
+    $(EMACS_ROOT)\nt\inc\sys\time.h
+
+$(BLD)\eval.obj: \
+    $(SRC)\eval.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\blockinput.h \
+    $(SRC)\atimer.h \
+    $(SRC)\systime.h \
+    $(EMACS_ROOT)\nt\inc\sys\time.h \
+    $(SRC)\commands.h \
+    $(SRC)\keyboard.h \
+    $(SRC)\dispextern.h \
+    $(SRC)\w32gui.h \
+    $(SRC)\mw32font.h
+
+$(BLD)\fileio.obj: \
+    $(SRC)\fileio.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(EMACS_ROOT)\nt\inc\unistd.h \
+    $(EMACS_ROOT)\nt\inc\pwd.h \
+    $(SRC)\lisp.h \
+    $(SRC)\intervals.h \
+    $(SRC)\dispextern.h \
+    $(SRC)\w32gui.h \
+    $(SRC)\mw32font.h \
+    $(SRC)\composite.h \
+    $(SRC)\buffer.h \
+    $(SRC)\charset.h \
+    $(SRC)\coding.h \
+    $(SRC)\ccl.h \
+    $(SRC)\window.h \
+    $(SRC)\systime.h \
+    $(EMACS_ROOT)\nt\inc\sys\time.h \
+    $(SRC)\commands.h
+
+$(BLD)\filelock.obj: \
+    $(SRC)\filelock.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(EMACS_ROOT)\nt\inc\pwd.h \
+    $(EMACS_ROOT)\nt\inc\sys\file.h \
+    $(EMACS_ROOT)\nt\inc\unistd.h \
+    $(SRC)\lisp.h \
+    $(SRC)\buffer.h \
+    $(SRC)\charset.h \
+    $(SRC)\coding.h \
+    $(SRC)\ccl.h \
+    $(SRC)\systime.h \
+    $(EMACS_ROOT)\nt\inc\sys\time.h
+
+$(BLD)\filemode.obj: \
+    $(SRC)\filemode.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h
+
+$(BLD)\fns.obj: \
+    $(SRC)\fns.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(EMACS_ROOT)\nt\inc\unistd.h \
+    $(SRC)\lisp.h \
+    $(SRC)\commands.h \
+    $(SRC)\charset.h \
+    $(SRC)\buffer.h \
+    $(SRC)\keyboard.h \
+    $(SRC)\intervals.h \
+    $(SRC)\dispextern.h \
+    $(SRC)\w32gui.h \
+    $(SRC)\mw32font.h \
+    $(SRC)\composite.h \
+    $(SRC)\frame.h \
+    $(SRC)\window.h \
+    $(SRC)\blockinput.h \
+    $(SRC)\atimer.h \
+    $(SRC)\systime.h \
+    $(EMACS_ROOT)\nt\inc\sys\time.h \
+    $(SRC)\md5.h \
+    $(SRC)\coding.h \
+    $(SRC)\ccl.h
+
+$(BLD)\indent.obj: \
+    $(SRC)\indent.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\buffer.h \
+    $(SRC)\charset.h \
+    $(SRC)\category.h \
+    $(SRC)\indent.h \
+    $(SRC)\keyboard.h \
+    $(SRC)\frame.h \
+    $(SRC)\window.h \
+    $(SRC)\dispextern.h \
+    $(SRC)\w32gui.h \
+    $(SRC)\mw32font.h \
+    $(SRC)\termchar.h \
+    $(SRC)\termopts.h \
+    $(SRC)\disptab.h \
+    $(SRC)\intervals.h \
+    $(SRC)\composite.h \
+    $(SRC)\region-cache.h
+
+$(BLD)\insdel.obj: \
+    $(SRC)\insdel.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\intervals.h \
+    $(SRC)\dispextern.h \
+    $(SRC)\w32gui.h \
+    $(SRC)\mw32font.h \
+    $(SRC)\composite.h \
+    $(SRC)\buffer.h \
+    $(SRC)\charset.h \
+    $(SRC)\window.h \
+    $(SRC)\blockinput.h \
+    $(SRC)\atimer.h \
+    $(SRC)\systime.h \
+    $(EMACS_ROOT)\nt\inc\sys\time.h \
+    $(SRC)\region-cache.h
+
+$(BLD)\keyboard.obj: \
+    $(SRC)\keyboard.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\termchar.h \
+    $(SRC)\termopts.h \
+    $(SRC)\lisp.h \
+    $(SRC)\termhooks.h \
+    $(SRC)\macros.h \
+    $(SRC)\keyboard.h \
+    $(SRC)\frame.h \
+    $(SRC)\window.h \
+    $(SRC)\dispextern.h \
+    $(SRC)\w32gui.h \
+    $(SRC)\mw32font.h \
+    $(SRC)\commands.h \
+    $(SRC)\buffer.h \
+    $(SRC)\charset.h \
+    $(SRC)\disptab.h \
+    $(SRC)\syntax.h \
+    $(SRC)\intervals.h \
+    $(SRC)\composite.h \
+    $(SRC)\blockinput.h \
+    $(SRC)\atimer.h \
+    $(SRC)\systime.h \
+    $(EMACS_ROOT)\nt\inc\sys\time.h \
+    $(SRC)\mw32sync.h \
+    $(SRC)\mw32mci.h \
+    $(SRC)\coding.h \
+    $(SRC)\ccl.h \
+    $(SRC)\puresize.h \
+    $(EMACS_ROOT)\nt\inc\sys\ioctl.h \
+    $(SRC)\syssignal.h \
+    $(SRC)\systty.h \
+    $(EMACS_ROOT)\nt\inc\unistd.h \
+    $(SRC)\mw32term.h
+
+$(BLD)\keymap.obj: \
+    $(SRC)\keymap.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\commands.h \
+    $(SRC)\buffer.h \
+    $(SRC)\charset.h \
+    $(SRC)\keyboard.h \
+    $(SRC)\termhooks.h \
+    $(SRC)\blockinput.h \
+    $(SRC)\atimer.h \
+    $(SRC)\systime.h \
+    $(EMACS_ROOT)\nt\inc\sys\time.h \
+    $(SRC)\puresize.h \
+    $(SRC)\intervals.h \
+    $(SRC)\dispextern.h \
+    $(SRC)\w32gui.h \
+    $(SRC)\mw32font.h \
+    $(SRC)\composite.h
+
+$(BLD)\lread.obj: \
+    $(SRC)\lread.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(EMACS_ROOT)\nt\inc\sys\file.h \
+    $(SRC)\lisp.h \
+    $(SRC)\intervals.h \
+    $(SRC)\dispextern.h \
+    $(SRC)\w32gui.h \
+    $(SRC)\mw32font.h \
+    $(SRC)\composite.h \
+    $(SRC)\buffer.h \
+    $(SRC)\charset.h \
+    $(SRC)\epaths.h \
+    $(SRC)\commands.h \
+    $(SRC)\keyboard.h \
+    $(SRC)\termhooks.h \
+    $(SRC)\coding.h \
+    $(SRC)\ccl.h \
+    $(EMACS_ROOT)\nt\inc\unistd.h
+
+$(BLD)\macros.obj: \
+    $(SRC)\macros.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\macros.h \
+    $(SRC)\commands.h \
+    $(SRC)\buffer.h \
+    $(SRC)\window.h \
+    $(SRC)\dispextern.h \
+    $(SRC)\w32gui.h \
+    $(SRC)\mw32font.h \
+    $(SRC)\keyboard.h
+
+$(BLD)\marker.obj: \
+    $(SRC)\marker.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\buffer.h \
+    $(SRC)\charset.h
+
+$(BLD)\md5.obj: \
+    $(SRC)\md5.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\md5.h
+
+$(BLD)\minibuf.obj: \
+    $(SRC)\minibuf.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\commands.h \
+    $(SRC)\buffer.h \
+    $(SRC)\charset.h \
+    $(SRC)\dispextern.h \
+    $(SRC)\w32gui.h \
+    $(SRC)\mw32font.h \
+    $(SRC)\keyboard.h \
+    $(SRC)\frame.h \
+    $(SRC)\window.h \
+    $(SRC)\syntax.h \
+    $(SRC)\intervals.h \
+    $(SRC)\composite.h
+
+$(BLD)\mocklisp.obj: \
+    $(SRC)\mocklisp.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\buffer.h
+
+$(BLD)\w32.obj: \
+    $(SRC)\w32.c \
+    $(EMACS_ROOT)\nt\inc\sys\file.h \
+    $(EMACS_ROOT)\nt\inc\sys\time.h \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(EMACS_ROOT)\nt\inc\pwd.h \
+    $(SRC)\mw32reg.h \
+    $(SRC)\mw32sync.h \
+    $(SRC)\charset.h \
+    $(SRC)\coding.h \
+    $(SRC)\ccl.h \
+    $(EMACS_ROOT)\nt\inc\sys\socket.h \
+    $(SRC)\w32.h \
+    $(SRC)\ndir.h \
+    $(SRC)\systime.h
+
+$(BLD)\w32inevt.obj: \
+    $(SRC)\w32inevt.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\keyboard.h \
+    $(SRC)\frame.h \
+    $(SRC)\blockinput.h \
+    $(SRC)\atimer.h \
+    $(SRC)\systime.h \
+    $(EMACS_ROOT)\nt\inc\sys\time.h \
+    $(SRC)\termhooks.h
+
+$(BLD)\w32proc.obj: \
+    $(SRC)\w32proc.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\w32.h \
+    $(SRC)\systime.h \
+    $(EMACS_ROOT)\nt\inc\sys\time.h \
+    $(SRC)\syswait.h \
+    $(SRC)\process.h \
+    $(SRC)\syssignal.h \
+    $(SRC)\w32term.h \
+    $(SRC)\w32gui.h \
+    $(SRC)\mw32font.h
+
+$(BLD)\w32console.obj: \
+    $(SRC)\w32console.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\charset.h \
+    $(SRC)\coding.h \
+    $(SRC)\ccl.h \
+    $(SRC)\disptab.h \
+    $(SRC)\termhooks.h \
+    $(SRC)\dispextern.h \
+    $(SRC)\w32gui.h \
+    $(SRC)\mw32font.h \
+    $(SRC)\frame.h \
+    $(SRC)\w32inevt.h
+
+$(BLD)\print.obj: \
+    $(SRC)\print.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\buffer.h \
+    $(SRC)\charset.h \
+    $(SRC)\keyboard.h \
+    $(SRC)\frame.h \
+    $(SRC)\window.h \
+    $(SRC)\dispextern.h \
+    $(SRC)\w32gui.h \
+    $(SRC)\mw32font.h \
+    $(SRC)\process.h \
+    $(SRC)\termchar.h \
+    $(SRC)\intervals.h \
+    $(SRC)\composite.h
+
+$(BLD)\process.obj: \
+    $(SRC)\process.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(EMACS_ROOT)\nt\inc\sys\file.h \
+    $(EMACS_ROOT)\nt\inc\unistd.h \
+    $(EMACS_ROOT)\nt\inc\sys\socket.h \
+    $(SRC)\w32.h \
+    $(EMACS_ROOT)\nt\inc\netdb.h \
+    $(EMACS_ROOT)\nt\inc\netinet\in.h \
+    $(EMACS_ROOT)\nt\inc\arpa\inet.h \
+    $(SRC)\systime.h \
+    $(EMACS_ROOT)\nt\inc\sys\time.h \
+    $(SRC)\systty.h \
+    $(SRC)\lisp.h \
+    $(SRC)\window.h \
+    $(SRC)\dispextern.h \
+    $(SRC)\w32gui.h \
+    $(SRC)\mw32font.h \
+    $(SRC)\buffer.h \
+    $(SRC)\charset.h \
+    $(SRC)\coding.h \
+    $(SRC)\ccl.h \
+    $(SRC)\process.h \
+    $(SRC)\termhooks.h \
+    $(SRC)\termopts.h \
+    $(SRC)\commands.h \
+    $(SRC)\keyboard.h \
+    $(SRC)\frame.h \
+    $(SRC)\blockinput.h \
+    $(SRC)\atimer.h \
+    $(SRC)\composite.h \
+    $(SRC)\syssignal.h \
+    $(SRC)\syswait.h \
+    $(SRC)\sysselect.h
+
+$(BLD)\regex.obj: \
+    $(SRC)\regex.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\buffer.h \
+    $(SRC)\syntax.h \
+    $(SRC)\charset.h \
+    $(SRC)\category.h \
+    $(SRC)\regex.h
+
+$(BLD)\scroll.obj: \
+    $(SRC)\scroll.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\termchar.h \
+    $(SRC)\lisp.h \
+    $(SRC)\dispextern.h \
+    $(SRC)\w32gui.h \
+    $(SRC)\mw32font.h \
+    $(SRC)\keyboard.h \
+    $(SRC)\frame.h \
+    $(SRC)\window.h
+
+$(BLD)\search.obj: \
+    $(SRC)\search.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\syntax.h \
+    $(SRC)\category.h \
+    $(SRC)\buffer.h \
+    $(SRC)\charset.h \
+    $(SRC)\region-cache.h \
+    $(SRC)\commands.h \
+    $(SRC)\blockinput.h \
+    $(SRC)\atimer.h \
+    $(SRC)\systime.h \
+    $(EMACS_ROOT)\nt\inc\sys\time.h \
+    $(SRC)\intervals.h \
+    $(SRC)\dispextern.h \
+    $(SRC)\w32gui.h \
+    $(SRC)\mw32font.h \
+    $(SRC)\composite.h \
+    $(SRC)\regex.h
+
+$(BLD)\syntax.obj: \
+    $(SRC)\syntax.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\commands.h \
+    $(SRC)\buffer.h \
+    $(SRC)\charset.h \
+    $(SRC)\syntax.h \
+    $(SRC)\intervals.h \
+    $(SRC)\dispextern.h \
+    $(SRC)\w32gui.h \
+    $(SRC)\mw32font.h \
+    $(SRC)\composite.h \
+    $(SRC)\category.h
+
+$(BLD)\sysdep.obj: \
+    $(SRC)\sysdep.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(EMACS_ROOT)\nt\inc\unistd.h \
+    $(SRC)\lisp.h \
+    $(SRC)\blockinput.h \
+    $(SRC)\atimer.h \
+    $(SRC)\systime.h \
+    $(EMACS_ROOT)\nt\inc\sys\time.h \
+    $(EMACS_ROOT)\nt\inc\sys\ioctl.h \
+    $(SRC)\systty.h \
+    $(SRC)\syswait.h \
+    $(SRC)\keyboard.h \
+    $(SRC)\frame.h \
+    $(SRC)\window.h \
+    $(SRC)\dispextern.h \
+    $(SRC)\w32gui.h \
+    $(SRC)\mw32font.h \
+    $(SRC)\termhooks.h \
+    $(SRC)\termchar.h \
+    $(SRC)\termopts.h \
+    $(SRC)\process.h \
+    $(SRC)\syssignal.h \
+    $(EMACS_ROOT)\nt\inc\sys\socket.h \
+    $(SRC)\w32.h \
+    $(EMACS_ROOT)\nt\inc\netdb.h \
+    $(SRC)\sysselect.h
+
+$(BLD)\term.obj: \
+    $(SRC)\term.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\termchar.h \
+    $(SRC)\termopts.h \
+    $(SRC)\lisp.h \
+    $(SRC)\charset.h \
+    $(SRC)\coding.h \
+    $(SRC)\ccl.h \
+    $(SRC)\keyboard.h \
+    $(SRC)\frame.h \
+    $(SRC)\disptab.h \
+    $(SRC)\termhooks.h \
+    $(SRC)\dispextern.h \
+    $(SRC)\w32gui.h \
+    $(SRC)\mw32font.h \
+    $(SRC)\window.h \
+    $(SRC)\cm.h
+
+$(BLD)\termcap.obj: \
+    $(SRC)\termcap.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(EMACS_ROOT)\nt\inc\sys\file.h \
+    $(EMACS_ROOT)\nt\inc\unistd.h
+
+$(BLD)\tparam.obj: \
+    $(SRC)\tparam.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h
+
+$(BLD)\undo.obj: \
+    $(SRC)\undo.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\buffer.h \
+    $(SRC)\commands.h
+
+$(BLD)\mw32mem.obj: \
+    $(SRC)\mw32mem.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\w32.h
+
+$(BLD)\window.obj: \
+    $(SRC)\window.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\buffer.h \
+    $(SRC)\keyboard.h \
+    $(SRC)\frame.h \
+    $(SRC)\window.h \
+    $(SRC)\dispextern.h \
+    $(SRC)\w32gui.h \
+    $(SRC)\mw32font.h \
+    $(SRC)\commands.h \
+    $(SRC)\indent.h \
+    $(SRC)\termchar.h \
+    $(SRC)\disptab.h \
+    $(SRC)\blockinput.h \
+    $(SRC)\atimer.h \
+    $(SRC)\systime.h \
+    $(EMACS_ROOT)\nt\inc\sys\time.h \
+    $(SRC)\intervals.h \
+    $(SRC)\composite.h \
+    $(SRC)\mw32term.h \
+    $(SRC)\mw32sync.h
+
+$(BLD)\xdisp.obj: \
+    $(SRC)\xdisp.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\keyboard.h \
+    $(SRC)\frame.h \
+    $(SRC)\window.h \
+    $(SRC)\dispextern.h \
+    $(SRC)\w32gui.h \
+    $(SRC)\mw32font.h \
+    $(SRC)\termchar.h \
+    $(SRC)\buffer.h \
+    $(SRC)\charset.h \
+    $(SRC)\indent.h \
+    $(SRC)\commands.h \
+    $(SRC)\macros.h \
+    $(SRC)\disptab.h \
+    $(SRC)\termhooks.h \
+    $(SRC)\intervals.h \
+    $(SRC)\composite.h \
+    $(SRC)\coding.h \
+    $(SRC)\ccl.h \
+    $(SRC)\process.h \
+    $(SRC)\region-cache.h \
+    $(SRC)\fontset.h \
+    $(SRC)\mw32term.h
+
+$(BLD)\casetab.obj: \
+    $(SRC)\casetab.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\buffer.h \
+    $(SRC)\charset.h
+
+$(BLD)\floatfns.obj: \
+    $(SRC)\floatfns.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\syssignal.h
+
+$(BLD)\frame.obj: \
+    $(SRC)\frame.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\charset.h \
+    $(SRC)\mw32term.h \
+    $(SRC)\frame.h \
+    $(SRC)\mw32font.h \
+    $(SRC)\mw32sync.h \
+    $(SRC)\buffer.h \
+    $(SRC)\commands.h \
+    $(SRC)\keyboard.h \
+    $(SRC)\fontset.h \
+    $(SRC)\termhooks.h \
+    $(SRC)\dispextern.h \
+    $(SRC)\w32gui.h \
+    $(SRC)\window.h
+
+$(BLD)\gmalloc.obj: \
+    $(SRC)\gmalloc.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(EMACS_ROOT)\nt\inc\unistd.h \
+    $(SRC)\getpagesize.h
+
+$(BLD)\intervals.obj: \
+    $(SRC)\intervals.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\intervals.h \
+    $(SRC)\dispextern.h \
+    $(SRC)\w32gui.h \
+    $(SRC)\mw32font.h \
+    $(SRC)\composite.h \
+    $(SRC)\buffer.h \
+    $(SRC)\puresize.h \
+    $(SRC)\keyboard.h
+
+$(BLD)\composite.obj: \
+    $(SRC)\composite.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\buffer.h \
+    $(SRC)\charset.h \
+    $(SRC)\intervals.h \
+    $(SRC)\dispextern.h \
+    $(SRC)\w32gui.h \
+    $(SRC)\mw32font.h \
+    $(SRC)\composite.h
+
+$(BLD)\ralloc.obj: \
+    $(SRC)\ralloc.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(EMACS_ROOT)\nt\inc\unistd.h \
+    $(SRC)\getpagesize.h
+
+$(BLD)\textprop.obj: \
+    $(SRC)\textprop.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\intervals.h \
+    $(SRC)\dispextern.h \
+    $(SRC)\w32gui.h \
+    $(SRC)\mw32font.h \
+    $(SRC)\composite.h \
+    $(SRC)\buffer.h \
+    $(SRC)\window.h
+
+$(BLD)\vm-limit.obj: \
+    $(SRC)\vm-limit.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\mem-limits.h
+
+$(BLD)\region-cache.obj: \
+    $(SRC)\region-cache.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\buffer.h \
+    $(SRC)\region-cache.h
+
+$(BLD)\strftime.obj: \
+    $(SRC)\strftime.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(EMACS_ROOT)\nt\inc\sys\time.h
+
+$(BLD)\coding.obj: \
+    $(SRC)\coding.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\buffer.h \
+    $(SRC)\charset.h \
+    $(SRC)\composite.h \
+    $(SRC)\ccl.h \
+    $(SRC)\coding.h \
+    $(SRC)\window.h \
+    $(SRC)\dispextern.h \
+    $(SRC)\w32gui.h \
+    $(SRC)\mw32font.h
+
+$(BLD)\charset.obj: \
+    $(SRC)\charset.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\buffer.h \
+    $(SRC)\charset.h \
+    $(SRC)\composite.h \
+    $(SRC)\coding.h \
+    $(SRC)\ccl.h \
+    $(SRC)\disptab.h
+
+$(BLD)\category.obj: \
+    $(SRC)\category.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\buffer.h \
+    $(SRC)\charset.h \
+    $(SRC)\category.h
+
+$(BLD)\fontset.obj: \
+    $(SRC)\fontset.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\buffer.h \
+    $(SRC)\charset.h \
+    $(SRC)\ccl.h \
+    $(SRC)\keyboard.h \
+    $(SRC)\frame.h \
+    $(SRC)\dispextern.h \
+    $(SRC)\w32gui.h \
+    $(SRC)\mw32font.h \
+    $(SRC)\fontset.h \
+    $(SRC)\window.h
+
+$(BLD)\ccl.obj: \
+    $(SRC)\ccl.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\charset.h \
+    $(SRC)\ccl.h \
+    $(SRC)\coding.h
+
+$(BLD)\mw32term.obj: \
+    $(SRC)\mw32term.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\blockinput.h \
+    $(SRC)\atimer.h \
+    $(SRC)\systime.h \
+    $(EMACS_ROOT)\nt\inc\sys\time.h \
+    $(SRC)\mw32sync.h \
+    $(SRC)\mw32term.h \
+    $(SRC)\frame.h \
+    $(SRC)\mw32font.h \
+    $(SRC)\mw32mci.h \
+    $(SRC)\systty.h \
+    $(SRC)\charset.h \
+    $(SRC)\coding.h \
+    $(SRC)\ccl.h \
+    $(SRC)\dispextern.h \
+    $(SRC)\w32gui.h \
+    $(SRC)\fontset.h \
+    $(SRC)\termhooks.h \
+    $(SRC)\termopts.h \
+    $(SRC)\termchar.h \
+    $(SRC)\gnu.h \
+    $(SRC)\disptab.h \
+    $(SRC)\buffer.h \
+    $(SRC)\window.h \
+    $(SRC)\keyboard.h \
+    $(SRC)\intervals.h \
+    $(SRC)\composite.h \
+    $(SRC)\process.h
+
+$(BLD)\mw32fns.obj: \
+    $(SRC)\mw32fns.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\mw32term.h \
+    $(SRC)\frame.h \
+    $(SRC)\mw32font.h \
+    $(SRC)\mw32reg.h \
+    $(SRC)\window.h \
+    $(SRC)\dispextern.h \
+    $(SRC)\w32gui.h \
+    $(SRC)\buffer.h \
+    $(SRC)\intervals.h \
+    $(SRC)\composite.h \
+    $(SRC)\keyboard.h \
+    $(SRC)\blockinput.h \
+    $(SRC)\atimer.h \
+    $(SRC)\systime.h \
+    $(EMACS_ROOT)\nt\inc\sys\time.h \
+    $(SRC)\mw32sync.h \
+    $(SRC)\epaths.h \
+    $(SRC)\charset.h \
+    $(SRC)\coding.h \
+    $(SRC)\ccl.h \
+    $(SRC)\fontset.h \
+    $(SRC)\termhooks.h \
+    $(SRC)\mw32rgb.h
+
+$(BLD)\mw32clpbd.obj: \
+    $(SRC)\mw32clpbd.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\charset.h \
+    $(SRC)\coding.h \
+    $(SRC)\ccl.h \
+    $(SRC)\buffer.h \
+    $(SRC)\blockinput.h \
+    $(SRC)\atimer.h \
+    $(SRC)\systime.h \
+    $(EMACS_ROOT)\nt\inc\sys\time.h
+
+$(BLD)\mw32menu.obj: \
+    $(SRC)\mw32menu.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\termhooks.h \
+    $(SRC)\keyboard.h \
+    $(SRC)\frame.h \
+    $(SRC)\window.h \
+    $(SRC)\dispextern.h \
+    $(SRC)\w32gui.h \
+    $(SRC)\mw32font.h \
+    $(SRC)\blockinput.h \
+    $(SRC)\atimer.h \
+    $(SRC)\systime.h \
+    $(EMACS_ROOT)\nt\inc\sys\time.h \
+    $(SRC)\buffer.h \
+    $(SRC)\charset.h \
+    $(SRC)\coding.h \
+    $(SRC)\ccl.h \
+    $(SRC)\mw32term.h
+
+$(BLD)\mw32ime.obj: \
+    $(SRC)\mw32ime.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\frame.h \
+    $(SRC)\window.h \
+    $(SRC)\dispextern.h \
+    $(SRC)\w32gui.h \
+    $(SRC)\mw32font.h \
+    $(SRC)\charset.h \
+    $(SRC)\coding.h \
+    $(SRC)\ccl.h \
+    $(SRC)\mw32term.h
+
+$(BLD)\mw32font.obj: \
+    $(SRC)\mw32font.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\frame.h \
+    $(SRC)\charset.h \
+    $(SRC)\coding.h \
+    $(SRC)\ccl.h \
+    $(SRC)\mw32term.h \
+    $(SRC)\mw32font.h \
+    $(SRC)\mw32bdf.h \
+    $(SRC)\dispextern.h \
+    $(SRC)\w32gui.h \
+    $(SRC)\fontset.h
+
+$(BLD)\mw32bdf.obj: \
+    $(SRC)\mw32bdf.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\mw32bdf.h
+
+$(BLD)\mw32reg.obj: \
+    $(SRC)\mw32reg.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\mw32reg.h \
+    $(SRC)\charset.h \
+    $(SRC)\coding.h \
+    $(SRC)\ccl.h \
+    $(SRC)\mw32term.h \
+    $(SRC)\frame.h \
+    $(SRC)\mw32font.h
+
+$(BLD)\mw32dl.obj: \
+    $(SRC)\mw32dl.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\w32heap.h \
+    $(SRC)\lisp.h \
+    $(SRC)\mw32dl.h
+
+$(BLD)\mw32mci.obj: \
+    $(SRC)\mw32mci.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\charset.h \
+    $(SRC)\coding.h \
+    $(SRC)\ccl.h \
+    $(SRC)\mw32term.h \
+    $(SRC)\frame.h \
+    $(SRC)\mw32font.h \
+    $(SRC)\mw32mci.h
+
+$(BLD)\xfaces.obj: \
+    $(SRC)\xfaces.c \
+    $(SRC)\config.h \
+    $(SRC)\s\ms-w32.h \
+    $(SRC)\m\intel386.h \
+    $(SRC)\lisp.h \
+    $(SRC)\charset.h \
+    $(SRC)\keyboard.h \
+    $(SRC)\frame.h \
+    $(SRC)\fontset.h \
+    $(SRC)\mw32term.h \
+    $(SRC)\mw32font.h \
+    $(SRC)\buffer.h \
+    $(SRC)\dispextern.h \
+    $(SRC)\w32gui.h \
+    $(SRC)\blockinput.h \
+    $(SRC)\atimer.h \
+    $(SRC)\systime.h \
+    $(EMACS_ROOT)\nt\inc\sys\time.h \
+    $(SRC)\window.h \
+    $(SRC)\intervals.h \
+    $(SRC)\composite.h
+
+### automatically generated dependency end

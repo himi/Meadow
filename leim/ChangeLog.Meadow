@@ -1,0 +1,92 @@
+2005-08-28  KOSEKI Yoshinori  <kose@meadowy.org>
+
+	* Meadow-2.10 (ASAGAO) Release.
+
+2005-03-22  KOSEKI Yoshinori  <kose@meadowy.org>
+
+	* Meadow-2.10 (ASAGAO) Release. (not Released)
+
+2005-03-13  Shuichi KITAGUCHI  <kit@meadowy.org>
+
+	* quail/latin-ltx.el: Sync up with Emacs 21.4.
+
+	* quail/latin-pre.el: Ditto.
+
+	* quail/thai.el: Ditto.
+
+	* ChangeLog: Ditto.
+
+	* Makefile.in: Ditto.
+
+2004-07-07  KOSEKI Yoshinori  <kose@meadowy.org>
+
+	* Meadow 2.00 (KIKYOU) Release.
+
+2003-10-15  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* makefile.meadow.w32-in (install): Modify path separators for
+	xcopy.
+
+2003-07-16  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* makefile.meadow.w32-in ($(TIT)): Don't depend on $(SUBDIRS).
+	($(MISC_DIC)): Ditto.
+
+2003-01-22  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* makefile.meadow.w32-in: Suppress compilation warnings.
+
+2002-10-20  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* makefile.meadow.w32-in (BUILT_EMACS): Name of executable is
+	changed for Meadow 2. Thanks to Masayuki FUJII
+	(boochang@m4.kcn.ne.jp).
+
+2002-10-12  Shun-ichi GOTO  <gotoh@taiyo.co.jp>
+
+	* makefile.nt (BUILT_EMACS): Name of executable is changed for
+	Meadow 2.
+
+2002-09-29  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* makefile.meadow.w32-in: Change install directory in Meadow's
+	way.
+
+2002-09-28  MIYOSHI Masanori  <miyoshi@boreas.dti.ne.jp>
+
+	* makefile.meadow.w32-in: New file. Apply Cygwin/Mingw support
+	patch from Masayuki FUJII (boochang@m4.kcn.ne.jp).
+
+2002-04-17  Shun-ichi GOTO  <gotoh@taiyo.co.jp>
+
+	* makefile.nt: Sync up with leim-21.1
+
+2002-01-15  MIYASHITA Hisashi  <himi@m17n.org>
+
+	* Sync up with leim-21.0.104.
+
+	* makefile.nt (SUBDIRS): New macro.
+	(TTB_GB): Change the suffix to .elc.
+	(TIT_BIG5): Ditto.
+	(NON_TIT_GB): Ditto.
+	(NON_TIT_BIG5): Remove quick-b5 and tsang-b5, and change
+	the suffix as well.
+	(NON_TIT_CNS): Removed.
+	(CHINESE_NON_TIT): Remove NON_TIT_CNS.
+	(CHINESE_CNS): Removed.
+	(JAPANESE, KOREAN, THAI, VIETNAMESE, LAO, INDIAN, TIBETAN, LATIN)
+	(SLAVIC, GREEK, RUSSIAN, MISC, MISC_DIC):
+	Change the suffix as well.
+	(CHINESE): Remove CHINESE_CNS.
+	(WORLD_ELC): Removed.
+	(NON_TIT): Add THAI, TIBETAN, VIETNAMESE, LAO, and INDIAN.
+	(all): Add SUBDIRS.  Remove WORLD_ELC.
+	(SUBDIRS): New target.
+	(MISC_DIC, NON_TIT): New explicit targets.
+	
+1999-09-08  Miyashita Hisashi  <himi@bird.scphys.kyoto-u.ac.jp>
+
+	* Makefile.nt:
+	New makefile for Windows.
+	
+

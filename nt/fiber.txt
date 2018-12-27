@@ -1,0 +1,324 @@
+;; -*- Mode: text ; Coding: iso-2022-jp -*-
+
+; English document follows after Japanese document.
+
+
+    File Inspect and Broking End Resolver  -- fiber --
+
+             Copyright (C) 1997-2004  Shuichi Kitaguchi <kit@meadowy.org>
+
+
+COPYRIGHT
+---------
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either versions 2, or (at your option)
+any later version.
+
+This program is distributed in the hope that it will be useful
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with fiber, see the file COPYING.  If not, write to the Free
+Software Foundation Inc., 59 Temple Place - Suite 330, Boston,
+MA 02111-1307, USA.
+
+
+======================== JAPANESE DOCUMENT ========================
+
+これは何をするもの?
+-------------------
+
+  fiber は大きくわけて 2 つの機能を持っています
+
+ o ファイルの中身を調べてその種類を決定する
+ o Windows の「関連付け」を用いてファイルを実行する
+
+  例えば、foo_file という中身が JPEG のファイルがあったとします。
+
+  > fiber foo_file
+
+  とすると、fiber は foo_file を foo_file.jpg にコピーした後、
+  foo_file.jpg に関連付けられたアプリケーションを実行します(後には
+  foo_file.jpg というファイルが残ります)。
+
+  つまり拡張子が付いていない、もしくは何なのかわからないファイルも 
+  fiber を使えば適切なアプリケーションで実行できるわけです。もちろん
+  fiber も万能ではないので、対応できていないファイル形式は山ほどありま
+  すが(限られたものしか対応してないとも言う)。
+
+
+使い方
+------
+
+   > fiber [オプション] <ファイル>
+
+  オプション:
+      -e ext                  拡張子を "ext" だとみなす
+      -s                      同期モード
+      -a ext=ident(,offset)   拡張子データをレジストリに追加
+      -l                      設定と拡張子の一覧表示
+      -r num                  拡張子データをレジストリから削除
+      -i                      レジストリのデータを初期値に戻す
+      -o Option={num,yes/no}  設定オプション
+ 
+      設定オプション    |  説明 (初期値)
+     -------------------+----------------------------------------------------
+      ExtNum            |  fiber がサポートする拡張子の最大値 (64)
+      ExecuteUnknownExt |  レジストリに登録されてない拡張子を実行する (yes)
+      ExecuteURL        |  URL(ftp:,http:,...)を実行する (yes)
+      TrustExt          |  fiber が判断したものとファイル名の拡張子が異なって
+                        |  いた場合、ファイル名の拡張子を信用する (yes)
+      OverrideExt       |  fiber が知らない拡張子であった場合、fiber が判断
+                        |  した拡張子で上書きして実行する (no)
+
+  ファイル:
+        ・拡張子なしファイル名
+        ・Windows で関連付けられている、拡張子付きファイル名
+        ・URL(http://..., ftp://...)
+ 
+
+実行例
+------
+
+1. 拡張子の指定 (-e)
+
+    > fiber -e jpg foo.dat
+
+  とすると、fiber は foo.dat が JPEG ファイルであると考え、foo.dat を 
+  foo.dat.jpg にコピーした後、foo.dat.jpg を実行します
+
+
+2. 同期モード (-s)
+
+  (例1) 通常の場合
+
+    > fiber foo.jpg
+
+    すぐにプロンプトに戻ってきます
+
+  (例2) -s オプション付きの場合
+
+    > fiber -s foo
+
+     foo を foo.ext にコピーした後、実行しているアプリケーションの終了
+     を待ってからプロンプトに戻ってきます。またこの場合は、foo.ext は
+     残らずに消去されます。
+
+
+3. 拡張子データの追加 (-a)
+
+   fiber が識別できる拡張子は、ユーザが自由に追加することができます。
+   追加するには、
+
+     > fiber -a 拡張子名=識別子(,オフセット値)
+
+   のように設定します。オフセット値を指定しなかった場合は 0 になります。
+
+
+   (例1) ".mid" を追加したい場合
+
+     .mid ファイルのフォーマットは、
+
+       ファイルの先頭
+           |
+           V
+           0   1   2   3   4   5   6   7  (バイト)
+         +---+---+---+---+---+---+---+---
+         | M | T | h | d | ? | ? | ? | ?  ...
+         +---+---+---+---+---+---+---+---
+
+    となっているので、
+
+      > fiber -a mid=MThd
+
+    もしくは
+
+      > fiber -a mid=MThd,0
+
+    と設定します
+
+
+   (例2) ".wav" を追加したい場合
+
+    .wav ファイルのフォーマットは、
+
+       ファイルの先頭
+           |
+           V
+           0   1   2   3   4   5   6   7   8   9   10  11  12  (バイト)
+         +---+---+---+---+---+---+---+---+---+---+---+---+---
+         | ? | ? | ? | ? | ? | ? | ? | ? | W | A | V | E | ? ...
+         +---+---+---+---+---+---+---+---+---+---+---+---+---
+
+    となっているので、
+
+      > fiber -a wav=WAVE,8
+
+    と指定します
+
+
+4. 設定オプションの変更 (-o)
+
+   (例1) サポートする拡張子数を 128 にする
+
+     > fiber -o ExtNum=128
+
+   (例2) fiber が知らない拡張子のファイルを実行しないようにする
+
+     > fiber -o ExecuteUnknownExt=no
+
+
+その他
+------
+
+   o レジストリキーの "HKEY_LOCAL_MACHINE\SOFTWARE\GNU\Fiber" が存在しなければ、
+     自動的にキーが作成されて初期値が書き込まれます
+
+   o もっと沢山の情報が得たいなら、fiber.c を見ましょう(^^;
+
+
+======================== ENGLISH DOCUMENT ========================
+
+WHATS THIS?
+-----------
+
+  Fiber has the following two facilities.
+
+1. Inspect the specified file and decide its file type.
+2. Execute a file by `File Association' provided by Windows.
+
+  For example, provided that "foo_file" is a JPEG file, this invocation:
+
+  > fiber foo_file
+
+  at first copies foo_file to foo_file.jpg, then executes a proper
+  application that is associated with the extention `jpg'
+  (foo_file.jpg remains as an aftereffect).
+
+  Thus fiber can execute a file which has no extensions.  Of course,
+  not all files can be executed by fiber because there are lots of
+  file formats that fiber still can not handle. ;-)
+
+
+USAGE
+-----
+
+   > fiber [option] <file>
+
+  option:
+          -e ext                  assume that the extention is "ext".
+          -s                      synchronous mode.
+          -a ext=ident(,offset)   add ext to database.
+          -l                      list options and database.
+          -r num                  remove ext indentified by num from database.
+          -i                      initialize database.
+          -o Option={num,yes/no}  set option.
+ 
+    Option              |   Explanation.(default value)
+   ---------------------+------------------------------------------------
+    ExtNum              |   ext max numbers fiber supported
+    ExecuteUnknownExt   |   execute for unknown file ext.(yes)
+    ExecuteURL          |   execute URL(ftp:,http:,...).(yes)
+    TrustExt            |   trust ext that filename has.(yes)
+    OverrideExt         |   override ext if filename has unknown ext.(no)
+
+  file:
+          filename without ext.
+          files that Windows can ShellExecute(Ex) (with ext).
+          URL(http://...)
+ 
+
+EXAMPLES
+--------
+
+1. SPECIFYING FILE EXTENSION (-e)
+
+  > fiber -e jpg foo.dat
+
+  Fiber assumes foo.dat is a JPEG file,
+  copies foo.dat to foo.dat.jpg and executes foo.dat.jpg.
+
+
+2. SYNCHRONOUS MODE (-s)
+
+  (ex.1) Without "-s" option:
+
+    > fiber foo.jpg
+
+   fiber returns to command prompt immediately.
+
+  (ex.2) However, with "-s" option
+
+    > fiber -s foo
+
+   fiber copies foo to foo.ext, executes foo.ext, waits until the invoked
+   execution finishes, and deletes foo.ext.
+
+
+3. ADDING NEW EXTENSIONS (-a)
+
+   You can add new extensions to fiber as below:
+
+     > fiber -a extension_name=identification(,offset_value)
+
+   If offset_value is omitted, it is considered to be 0.
+
+   (ex.1) ".mid" file
+
+     Since .mid format is:
+
+       file's head
+           |
+           V
+           0   1   2   3   4   5   6   7  (bytes)
+         +---+---+---+---+---+---+---+---
+         | M | T | h | d | ? | ? | ? | ?  ...
+         +---+---+---+---+---+---+---+---
+
+    you should specify 
+      > fiber -a mid=MThd
+    or
+      > fiber -a mid=MThd,0
+
+
+   (ex.2) ".wav" file
+
+    Since .wav format is:
+
+       file's head
+           |
+           V
+           0   1   2   3   4   5   6   7   8   9   10  11  12  (bytes)
+         +---+---+---+---+---+---+---+---+---+---+---+---+---
+         | ? | ? | ? | ? | ? | ? | ? | ? | W | A | V | E | ? ...
+         +---+---+---+---+---+---+---+---+---+---+---+---+---
+
+     you should specify
+      > fiber -a wav=WAVE,8
+
+
+4. CHANGING OPTIONS (-o)
+
+   (ex.1) Set the number of supported files to 128.
+
+     > fiber -o ExtNum=128
+
+   (ex.2) Not execute files that have unknown extensions.
+
+     > fiber -o ExecuteUnknownExt=no
+
+
+REMARKS
+-------
+
+  o If the registry key "HKEY_LOCAL_MACHINE\SOFTWARE\GNU\Fiber"
+    does not exist, fiber creates it and writes initial values.
+
+  o For more information, see fiber.c :-)
+
+
+;; document ends here.

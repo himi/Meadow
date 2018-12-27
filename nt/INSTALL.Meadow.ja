@@ -1,0 +1,214 @@
+-*- coding: sjis-dos -*-
+***************************************************************************
+     Meadow インストールマニュアル
+***************************************************************************
+
+1. 注意事項
+
+o Meadow-2.XX では、Meadow-1.XX で作成した elc ファイル(バイトコンパイ
+  ルした lisp ファイル)を利用できません。必ず、バイトコンパイルし直し
+  てください。
+
+
+2. 事前準備
+
+Meadow を使うためには、以下のソフトウェアをインストールしておく必要が
+あります。
+
+2.1 ImageMagick
+
+ImageMagick は、さまざまなフォーマットの画像を扱うためのライブラリです。
+現状の Meadow2.10 では、ImageMagick-6.2.4にしか対応しておりません。必ず 
+6.2.4 をインストールしてください。必要な設定は、wizard を使って対話的
+に設定することができます。ただし、Windows 9X/ME では、ImageMagick への
+パスを手動で設定する必要があるかもしれません。具体的な方法はご自分で調
+べてください。
+
+
+それぞれのパッケージは下記から入手できます。 
+
+o ImageMagick
+http://www.meadowy.org/meadow/dists/snapshot/
+http://www.imagemagick.org/www/download.html
+
+
+3. インストール
+
+インストールは「3.1 バイナリアーカイブのインストール」と
+「3.2 Netinstaller を使ったインストール」の二通りの方法があります。
+
+
+3.1  バイナリアーカイブのインストール
+
+<ステップ1：アーカイブの展開>
+
+Meadow アーカイブを解凍してください。
+バイナリアーカイブには以下のものがあります。
+
+  Meadow-${VERSION}-i386.tar.gz	Intel x86 Binary
+
+例えば、Intel のx86用の Meadow バージョン2.10のファイル名は
+"Meadow-2.10-i386.tar.gz" となります。
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! アーカイブはtar.exeとgzip.exeで解凍できます。           !
+! ほかの解凍ツールを使う場合、                            !
+! LF を CR+LF に変換する機能を使わないでください。        !
+! (Winzipはデフォルトでは LF を CR+LF に変換します。)     !
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! Meadow をディレクトリの名前が ASCII 文字でない文字や空白を含む           !
+! ディレクトリにインストールしないでください。                             !
+! おそらく、そのようなディレクトリにもインストールできると思いますが、     !
+! その場合の動作は検証していません。同様に、ホームディレクトリに           !
+! ASCII 文字でない文字を含むディレクトリを指定しないでください。           !
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+"c:/win32app/Meadow" にインストールしたいときは、
+c:/win32app で解凍してください。
+
+例えば、
+-----------------
+c: [RETURN]
+cd \win32app [RETURN]
+tar zxvf Meadow-<VERSION>-<ARCHITECTURE>.tar.gz [RETURN]
+-----------------
+とします。
+
+解凍すると次のディレクトリ構造になります。
+c:/win32app/Meadow/
+               +---- bin/              実行ファイル
+               +---- bitmap/           起動画面ビットマップファイル
+               +---- etc/              他のデータ
+               +---- info/             info ディレクトリ
+               +---- leim/             leim ディレクトリ
+               +---- lisp/             Emacs Lispライブラリ
+               +---- site-lisp/        site-lisp Emacs Lispライブラリ
+               +---- README.Meadow.ja
+               +---- INSTALL.Meadow.ja
+               +---- dot.emacs.ja      .emacsサンプル
+               +---- install.exe
+
+<ステップ2：install.exe の実行>
+
+"install.exe" を実行してください。
+
+"Meadow" ディレクトリに "install.exe" があると思います。
+それがインストールプログラムですので、それを実行してください。
+(エクスプローラから、コマンドプロンプトから、などなど)
+
+<ステップ3：ホームディレクトリの指定>
+
+インストールプログラムがホームディレクトリをどこにするかを
+尋ねますので、ホームディレクトリを入力してください。
+
+;; ホームディレクトリとは
+;; ホームディレクトリは個人的なスペースとして使われます。
+;; そして、".emacs" ファイルをそこに置くことができます。
+;; そうすれば、Meadow はそれを読み込みます。
+
+以上ですべてです。インストールプログラムが Meadow をインストール
+してくれます。
+
+<ステップ4：Meadow の実行>
+
+Meadow を "スタート" メニューから起動できます。
+メニューは "スタート -> プログラム -> Meadow -> Meadow" にあります。
+
+
+3.2 Netinstaller を使ったインストール
+
+http://www.meadowy.org/meadow/dists/2.10/
+から setup.exe をダウンロード、実行します。
+インストールは wizard を使って対話的に行います。
+
+
+4. ソースアーカイブのインストール
+
+Microsoft Visual C++ を利用する場合と、Cygwin(*) を利用する場合で、手
+順が異なります。以下、順に説明します。
+
+* http://www.cygwin.com/
+
+4.1 Microsoft Visual C++ を利用する場合
+
+<ステップ1：アーカイブの展開>
+
+Meadow アーカイブを解凍してください。
+
+ソースアーカイブの名前は "Meadow-<VERSION>-src.tar.gz" になっています。
+;; <VERSION> は Meadow のバージョン名です。
+;; <VERSION> をバージョン名と置き換えてください。
+
+例えば、c:/source にソースを起きたい場合は
+-----------------
+c: [RETURN]
+cd \source [RETURN]
+tar zxvf Meadow-<VERSION>-src.tar.gz
+-----------------
+とします。
+
+そうすると、次のディレクトリ構造になります。
+
+c:/source/Meadow-<VERSION>/-------src/      (メインソース)
+                               +--lib-src/  (ライブラリとツールのソース)
+                               +--nt/       (Meadowの設定ファイル)
+                               +--info/     (infoファイル)
+                               +--lisp/     (Emacs Lispファイル)
+                               +--etc/      (他のデータ)
+                               +-- .... その他
+
+これ以降、(1) Microsoft Visual C++ を利用する場合と、(2) Cygwin(*) を
+利用する場合で、手順が異なります。以下、順に説明します。
+
+* http://www.cygwin.com/
+
+<ステップ2：コンパイル>
+
+-----------------
+cd Meadow-<VERSION>\nt [RETURN]
+configure.meadow --with-msvc --prefix <YOUR INSTALL DIRECTORY> --magick "<IMAGEMAGICK DIRECTORY>" [RETURN]
+nmake bootstrap [RETURN]
+nmake all [RETURN]
+-----------------
+
+Microsoft Visual C++ 6.0 および 7.0 以降のバージョンでコンパイルできる
+と思います。他のバージョンでもコンパイルできると思いますが、定かではあ
+りません。
+
+何か問題があった場合は"自分自身"!!!で解決してください。 :-)
+
+<ステップ3：インストール>
+
+-----------------
+nmake install [RETURN]
+-----------------
+
+4.2 Cygwin を利用する場合
+
+<ステップ1：アーカイブの展開>
+
+Microsoft Visual C++ の場合と同様の手順でアーカイブを展開します。
+
+<ステップ2：コンパイル>
+
+Cygwin の shell(sh, bash 等)から次のように実行します。
+-----------------
+cd Meadow-<VERSION>/nt [RETURN]
+./configure.meadow.bat --with-gcc --no-cygwin --prefix <YOUR INSTALL DIRECTORY> --magick "<IMAGEMAGICK DIRECTORY>" [RETURN]
+make bootstrap [RETURN]
+make all [RETURN]
+-----------------
+
+なお、cmd.exe (または command.com)からでもコンパイル可能です。何か問題
+があった場合は"自分自身"!!!で解決してください。 :-)
+
+<ステップ3：インストール>
+
+-----------------
+make install [RETURN]
+-----------------
+
+
+以上です。
