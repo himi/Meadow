@@ -94,14 +94,10 @@ Boston, MA 02111-1307, USA.  */
 #define HAVE_MOUSE
 #endif
 
-#ifdef emacs
+#if defined(USE_CRT_DLL) || defined(USE_LIBC)
 #include <time.h>
 #include <sys/timeb.h>
 #define HAVE_STRUCT_UTIMBUF
-#define USE_CRT_DLL
-#define malloc gmalloc
-#define realloc grealloc
-#define free gfree
 #endif
 
 #ifdef MEADOW
