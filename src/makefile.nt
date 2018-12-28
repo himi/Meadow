@@ -44,12 +44,14 @@ SUBSYSTEM=console
 LOCAL_FLAGS     = -Demacs=1 -DWINDOWSNT -DDOS_NT -DHAVE_CONFIG_H -I..\nt\inc \
 	-I$(MAGICKDIR)\include
 !ifdef NTGUI
-LOCAL_FLAGS     = $(LOCAL_FLAGS) -DHAVE_NTGUI=1
+LOCAL_FLAGS     = $(LOCAL_FLAGS) -DHAVE_NTGUI=1 -DUSE_LIBC=1 -MT
 !endif
 !ifdef USE_CRT_DLL
-LOCAL_FLAGS     = $(LOCAL_FLAGS) -DUSE_CRT_DLL=1 -MD
+LOCAL_FLAGS     = $(LOCAL_FLAGS) -DUSE_CRT_DLL=1 -MT
 libc            = msvcrt.lib
 LINK_FLAGS      = -nodefaultlib
+!else
+libc            = libcmt.lib
 !endif
 
 # From MSVC 5.0 onwards, it seem base relocation information is not included,
