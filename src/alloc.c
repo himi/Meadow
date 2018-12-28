@@ -5412,6 +5412,10 @@ die (msg, file, line)
 
 #ifdef PDUMP
 
+#ifndef PDUMP_PINT
+#define PDUMP_PINT long long
+#endif
+
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -5424,14 +5428,17 @@ die (msg, file, line)
 #include <assert.h>
 #include "coding.h"
 
+static int pdump_base;
+
 /* Header of dumped data. */
 typedef struct pdump_header_type
 {
-  long offset;		     /* Base offset of Lisp_Object address. */
+  long offset;	     		/* Base offset of Lisp_Object address. */
+  POINTER_TYPE *ppdump_base;
   long root_objects_length;	/* Number of root objects */
   long objects_size;		/* Size of Lisp_Object data */
   long pointers_length;		/* Length of pointer data */
-  long subr_docs_length;	/* Length of pointer to subr doc */
+  long subr_docs_length;		/* Length of pointer to subr doc */
   long interval_tree_length;	/* Length of pointer to intervals */
 
   /* *_length indicates the number of objects,
@@ -6096,7 +6103,7 @@ pdump_forward_object (Lisp_Object obj)
 {
   pdump_forward *f;
   Lisp_Object new_obj;
-  unsigned long addr;
+  PDUMP_PINT addr;
   int i;
   enum pdump_object_type type;
 
@@ -6395,6 +6402,7 @@ pdump (void)
 
   /* write header */
   header.offset = PDUMP_OFFSET;
+  header.ppdump_base = &pdump_base;
   header.root_objects_length = staticidx;
   header.objects_size = 0;
   for (i = 0; i < PDUMP_OBJECT_LIMIT; i++)
@@ -6535,10 +6543,10 @@ pdump (void)
 #define PDUMP_RELOCATE(obj, offset)					\
 do									\
 {									\
-  char *p_r_ptr = (char *) ((unsigned long) XPNTR (obj) + offset);	\
+  char *p_r_ptr = (char *) ((PDUMP_PINT) XPNTR (obj) + offset);	         \
   if (! INTEGERP (obj)							\
       && pdump_objects_start <= p_r_ptr					\
-      && p_r_ptr < pdump_objects_start + pdump_header.objects_size)	\
+      && p_r_ptr < pdump_objects_start + pdump_header.objects_size)	         \
     XSET ((obj), XTYPE (obj), p_r_ptr);					\
 }									\
 while (0)
@@ -6720,9 +6728,9 @@ pdump_map_file (int fd, char *path)
   pdump_current_load_scheme = PDUMP_MMAP;
 #endif /* WINDOWSNT */
 
-  if (ret == NULL || (long) ret == -1 || (unsigned long)ret & ~VALMASK)
+  if (ret == NULL || (long) ret == -1 || ((PDUMP_PINT) ret) & ~VALMASK)
     {
-      if ((unsigned long)ret & ~VALMASK)
+      if (((PDUMP_PINT) ret) & ~VALMASK)
 	{
 #ifdef WINDOWSNT
 	  UnmapViewOfFile (ret);
@@ -6740,7 +6748,7 @@ pdump_map_file (int fd, char *path)
       mallopt (M_MMAP_MAX, MMAP_MAX_AREAS);
 #endif
       pdump_current_load_scheme = PDUMP_MALLOC;
-      if ((unsigned long)ret & ~VALMASK)
+      if ((PDUMP_PINT)ret & ~VALMASK)
 	{
 	  fprintf (stderr, "emacs: malloc returned high address\n");
 	  xfree (ret);
@@ -6771,6 +6779,7 @@ pdump_load (char *argv0)
   int fd;
   char *ret, path[PATH_MAX + 1];
   long offset;
+  PDUMP_PINT static_offset;
 
   /* open dump file and load header */
   if ((fd = pdump_open_dump_file (argv0, path)) < 0)
@@ -6796,7 +6805,7 @@ pdump_load (char *argv0)
   PDUMP_MESSAGE ((" objectspace: from %08x to %08x\n",
 		   pdump_objects_start,
 		   pdump_objects_start + pdump_header.objects_size));
-  offset = (long) ret - pdump_header.offset;
+  offset = ((PDUMP_PINT) ret) - pdump_header.offset;
   pdump_load_offset = offset;
   if (offset != 0)
     PDUMP_MESSAGE ((" offset: %08x\n", pdump_load_offset));
@@ -6804,13 +6813,14 @@ pdump_load (char *argv0)
   /* load root objects and relocate */
   PDUMP_MESSAGE (("Loading root objects... \n"));
   lseek (fd, pdump_header.objects_size + sizeof (pdump_header_type), SEEK_SET);
+
+  static_offset = ((PDUMP_PINT) &pdump_base) - ((PDUMP_PINT) pdump_header.ppdump_base);
   for (staticidx = 0; staticidx < pdump_header.root_objects_length; staticidx++)
     {
       pdump_root root;
       read (fd, &root, sizeof (root));
-      staticvec[staticidx] = (Lisp_Object *)root.address;
-      if (offset != 0)
-	PDUMP_RELOCATE (root.val, offset);
+      if (offset != 0) PDUMP_RELOCATE (root.val, offset);
+      staticvec[staticidx] = (Lisp_Object *) (((PDUMP_PINT) root.address) + static_offset);
       *staticvec[staticidx] = root.val;
     }
   PDUMP_MESSAGE (("Loading root objects... done; %d objects\n", staticidx));
