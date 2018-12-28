@@ -5106,7 +5106,7 @@ free_image (f, img)
       c->images[img->id] = NULL;
 
       /* Free resources, then free IMG.  */
-      img->type->free (f, img);
+      (img->type->free) (f, img);
       xfree (img);
     }
 }
