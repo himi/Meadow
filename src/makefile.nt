@@ -101,7 +101,8 @@ STARTUP_ENTRY = _start
 
 ## Note: To imprement redump feature, set -swaprun:net -swaprun:cd not to lock image.
 #LINK_FLAGS      = $(ARCH_LDFLAGS) -stack:0x00A00000 -base:0x3800000 -debug:full -debugtype:cv -machine:$(ARCH) -subsystem:$(SUBSYSTEM),4.00 -entry:$(STARTUP_ENTRY) -map:$(BLD)\temacs.map -swaprun:net -swaprun:cd
-LINK_FLAGS      = $(ARCH_LDFLAGS) -stack:0x00900000 -base:0x400000 -machine:$(ARCH) -subsystem:$(SUBSYSTEM),4.00 -entry:$(STARTUP_ENTRY) -map:$(BLD)\temacs.map
+#LINK_FLAGS      = $(ARCH_LDFLAGS) -stack:0x00900000 -base:0x400000 -machine:$(ARCH) -subsystem:$(SUBSYSTEM),4.00 -entry:$(STARTUP_ENTRY) -map:$(BLD)\temacs.map
+LINK_FLAGS      = $(ARCH_LDFLAGS) -stack:0x00900000 -dynamicbase:no -machine:$(ARCH) -subsystem:$(SUBSYSTEM) -entry:$(STARTUP_ENTRY) -map:$(BLD)\temacs.map
 !if "$(BUILD_TYPE)" != "spd"
 LINK_FLAGS      = $(LINK_FLAGS) $(EXTRA_LINK)
 !endif
@@ -433,7 +434,7 @@ install:        all
 		$(CP) $(TEMACS) $(INSTALL_DIR)\bin
 !endif
 		$(CP) $(EMACS_DMP) $(INSTALL_DIR)\bin
-		$(CP) $(BLD)\fns-*.el $(INSTALL_DIR)\bin
+		- $(CP) $(BLD)\fns-*.el $(INSTALL_DIR)\bin
 !if $(MEADOW_TEST_VERSION)
 		$(CP) $(BLD)\vc.pdb $(INSTALL_DIR)\bin
 !endif
