@@ -45,7 +45,7 @@ $(BLD)\install.obj: install.c
 fiber:		$(BLD) $(BLD)\fiber.exe
 $(BLD)\fiber.exe: $(BLD)\fiber.obj
 	$(LINK) -out:$@ -subsystem:console -entry:mainCRTStartup \
-	$(SYS_LDFLAGS) $** libc.lib advapi32.lib oldnames.lib shell32.lib
+	$(SYS_LDFLAGS) $** $(libc) advapi32.lib oldnames.lib shell32.lib
 $(BLD)\fiber.obj: fiber.c
 
 RunMW32:		$(BLD) $(BLD)\RunMW32.exe
