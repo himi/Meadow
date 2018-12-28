@@ -52,7 +52,7 @@
 # endif
 #endif
 #if HAVE_TZNAME
-#ifndef USE_CRT_DLL
+#if !(defined(USE_CRT_DLL) || defined(USE_LIBC))
 extern char *tzname[];
 #endif
 #endif

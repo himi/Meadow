@@ -450,7 +450,7 @@ extern char *get_emacs_configuration_options (void);
 #define _WINSOCK_H
 
 /* Defines size_t and alloca ().  */
-#ifdef USE_CRT_DLL
+#if defined(USE_CRT_DLL) || defined(USE_LIBC)
 #define malloc e_malloc
 #define free   e_free
 #define realloc e_realloc
