@@ -952,7 +952,7 @@ init_environment (char **argv)
 	 read-only filesystem, like CD-ROM or a write-protected floppy.
 	 The only way to be really sure is to actually create a file and
 	 see if it succeeds.  But I think that's too much to ask.  */
-      if (tmp && _access (tmp, D_OK) == 0)
+      if (tmp && sys_access (tmp, D_OK) == 0)
 	{
 	  char * var = alloca (strlen (tmp) + 8);
 	  sprintf (var, "TMPDIR=%s", tmp);
@@ -2807,6 +2807,7 @@ file_attributes_stat (const char *path, struct stat * buf)
 }
 #endif
 
+#if 0
 int
 utime (const char *name, struct utimbuf *times)
 {
@@ -2843,6 +2844,7 @@ utime (const char *name, struct utimbuf *times)
     }
   return 0;
 }
+#endif
 
 #ifdef HAVE_SOCKETS
 
