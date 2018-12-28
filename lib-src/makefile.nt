@@ -28,7 +28,7 @@
 LOCAL_FLAGS	= -DWINDOWSNT -DDOS_NT -DSTDC_HEADERS=1 -DNO_LDAV=1 \
 	-DNO_ARCHIVES=1 -DHAVE_CONFIG_H=1 -I..\nt\inc -I..\src
 
-LINK_FLAGS	= $(ARCH_LDFLAGS) -debug:PARTIAL -machine:$(ARCH) -subsystem:console -entry:mainCRTStartup setargv.obj
+LINK_FLAGS	= $(ARCH_LDFLAGS) -debug -machine:$(ARCH) -subsystem:console -entry:mainCRTStartup setargv.obj
 
 ALL	        = $(BLD)\make-docfile.exe \
 		$(BLD)\hexl.exe		\
@@ -57,7 +57,7 @@ $(BLD)\make-docfile.exe: 	$(BLD)\make-docfile.obj $(BLD)\ntlib.obj
 		$(LINK) -out:$@ $(LINK_FLAGS) $(BLD)\make-docfile.obj $(BLD)\ntlib.obj $(LIBS)
 $(BLD)\hexl.exe:		$(BLD)\hexl.obj
 $(BLD)\fakemail.exe: 		$(BLD)\fakemail.obj $(BLD)\ntlib.obj
-		$(LINK) -out:$@ $(LINK_FLAGS) -debug:full $(BLD)\fakemail.obj $(BLD)\ntlib.obj $(LIBS)
+		$(LINK) -out:$@ $(LINK_FLAGS) -debug $(BLD)\fakemail.obj $(BLD)\ntlib.obj $(LIBS)
 
 make-docfile:	$(BLD) $(BLD)\make-docfile.exe
 etags:		$(BLD) $(BLD)\etags.exe
@@ -81,7 +81,7 @@ MOVEMAIL_PROGDLG_LIB = comctl32.lib user32.lib
 
 $(BLD)\movemail.exe:	$(MOVEMAILOBJS) $(MOVEMAIL_PROGDLG) getopt.h
 # put wsock32.lib before $(LIBS) to ensure we don't link to ws2_32.lib
-		$(LINK) -out:$@ $(LINK_FLAGS) -debug:FULL \
+		$(LINK) -out:$@ $(LINK_FLAGS) -debug \
                         $(MOVEMAILOBJS) $(MOVEMAIL_PROGDLG) \
                         wsock32.lib $(LIBS) $(MOVEMAIL_PROGDLG_LIB)
 

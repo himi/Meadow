@@ -185,7 +185,7 @@ ADVAPI32	=
 
 # Older ntwin32.mak files do not define libc; do it for them.
 !ifndef libc
-libc		= libc.lib
+libc		= libcmt.lib
 !endif
 
 # The base libraries for compiling Emacs on NT.  With MSVC, this should
@@ -211,7 +211,7 @@ SYS_LDFLAGS	= -nologo -release -incremental:no -version:3.10
 SYS_LDFLAGS = $(SYS_LDFLAGS) -swaprun:cd -swaprun:net
 
 !if $(DEBUG_MODE)
-SYS_LDFLAGS = $(SYS_LDFLAGS) -debug:full -debugtype:cv
+SYS_LDFLAGS = $(SYS_LDFLAGS) -debug -debugtype:cv
 !endif
 
 INC             = -I.
@@ -284,7 +284,7 @@ ARCH_CFLAGS     = -nologo -D_X86_=1 -c -Zel -W2 -H63 -O2 -Ob2 -GBdF -Zi -Zp8
 !else
 ARCH_CFLAGS     = -nologo -D_X86_=1 -c -Zel -W2 -H63 -Od -G3d -Zi -Zp8
 !endif
-ARCH_LDFLAGS	= -align:0x1000 $(SYS_LDFLAGS)
+ARCH_LDFLAGS	= $(SYS_LDFLAGS)
 
 !else
 !if "$(ARCH)" == "mips"
