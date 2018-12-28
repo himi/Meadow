@@ -94,6 +94,15 @@ Boston, MA 02111-1307, USA.  */
 #define HAVE_MOUSE
 #endif
 
+#ifdef emacs
+#include <time.h>
+#include <sys/timeb.h>
+#define HAVE_STRUCT_UTIMBUF
+#define malloc gmalloc
+#define realloc grealloc
+#define free gfree
+#endif
+
 #ifdef MEADOW
 #define IME_CONTROL
 #define HAVE_MULTILINGUAL_MENU
