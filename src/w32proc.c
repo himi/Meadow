@@ -643,33 +643,54 @@ w32_executable_type (char * filename, int * is_dos_app, int * is_cygnus_app, int
       else if (nt_header->Signature == IMAGE_NT_SIGNATURE)
   	{
 	  /* Look for cygwin.dll in DLL import list. */
-	  IMAGE_DATA_DIRECTORY import_dir =
-	    nt_header->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT];
-	  IMAGE_IMPORT_DESCRIPTOR * imports;
-	  IMAGE_SECTION_HEADER * section;
+	  IMAGE_DATA_DIRECTORY *pImport_dir;
+	  IMAGE_IMPORT_DESCRIPTOR *pImports;
+	  IMAGE_SECTION_HEADER *pSection;
 
-	  section = rva_to_section (import_dir.VirtualAddress, nt_header);
-	  imports = RVA_TO_PTR (import_dir.VirtualAddress, section, executable);
+	  if (nt_header->FileHeader.Machine == IMAGE_FILE_MACHINE_AMD64)
+	    {
+	      IMAGE_NT_HEADERS64* nt_header64 = (IMAGE_NT_HEADERS64*) nt_header;
 
-	  for ( ; imports->Name; imports++)
-  	    {
-	      char * dllname = RVA_TO_PTR (imports->Name, section, executable);
+	      /* Check whether app is marked as a console or windowed (aka
+		 GUI) app.  Accept Posix and OS2 subsytem apps as console
+		 apps.  */
+	      *is_gui_app = (nt_header64->OptionalHeader.Subsystem == IMAGE_SUBSYSTEM_WINDOWS_GUI);
+	      pImport_dir = &(nt_header64->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT]);
+	      pSection = rva_to_section64 (pImport_dir->VirtualAddress, nt_header64);
+	    }
+	  else if (nt_header->FileHeader.Machine == IMAGE_FILE_MACHINE_I386)
+	    {
+	      IMAGE_NT_HEADERS32* nt_header32 = (IMAGE_NT_HEADERS32*) nt_header;
+
+	      /* Check whether app is marked as a console or windowed (aka
+		 GUI) app.  Accept Posix and OS2 subsytem apps as console
+		 apps.  */
+	      *is_gui_app = (nt_header32->OptionalHeader.Subsystem == IMAGE_SUBSYSTEM_WINDOWS_GUI);
+	      pImport_dir = &(nt_header32->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT]);
+	      pSection = rva_to_section32 (pImport_dir->VirtualAddress, nt_header32);
+	    }
+	  else
+	    {
+	      goto unwind;
+	    }
+
+	  pImports = RVA_TO_PTR (pImport_dir->VirtualAddress, pSection, executable);
+
+	  for ( ; pImports->Name; pImports++)
+	    {
+	      char * dllname = RVA_TO_PTR (pImports->Name, pSection, executable);
 
 	      /* The exact name of the cygwin dll has changed with
-	         various releases, but hopefully this will be reasonably
-	         future proof.  */
+		 various releases, but hopefully this will be reasonably
+		 future proof.  */
 	      if (strncmp (dllname, "cygwin", 6) == 0)
 		{
 		  *is_cygnus_app = TRUE;
 		  break;
 		}
-  	    }
-
-	  /* Check whether app is marked as a console or windowed (aka
-             GUI) app.  Accept Posix and OS2 subsytem apps as console
-             apps.  */
-	  *is_gui_app = (nt_header->OptionalHeader.Subsystem == IMAGE_SUBSYSTEM_WINDOWS_GUI);
+	    }
   	}
+
     }
   
 unwind:

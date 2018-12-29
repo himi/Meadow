@@ -173,7 +173,11 @@ IMAGE_SECTION_HEADER * find_section (char * name, IMAGE_NT_HEADERS * nt_header);
 
 /* Return pointer to section header for section containing the given
    relative virtual address. */
-IMAGE_SECTION_HEADER * rva_to_section (DWORD rva, IMAGE_NT_HEADERS * nt_header);
+IMAGE_SECTION_HEADER * rva_to_section32 (DWORD rva, IMAGE_NT_HEADERS32 * nt_header);
+
+/* Return pointer to section header for section containing the given
+   relative virtual address. */
+IMAGE_SECTION_HEADER * rva_to_section64 (DWORD rva, IMAGE_NT_HEADERS64 * nt_header);
 
 #endif /* MEADOW */
 
