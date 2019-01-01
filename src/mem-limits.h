@@ -97,8 +97,12 @@ extern char etext;
 /* start of data space; can be changed by calling malloc_init */
 static POINTER data_space_start;
 
+#ifndef POINTER_INT
+#define POINTER_INT long long
+#endif
+
 /* Number of bytes of writable memory we can expect to be able to get */
-static PDUMP_PINT lim_data;
+static POINTER_INT lim_data;
 
 #ifdef NO_LIM_DATA
 static void
@@ -138,7 +142,7 @@ static void
 get_lim_data ()
 {
 #ifdef MEADOW
-  extern PDUMP_PINT get_reserved_heap_size();
+  extern POINTER_INT get_reserved_heap_size();
   lim_data = get_reserved_heap_size ();
 #else
   extern unsigned long reserved_heap_size;

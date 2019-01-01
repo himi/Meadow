@@ -106,13 +106,14 @@ Boston, MA 02111-1307, USA.  */
 #endif
 
 #ifdef _M_X64
-#include <stddef.h>
 #define EMACS_INT intptr_t
 #define EMACS_UINT uintptr_t
 /* #define BITS_PER_EMACS_INT (sizeof(uintptr_t) * 8) */
 #define BITS_PER_EMACS_INT 64
-#define PDUMP_PINT intptr_t
 #endif
+
+#include <stddef.h>
+#define PDUMP_POINTER intptr_t
 
 extern char* sys_strerror();
 

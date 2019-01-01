@@ -5415,8 +5415,8 @@ die (msg, file, line)
 
 #ifdef PDUMP
 
-#ifndef PDUMP_PINT
-#define PDUMP_PINT long long
+#ifndef POINTER_INT
+#define POINTER_INT long long
 #endif
 
 #include <stdio.h>
@@ -5468,7 +5468,7 @@ typedef struct pdump_header_type
 typedef struct pdump_forward
 {
   Lisp_Object obj;		/* object itself */
-  PDUMP_PINT offset;	     /* Offset from the start of hash table */
+  POINTER_INT offset;	     /* Offset from the start of hash table */
   long size;			/* size of object */
 } pdump_forward;
 
@@ -5572,7 +5572,7 @@ static char *pdump_objects_start;
 static enum pdump_object_type pdump_object_to_enum (Lisp_Object obj);
 static void pdump_add_object (Lisp_Object obj);
 static int pdump_open_dump_file (char *argv0, char *path);
-static void pdump_relocate_objects (PDUMP_PINT offset);
+static void pdump_relocate_objects (POINTER_INT offset);
 #ifdef PDUMP_DEBUG
 /* object validity checker */
 static void pdump_check_root_objects (void);
@@ -5684,12 +5684,12 @@ pdump_message (char *fmt, ...)
 static int
 pdump_hash_value (Lisp_Object obj)
 {
-  return ((PDUMP_PINT) obj >> 3) % PDUMP_HASH_SIZE;
+  return ((POINTER_INT) obj >> 3) % PDUMP_HASH_SIZE;
 }
 
 /* put given Lisp_Object to pdump_hash */
 static void
-pdump_put_hash (Lisp_Object obj, PDUMP_PINT offset, long size)
+pdump_put_hash (Lisp_Object obj, POINTER_INT offset, long size)
 {
   pdump_forward *f;
   int idx = pdump_hash_value (obj);
@@ -6106,7 +6106,7 @@ pdump_forward_object (Lisp_Object obj)
 {
   pdump_forward *f;
   Lisp_Object new_obj;
-  PDUMP_PINT addr;
+  POINTER_INT addr;
   int i;
   enum pdump_object_type type;
 
@@ -6312,7 +6312,7 @@ static void
 pdump_add_special_buffers ()
 {
   int i;
-  PDUMP_PINT offset;
+  POINTER_INT offset;
   struct buffer *buffers[] = {&buffer_defaults,
 			      &buffer_local_symbols,
 			      NULL};
@@ -6734,9 +6734,9 @@ pdump_map_file (int fd, char *path)
   pdump_current_load_scheme = PDUMP_MMAP;
 #endif /* WINDOWSNT */
 
-  if (ret == NULL || (long) ret == -1 || ((PDUMP_PINT) ret) & ~VALMASK)
+  if (ret == NULL || (long) ret == -1 || ((POINTER_INT) ret) & ~VALMASK)
     {
-      if (((PDUMP_PINT) ret) & ~VALMASK)
+      if (((POINTER_INT) ret) & ~VALMASK)
 	{
 #ifdef WINDOWSNT
 	  UnmapViewOfFile (ret);
@@ -6754,7 +6754,7 @@ pdump_map_file (int fd, char *path)
       mallopt (M_MMAP_MAX, MMAP_MAX_AREAS);
 #endif
       pdump_current_load_scheme = PDUMP_MALLOC;
-      if ((PDUMP_PINT)ret & ~VALMASK)
+      if ((POINTER_INT)ret & ~VALMASK)
 	{
 	  fprintf (stderr, "emacs: malloc returned high address\n");
 	  xfree (ret);
@@ -6784,8 +6784,8 @@ pdump_load (char *argv0)
   int i;
   int fd;
   char *ret, path[PATH_MAX + 1];
-  PDUMP_PINT offset;
-  PDUMP_PINT static_offset;
+  POINTER_INT offset;
+  POINTER_INT static_offset;
 
   /* open dump file and load header */
   if ((fd = pdump_open_dump_file (argv0, path)) < 0)
@@ -6811,7 +6811,7 @@ pdump_load (char *argv0)
   PDUMP_MESSAGE ((" objectspace: from %08x to %08x\n",
 		   pdump_objects_start,
 		   pdump_objects_start + pdump_header.objects_size));
-  offset = ((PDUMP_PINT) ret) - pdump_header.offset;
+  offset = ((POINTER_INT) ret) - pdump_header.offset;
   pdump_load_offset = offset;
   if (offset != 0)
     PDUMP_MESSAGE ((" offset: %08x\n", pdump_load_offset));
@@ -6820,13 +6820,13 @@ pdump_load (char *argv0)
   PDUMP_MESSAGE (("Loading root objects... \n"));
   lseek (fd, pdump_header.objects_size + sizeof (pdump_header_type), SEEK_SET);
 
-  static_offset = ((PDUMP_PINT) &pdump_base) - ((PDUMP_PINT) pdump_header.ppdump_base);
+  static_offset = ((POINTER_INT) &pdump_base) - ((POINTER_INT) pdump_header.ppdump_base);
   for (staticidx = 0; staticidx < pdump_header.root_objects_length; staticidx++)
     {
       pdump_root root;
       read (fd, &root, sizeof (root));
       if (offset != 0) PDUMP_RELOCATE (root.val, offset);
-      staticvec[staticidx] = (Lisp_Object *) (((PDUMP_PINT) root.address) + static_offset);
+      staticvec[staticidx] = (Lisp_Object *) (((POINTER_INT) root.address) + static_offset);
       *staticvec[staticidx] = root.val;
       // PDUMP_MESSAGE (("Loaded Root val (%d): %llX\n", staticidx, XPNTR(root.val)));
   }
@@ -6896,7 +6896,7 @@ pdump_load (char *argv0)
     if (offset != 0)
       {
 	int i;
-	PDUMP_PINT buff_offset;
+	POINTER_INT buff_offset;
 	struct buffer *buffers[] = {&buffer_defaults,
 				    &buffer_local_symbols,
 				    &buffer_local_types,
@@ -6988,7 +6988,7 @@ pdump_free ()
 }
 
 static void
-pdump_relocate_objects (PDUMP_PINT offset)
+pdump_relocate_objects (POINTER_INT offset)
 {
   char *obj_ptr = pdump_objects_start; /* cursor */
   int i;

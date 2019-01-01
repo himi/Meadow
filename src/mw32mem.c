@@ -27,6 +27,10 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #include "lisp.h"
 #include "w32.h"
 
+#ifndef POINTER_INT
+#define POINTER_INT long long
+#endif
+
 int os_subtype;
 
 HINSTANCE hinst = NULL;
@@ -212,7 +216,7 @@ mw32_initialize_lisp_heap ()
   lisp_heap_end = end;
 }
 
-PDUMP_PINT
+POINTER_INT
 get_reserved_heap_size ()
 {
   return lisp_heap_end - lisp_heap_start;
@@ -242,7 +246,7 @@ void*
 sbrk (long increment)
 {
   void *result;
-  PDUMP_PINT size = (PDUMP_PINT) increment;
+  POINTER_INT size = (POINTER_INT) increment;
   
   result = lisp_heap_current;
 
@@ -253,7 +257,7 @@ sbrk (long increment)
   /* If size is negative, shrink the heap by decommitting pages.  */
   if (size < 0) 
     {
-      PDUMP_PINT dealloc_size;
+      POINTER_INT dealloc_size;
       unsigned char *new_current;
 
       size = -size;
@@ -280,8 +284,8 @@ sbrk (long increment)
   /* If size is positive, grow the heap by committing reserved pages.  */
   else if (size > 0) 
     {
-      PDUMP_PINT req_size;
-      PDUMP_PINT alloced_size;
+      POINTER_INT req_size;
+      POINTER_INT alloced_size;
       /* Sanity checks.  */
       if ((lisp_heap_current + size) >= lisp_heap_end)
 	return NULL;

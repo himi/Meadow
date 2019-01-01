@@ -30,6 +30,10 @@ Cambridge, MA 02139, USA.
 
 #define _MALLOC_H	1
 
+#ifndef POINTER_INT
+#define POINTER_INT long long
+#endif
+
 #ifdef _MALLOC_INTERNAL
 
 #ifdef	HAVE_CONFIG_H
@@ -444,7 +448,7 @@ align (size)
      __malloc_size_t size;
 {
   __ptr_t result;
-  PDUMP_PINT adj;
+  POINTER_INT adj;
 
   /* align accepts an unsigned argument, but __morecore accepts a
      signed one.  This could lead to trouble if SIZE overflows a
@@ -454,7 +458,7 @@ align (size)
     result = 0;
   else
     result = (*__morecore) (size);
-  adj = (PDUMP_PINT) ((PDUMP_PINT) ((char *) result -
+  adj = (POINTER_INT) ((POINTER_INT) ((char *) result -
 				    (char *) NULL)) % BLOCKSIZE;
   if (adj != 0)
     {
