@@ -45,11 +45,22 @@ extern int nCmdShow;
 #define CHECK_IME_FACILITY \
   if (!fIME) error ("System have no IME facility.")
 
+#include <stdint.h>
+#ifdef _WIN64
+#define IM_BITS 64
+#define IMTYPE int64_t
+#else
+#define IM_BITS 32
+#define IMTYPE int32_t
+#endif
+#define IM_HALF_BITS (IM_BITS / 2)
+#define IM_HALF_MASK ((((IMTYPE) 1) << IM_HALF_BITS) - 1)
+
 #define IMMCONTEXTCAR(imc) \
-  (XFASTINT ((((unsigned long) (imc)) >> 16) & 0xffff))
+  (XFASTINT ((((IMTYPE) (imc)) >> IM_HALF_BITS) & IM_HALF_MASK))
 
 #define IMMCONTEXTCDR(imc) \
-  (XFASTINT (((unsigned long) (imc)) & 0xffff))
+  (XFASTINT (((IMTYPE) (imc)) & IM_HALF_MASK))
 
 #ifdef IME_CONTROL
 
@@ -128,12 +139,12 @@ typedef HIMC (WINAPI *IMMCREATECONTEXTPROC)(void);
 IMMCREATECONTEXTPROC ImmCreateContextProc;
 typedef BOOL (WINAPI *IMMDESTROYCONTEXTPROC)(HIMC);
 IMMDESTROYCONTEXTPROC ImmDestroyContextProc;
-typedef BOOL (WINAPI *IMMASSOCIATECONTEXTPROC) (HWND, HIMC);
+typedef HIMC (WINAPI *IMMASSOCIATECONTEXTPROC) (HWND, HIMC);
 IMMASSOCIATECONTEXTPROC ImmAssociateContextProc;
-typedef BOOL (WINAPI *IMMGETCANDIDATELISTPROC)
+typedef DWORD (WINAPI *IMMGETCANDIDATELISTPROC)
 (HIMC, DWORD, LPCANDIDATELIST, DWORD);
 IMMGETCANDIDATELISTPROC ImmGetCandidateListProc;
-typedef BOOL (WINAPI *IMMGETCANDIDATELISTCOUNTPROC) (HIMC, LPDWORD);
+typedef DWORD (WINAPI *IMMGETCANDIDATELISTCOUNTPROC) (HIMC, LPDWORD);
 IMMGETCANDIDATELISTCOUNTPROC ImmGetCandidateListCountProc;
 typedef BOOL (WINAPI *IMMGETHOTKEYPROC)(DWORD , LPUINT, LPUINT, LPHKL);
 IMMGETHOTKEYPROC ImmGetHotKeyProc;
@@ -383,7 +394,7 @@ mw32_set_ime_font (HWND hwnd, LPLOGFONT psetlf)
 
 /* From here, communication programs to make IME a conversion machine. */
 
-void
+static void
 check_immcontext (Lisp_Object context)
 {
   if (NUMBERP (context))
@@ -400,14 +411,14 @@ check_immcontext (Lisp_Object context)
     }
 }
 
-HIMC
+static HIMC
 immcontext (Lisp_Object context)
 {
   if (NUMBERP (context))
     return agent[XFASTINT (context)].himc;
   else
-    return ((((unsigned long) (XCONS (context)->car)) << 16) |
-	    (((unsigned long) (XCONS (context)->cdr)) & 0xffff));
+    return (HIMC) ((((IMTYPE) XFASTINT(XCONS (context)->car)) << IM_HALF_BITS) |
+		   (((IMTYPE) XFASTINT(XCONS (context)->cdr)) & IM_HALF_MASK));
 }
 
 LRESULT CALLBACK
@@ -421,12 +432,21 @@ conversion_agent_wndproc (HWND hwnd, UINT message,
     case WM_CREATE:
       himc = (ImmCreateContextProc) ();
       holdimc = (ImmAssociateContextProc) (hwnd, himc);
+#ifdef _WIN64
+      SetWindowLongPtr (hwnd, 0, (LONG_PTR) himc);
+      SetWindowLongPtr (hwnd, DWLP_USER, (LONG_PTR) holdimc);
+#else
       SetWindowLong (hwnd, 0, himc);
-      SetWindowLong (hwnd, 4, holdimc);
+      SetWindowLong (hwnd, DWL_USER, holdimc);
+#endif
       break;
 
     case WM_DESTROY:
-      holdimc = GetWindowLong (hwnd, 4);
+#ifdef _WIN64
+      holdimc = (HIMC) GetWindowLongPtr (hwnd, DWLP_USER);
+#else
+      holdimc = (HIMC) GetWindowLong (hwnd, DWL_USER);
+#endif
       himc = (ImmAssociateContextProc) (hwnd, holdimc);
       (ImmDestroyContextProc) (himc);
       break;
@@ -444,17 +464,16 @@ conversion_agent_wndproc (HWND hwnd, UINT message,
     case WM_MULE_IMM_SET_MODE:
       return mw32_set_ime_mode (hwnd, (int) wparam, (int) lparam);
 
-    case WM_MULE_IMM_SET_COMPOSITION_STRING:
 #if 0
-      return mw32_set_ime_composition_string (hwnd,
-					      (int) wparam, (int) lparam);
+    case WM_MULE_IMM_SET_COMPOSITION_STRING:
+     return mw32_set_ime_composition_string (hwnd, (int) wparam, (int) lparam);
 #endif
 
     case WM_MULE_IMM_GET_COMPOSITION_STRING:
       return mw32_get_ime_composition_string (hwnd);
 
-    case WM_MULE_IMM_NOTIFY:
 #if 0
+    case WM_MULE_IMM_NOTIFY:
       return mw32_ime_notify (hwnd, (int) wparam, (int) lparam);
 #endif
 
@@ -573,6 +592,29 @@ BYTE lisp_object_to_attribute_data (Lisp_Object attr)
   Emacs Lisp function entries
 */
 
+DEFUN ("fep-get-mode", Ffep_get_mode, Sfep_get_mode, 0, 0, "",
+       "Get IME status.\n\
+t means status of IME is open.  nil means it is close.")
+  ()
+{
+  if (fIME && !NILP (Vime_control))
+    {
+      HWND hwnd;
+      int result;
+
+#ifdef HAVE_NTGUI
+      hwnd = FRAME_MW32_WINDOW (SELECTED_FRAME ());
+#else
+      hwnd = hwndConsole;
+#endif
+      result = SendMessage (hwnd, WM_MULE_IMM_GET_STATUS, 0, 0);
+      
+      return result ? Qt : Qnil;
+    }
+  else
+    return Qnil;
+}
+
 DEFUN ("fep-force-on", Ffep_force_on, Sfep_force_on, 0, 1, 0,
        "Force status of IME open.")
   (eventp)
@@ -620,29 +662,6 @@ DEFUN ("fep-force-off", Ffep_force_off, Sfep_force_off, 0, 1, 0,
   return Qnil;
 }
 
-
-DEFUN ("fep-get-mode", Ffep_get_mode, Sfep_get_mode, 0, 0, "",
-       "Get IME status.\n\
-t means status of IME is open.  nil means it is close.")
-  ()
-{
-  if (fIME && !NILP (Vime_control))
-    {
-      HWND hwnd;
-      int result;
-
-#ifdef HAVE_NTGUI
-      hwnd = FRAME_MW32_WINDOW (SELECTED_FRAME ());
-#else
-      hwnd = hwndConsole;
-#endif
-      result = SendMessage (hwnd, WM_MULE_IMM_GET_STATUS, 0, 0);
-      
-      return result ? Qt : Qnil;
-    }
-  else
-    return Qnil;
-}
 
 DEFUN ("w32-ime-undetermined-string-length",
        Fw32_ime_undetermined_string_length,
@@ -957,7 +976,11 @@ DEFUN ("w32-ime-create-conversion-agent",
   WAIT_REPLY_MESSAGE (&msg, WM_MULE_IME_CREATE_AGENT_REPLY);
   hwnd = (HWND) msg.wParam;
   agent[i].hwnd = hwnd;
-  agent[i].himc = GetWindowLong (hwnd, 0);
+#ifdef _WIN64
+  agent[i].himc = (HIMC) GetWindowLongPtr (hwnd, 0);
+#else
+  agent[i].himc = (HIMC) GetWindowLong (hwnd, 0);
+#endif
 
   /*  ShowWindow (hwnd, SW_SHOW); */
 
@@ -1412,6 +1435,8 @@ OPERATION must be one of the followings.\n\
 
 #endif /* IME_CONTROL */
 
+
+void
 syms_of_mw32ime ()
 {
 #ifdef IME_CONTROL

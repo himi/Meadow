@@ -3937,6 +3937,7 @@ Transposing beyond buffer boundaries is an error.")
 }
 
 
+void
 reinit_syms_of_editfns ()
 {
   Lisp_Object obuf;

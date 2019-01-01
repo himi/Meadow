@@ -1229,4 +1229,12 @@ typedef struct tagTRACKMOUSEEVENT
 #define SPI_SETFOREGROUNDLOCKTIMEOUT        0x2001
 #endif
 
+extern void set_frame_menubar();
+extern void mw32_clear_area();
+extern void cancel_mouse_face();
+extern void mw32_set_ime_font(HWND hwnd, LPLOGFONT psetlf);
+extern BOOL mw32_get_ime_composition_string(HWND hwnd);
+extern void mw32_calc_absolute_position(struct frame* f);
+
+
 #endif /* not _MW32TERM_H_ */

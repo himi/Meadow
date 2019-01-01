@@ -190,5 +190,7 @@ extern MW32LogicalFont* mw32_load_lf P_ ((MW32FontRequest *pfr,
 					  struct face *face, int c));
 extern void mw32_delete_logical_font P_ ((MW32LogicalFont *plf));
 extern void mw32_initialize_default_logfont P_ ((LOGFONT*));
+typedef struct frame *FRAME_PTR;
+extern void mw32font_set_frame_ime_font_by_llogfont P_ ((FRAME_PTR f, Lisp_Object llf));
 
 #endif  /* __MW32_FONT__ */

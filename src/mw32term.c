@@ -6586,7 +6586,7 @@ note_mouse_highlight (struct frame *f, int x, int y)
 		{
 		  Lisp_Object before = Foverlay_start (overlay);
 		  Lisp_Object after = Foverlay_end (overlay);
-		  Lisp_Object ignore;
+		  int ignore;
 
 		  /* Note that we might not be able to find position
 		     BEFORE in the glyph matrix if the overlay is
@@ -10803,7 +10803,7 @@ DEFUN ("w32-get-system-metrics", Fw32_get_system_metrics,
        Sw32_get_system_metrics,
        1, 1, 0, 
 "Retrieve system metrics. This function only calls GetSystemMetrics.")
-  (index)
+  (Lisp_Object index)
 {
   Lisp_Object ret;
   CHECK_NUMBER (index, 0);
@@ -10821,7 +10821,7 @@ MODIFIER is one of these.\n\
 'shift...shift modifier(it works modifier key only.)\n\
 'alt...alt modifier. 'super...super modifier.\n\
 'hyper...hyper modifier.")
-     (key, modifier)
+     (Lisp_Object key, Lisp_Object modifier)
 {
   int virtkey;
 
@@ -10898,7 +10898,7 @@ DEFUN ("w32-get-key-state", Fw32_get_key_state, Sw32_get_key_state,
        1, 1, 0, 
 "Retrieve a key state when the previous message was received;\n\
 not the current state. KEY is a virtual key code to get a state.")
-  (key)
+  (Lisp_Object key)
 {
   int state;
   Lisp_Object ret;
@@ -10914,7 +10914,7 @@ DEFUN ("w32-get-mouse-wheel-scroll-lines",
        Sw32_get_mouse_wheel_scroll_lines,
        1, 1, 0, 
        "Retrieve a number of scroll lines from delta number of mouse wheel.")
-  (delta)
+  (Lisp_Object delta)
 {
 #ifdef W32_INTELLIMOUSE
   UINT lines;
@@ -11013,7 +11013,7 @@ DEFUN ("mw32-get-device-capability",
        Smw32_get_device_capability,
        1, 2, 0, 
 "Retrieve system metrics. This function only calls GetSystemMetrics.")
-  (item, target)
+  (Lisp_Object item, Lisp_Object target)
 {
   HDC hdc;
   Lisp_Object ret;

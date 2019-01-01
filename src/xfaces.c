@@ -216,6 +216,7 @@ Boston, MA 02111-1307, USA.  */
 #endif
 
 #ifdef MEADOW
+extern Lisp_Object vga_stdcolor_name (int idx);
 #include "mw32term.h"
 #include "fontset.h"
 #define x_display_info mw32_display_info
@@ -225,6 +226,7 @@ Boston, MA 02111-1307, USA.  */
 #define x_list_fonts mw32_list_fonts
 #else
 #ifdef WINDOWSNT
+extern Lisp_Object vga_stdcolor_name (int idx);
 #include "w32term.h"
 #include "fontset.h"
 /* Redefine X specifics to W32 equivalents to avoid cluttering the
@@ -2411,7 +2413,8 @@ x_face_list_fonts (f, pattern, fonts, nfonts, try_alternatives_p)
   /* Get the list of fonts matching PATTERN.  */
 #ifdef WINDOWSNT
 #ifdef MEADOW
-  lfonts = x_list_fonts (f, lpattern, -1, nfonts);
+  extern Lisp_Object mw32_list_fonts (struct frame *f, Lisp_Object pattern, int size, int maxnames);
+  lfonts = mw32_list_fonts (f, lpattern, -1, nfonts);
 #else
   BLOCK_INPUT;
   lfonts = w32_list_fonts (f, lpattern, 0, nfonts);

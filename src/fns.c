@@ -110,7 +110,7 @@ With argument t, set the random number seed from the current time and pid.")
 	 it's possible to get a quotient larger than n; discarding
 	 these values eliminates the bias that would otherwise appear
 	 when using a large n.  */
-      denominator = ((unsigned long)1 << VALBITS) / XFASTINT (n);
+      denominator = ((EMACS_INT)1 << VALBITS) / XFASTINT (n);
       do
 	val = get_random () / denominator;
       while (val >= XFASTINT (n));

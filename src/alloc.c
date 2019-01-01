@@ -22,6 +22,9 @@ Boston, MA 02111-1307, USA.  */
 #include <config.h>
 #include <stdio.h>
 
+//#define PDUMP_DEBUG
+//#define PDUMP_CHECK_OBJECT_VALIDITY_ON_GC
+
 /* Note that this declares bzero on OSF/1.  How dumb.  */
 
 #include <signal.h>
@@ -5465,14 +5468,14 @@ typedef struct pdump_header_type
 typedef struct pdump_forward
 {
   Lisp_Object obj;		/* object itself */
-  long offset;		     /* Offset from the start of hash table */
+  PDUMP_PINT offset;	     /* Offset from the start of hash table */
   long size;			/* size of object */
 } pdump_forward;
 
 /* Struct to hold DEFVAR_INT and DEFVAR_BOOL'ed variable. */
 typedef struct pdump_forward_pointer
 {
-  POINTER_TYPE *address;
+  int *address;
   int value;
 } pdump_forward_pointer;
 
@@ -5503,7 +5506,7 @@ typedef struct pdump_forward_hash_table
 typedef struct pdump_root
 {
   POINTER_TYPE *address;
-  long val;
+  Lisp_Object val;
 } pdump_root;
 
 
@@ -5569,7 +5572,7 @@ static char *pdump_objects_start;
 static enum pdump_object_type pdump_object_to_enum (Lisp_Object obj);
 static void pdump_add_object (Lisp_Object obj);
 static int pdump_open_dump_file (char *argv0, char *path);
-static void pdump_relocate_objects (long offset);
+static void pdump_relocate_objects (PDUMP_PINT offset);
 #ifdef PDUMP_DEBUG
 /* object validity checker */
 static void pdump_check_root_objects (void);
@@ -5681,12 +5684,12 @@ pdump_message (char *fmt, ...)
 static int
 pdump_hash_value (Lisp_Object obj)
 {
-  return ((long) obj >> 3) % PDUMP_HASH_SIZE;
+  return ((PDUMP_PINT) obj >> 3) % PDUMP_HASH_SIZE;
 }
 
 /* put given Lisp_Object to pdump_hash */
 static void
-pdump_put_hash (Lisp_Object obj, long offset, long size)
+pdump_put_hash (Lisp_Object obj, PDUMP_PINT offset, long size)
 {
   pdump_forward *f;
   int idx = pdump_hash_value (obj);
@@ -5742,7 +5745,7 @@ static void
 pdump_register_pointer (int *ptr)
 {
   pdump_forward_pointer fp;
-  fp.address = (POINTER_TYPE *) ptr;
+  fp.address = ptr;
   fp.value = *ptr;
   pdump_pointers[pdump_pointers_index++] = fp;
   assert (pdump_pointers_index <= PDUMP_POINTERS_SIZE);
@@ -6308,7 +6311,8 @@ pdump_write_objects (FILE *pdump_stream)
 static void
 pdump_add_special_buffers ()
 {
-  int i, offset;
+  int i;
+  PDUMP_PINT offset;
   struct buffer *buffers[] = {&buffer_defaults,
 			      &buffer_local_symbols,
 			      NULL};
@@ -6450,6 +6454,7 @@ pdump (void)
       pdump_root root;
       root.address = (POINTER_TYPE *) staticvec[i];
       root.val = pdump_forward_object (*staticvec[i]);
+      // PDUMP_MESSAGE (("Dumped Root val (%d): %llX\n", i, XPNTR(root.val)));
       fwrite (&root, sizeof (root), 1, pdump_stream);
     }
   fwrite (&staticpidx, sizeof (staticpidx), 1, pdump_stream);
@@ -6523,6 +6528,7 @@ pdump (void)
       }
     fwrite (lface_id_to_name, sizeof (lface_id_to_name[0]),
 	    lface_id_to_name_size, pdump_stream);
+    PDUMP_MESSAGE (("Dumped lfaces; %d lfaces\n", next_lface_id));
   }
   fwrite (&last_per_buffer_idx, sizeof (last_per_buffer_idx), 1, pdump_stream);
 
@@ -6543,7 +6549,7 @@ pdump (void)
 #define PDUMP_RELOCATE(obj, offset)					\
 do									\
 {									\
-  char *p_r_ptr = (char *) ((PDUMP_PINT) XPNTR (obj) + offset);	         \
+  char *p_r_ptr = (char *) (XPNTR (obj) + offset);	         \
   if (! INTEGERP (obj)							\
       && pdump_objects_start <= p_r_ptr					\
       && p_r_ptr < pdump_objects_start + pdump_header.objects_size)	         \
@@ -6559,7 +6565,7 @@ pdump_object_start_address (enum pdump_object_type type)
   long ret = 0;
   for (i = 0; i < type; i++)
     ret += addr[i];
-  return (char *)(ret + pdump_objects_start);
+  return (char *)(pdump_objects_start + ret);
 }
 
 static void
@@ -6778,7 +6784,7 @@ pdump_load (char *argv0)
   int i;
   int fd;
   char *ret, path[PATH_MAX + 1];
-  long offset;
+  PDUMP_PINT offset;
   PDUMP_PINT static_offset;
 
   /* open dump file and load header */
@@ -6822,7 +6828,8 @@ pdump_load (char *argv0)
       if (offset != 0) PDUMP_RELOCATE (root.val, offset);
       staticvec[staticidx] = (Lisp_Object *) (((PDUMP_PINT) root.address) + static_offset);
       *staticvec[staticidx] = root.val;
-    }
+      // PDUMP_MESSAGE (("Loaded Root val (%d): %llX\n", staticidx, XPNTR(root.val)));
+  }
   PDUMP_MESSAGE (("Loading root objects... done; %d objects\n", staticidx));
   if (offset != 0)
     {
@@ -6830,18 +6837,22 @@ pdump_load (char *argv0)
       pdump_relocate_objects (offset);
       PDUMP_MESSAGE (("Relocating objects... done\n"));
     }
+  PDUMP_MESSAGE (("### %llX\n", XPNTR(*staticvec[6])));
   read (fd, &staticpidx, sizeof (staticpidx));
   read (fd, &staticpvec, sizeof (staticpvec[0]) * staticpidx);
 
+  PDUMP_MESSAGE (("### %llX\n", XPNTR(*staticvec[6])));
   /* load pdump_pointers */
   PDUMP_MESSAGE (("Loading pointers... \n"));
   for (i = 0; i < pdump_header.pointers_length; i++)
     {
       pdump_forward_pointer fp;
       read (fd, &fp, sizeof (fp));
-      *(int *)fp.address = fp.value;
+      PDUMP_MESSAGE (("##! %llX <- %d\n", fp.address, fp.value));
+      *fp.address = fp.value;
     }
   PDUMP_MESSAGE (("Loading pointers... done; %d pointers\n", i));
+  PDUMP_MESSAGE (("### %llX\n", XPNTR(*staticvec[6])));
 
   /* load pdump_subr_doc */
   PDUMP_MESSAGE (("Loading subr_docs... \n"));
@@ -6852,6 +6863,7 @@ pdump_load (char *argv0)
       *(char **)fsp.address = fsp.value;
     }
   PDUMP_MESSAGE (("Loading subr_docs... done; %d subr_docs\n", i));
+  PDUMP_MESSAGE (("### %llX\n", XPNTR(*staticvec[6])));
 
   /* load pdump_interval_tree */
   PDUMP_MESSAGE (("Loading interval tree... \n"));
@@ -6859,12 +6871,14 @@ pdump_load (char *argv0)
   PDUMP_MESSAGE (("Loading interval tree... done; %d interval trees\n",
 		  pdump_header.interval_tree_length));
 
+  PDUMP_MESSAGE (("### %llX\n", XPNTR(*staticvec[6])));
   /* load pdump_hash_table */
   PDUMP_MESSAGE (("Loading hash tables... \n"));
   pdump_load_hash_table (fd, offset);
   PDUMP_MESSAGE (("Loading hash tables... done; %d hash tables\n",
 		  pdump_header.hash_table_length));
 
+  PDUMP_MESSAGE (("### %llX\n", XPNTR(*staticvec[6])));
   /* load misc */
   {
     read (fd, &buffer_local_flags.undo_list,
@@ -6881,7 +6895,8 @@ pdump_load (char *argv0)
 	   - (char *)&buffer_local_types.undo_list));
     if (offset != 0)
       {
-	int i, buff_offset;
+	int i;
+	PDUMP_PINT buff_offset;
 	struct buffer *buffers[] = {&buffer_defaults,
 				    &buffer_local_symbols,
 				    &buffer_local_types,
@@ -6894,6 +6909,7 @@ pdump_load (char *argv0)
 			    offset);
       }
   }
+  PDUMP_MESSAGE (("### %llX\n", XPNTR(*staticvec[6])));
   {
     read (fd, &Vweak_hash_tables, sizeof (Vweak_hash_tables));
     if (offset != 0)
@@ -6911,20 +6927,23 @@ pdump_load (char *argv0)
   read (fd, &emacs_code_class, sizeof (int) * 256);
   pdump_read_coding_symbols (fd, offset);
   read (fd, &font_sort_order, sizeof (font_sort_order));
+
   {
     read (fd, &next_lface_id, sizeof (next_lface_id));
     read (fd, &lface_id_to_name_size, sizeof (lface_id_to_name_size));
     lface_id_to_name = xmalloc (sizeof (lface_id_to_name[0]) * lface_id_to_name_size);
     read (fd, lface_id_to_name, sizeof (lface_id_to_name[0]) * lface_id_to_name_size);
     if (offset != 0)
-      for (i = 0; i < lface_id_to_name_size; i ++)
+      for (i = 0; i < next_lface_id; i ++)
 	PDUMP_RELOCATE (lface_id_to_name[i], offset);
   }
+  PDUMP_MESSAGE (("Loaded lfaces... done; %d lfaces\n", next_lface_id));
   read (fd, &last_per_buffer_idx, sizeof (last_per_buffer_idx));
 
   /* dispose */
   close (fd);
 
+  PDUMP_MESSAGE (("### %llX\n", XPNTR(*staticvec[6])));
 #ifdef PDUMP_DEBUG
   pdump_message ("checking root objects... \n");
   pdump_message ("  staticidx: %d, staticpidx: %d\n", staticidx, staticpidx);
@@ -6969,7 +6988,7 @@ pdump_free ()
 }
 
 static void
-pdump_relocate_objects (long offset)
+pdump_relocate_objects (PDUMP_PINT offset)
 {
   char *obj_ptr = pdump_objects_start; /* cursor */
   int i;
@@ -7256,10 +7275,10 @@ pdump_check_hash_table (void)
 }
 
 
-#define PDUMPED_PTR_P(ptr)						\
-    (0 < pdump_objects_start &&						\
-     pdump_objects_start <= ((char *)(ptr)) &&				\
-     ((char *)(ptr)) < pdump_objects_start + pdump_header.objects_size)
+#define PDUMPED_PTR_P(ptr)					\
+     (0 < pdump_objects_start					\
+      &&  pdump_objects_start <= ((char *)(ptr))			\
+      && ((char *)(ptr)) < pdump_objects_start + pdump_header.objects_size)
 
 static void
 pdump_check_object_validity_Lisp_Int (Lisp_Object obj)

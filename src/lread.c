@@ -2365,6 +2365,8 @@ read1 (readcharfun, pch, first_in_list)
 		      XSETINT (val, atoi (read_buffer));
 		    else if (sizeof (long) == sizeof (EMACS_INT))
 		      XSETINT (val, atol (read_buffer));
+		    else if (sizeof (long long) == sizeof (EMACS_INT))
+		      XSETINT (val, atoll (read_buffer));
 		    else
 		      abort ();
 		    return val;

@@ -98,7 +98,7 @@ extern char etext;
 static POINTER data_space_start;
 
 /* Number of bytes of writable memory we can expect to be able to get */
-static unsigned long lim_data;
+static PDUMP_PINT lim_data;
 
 #ifdef NO_LIM_DATA
 static void
@@ -138,7 +138,7 @@ static void
 get_lim_data ()
 {
 #ifdef MEADOW
-  extern unsigned long get_reserved_heap_size();
+  extern PDUMP_PINT get_reserved_heap_size();
   lim_data = get_reserved_heap_size ();
 #else
   extern unsigned long reserved_heap_size;

@@ -55,6 +55,9 @@ extern BOOL WINAPI IsValidLocale (LCID, DWORD);
 #include "syssignal.h"
 #include "w32term.h"
 
+extern void w32_abort();
+extern int _sys_read_ahead (int fd);
+
 /* Control whether spawnve quotes arguments as necessary to ensure
    correct parsing by child process.  Because not all uses of spawnve
    are careful about constructing argv arrays, we make this behaviour
@@ -2312,6 +2315,7 @@ If successful, the new layout id is returned, otherwise nil.")
 #endif
 
 
+void
 syms_of_ntproc ()
 {
   Qhigh = intern ("high");
@@ -2385,7 +2389,7 @@ When non-nil, they inherit their error mode setting from Emacs, which stops\n\
 them blocking when trying to access unmounted drives etc.");
   Vw32_start_process_inherit_error_mode = Qt;
 
-  DEFVAR_INT ("w32-pipe-read-delay", &Vw32_pipe_read_delay,
+  DEFVAR_LISP ("w32-pipe-read-delay", &Vw32_pipe_read_delay,
     "Forced delay before reading subprocess output.\n\
 This is done to improve the buffering of subprocess output, by\n\
 avoiding the inefficiency of frequently reading small amounts of data.\n\
@@ -2394,7 +2398,7 @@ If positive, the value is the number of milliseconds to sleep before\n\
 reading the subprocess output.  If negative, the magnitude is the number\n\
 of time slices to wait (effectively boosting the priority of the child\n\
 process temporarily).  A value of zero disables waiting entirely.");
-  Vw32_pipe_read_delay = 50;
+  XSETINT(Vw32_pipe_read_delay, 50);
 
   DEFVAR_LISP ("w32-downcase-file-names", &Vw32_downcase_file_names,
     "Non-nil means convert all-upper case file names to lower case.\n\

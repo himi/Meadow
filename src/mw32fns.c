@@ -386,8 +386,19 @@ mw32_window_to_frame (struct mw32_display_info *dpyinfo,
   return 0;
 }
 
+
 /* Like x_window_to_frame but also compares the window with the widget's
    windows.  */
+
+static BOOL
+is_mw32_window (HWND hwnd)
+{
+#ifdef _WIN64
+    return GetWindowLongPtr(hwnd, GWLP_WNDPROC) == (LONG_PTR) mw32_WndProc;
+#else
+    return GetClassLong (hwnd, GCL_WNDPROC) == mw32_WndProc;
+#endif    
+}
 
 struct frame *
 mw32_any_window_to_frame (struct mw32_display_info *dpyinfo,
@@ -396,7 +407,7 @@ mw32_any_window_to_frame (struct mw32_display_info *dpyinfo,
   do {
     if (hwnd == dpyinfo->root_window)
       return NULL;
-    if ((WNDPROC) GetClassLong (hwnd, GCL_WNDPROC) == mw32_WndProc)
+    if (is_mw32_window(hwnd))
       return mw32_window_to_frame (dpyinfo, hwnd);
   } while (hwnd = GetParent (hwnd));
 
@@ -9702,6 +9713,7 @@ init_mw32fns (void)
 }
 
 #undef abort
+extern void abort();
 
 void 
 w32_abort (void)

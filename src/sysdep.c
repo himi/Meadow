@@ -3118,7 +3118,7 @@ get_random ()
 #endif /* need at least 4 */
 #endif /* need at least 3 */
 #endif /* need at least 2 */
-  return val & ((1L << VALBITS) - 1);
+  return val & ((((EMACS_INT) 1) << VALBITS) - 1);
 }
 
 #ifdef WRONG_NAME_INSQUE

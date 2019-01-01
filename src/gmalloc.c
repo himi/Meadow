@@ -444,7 +444,7 @@ align (size)
      __malloc_size_t size;
 {
   __ptr_t result;
-  unsigned long int adj;
+  PDUMP_PINT adj;
 
   /* align accepts an unsigned argument, but __morecore accepts a
      signed one.  This could lead to trouble if SIZE overflows a
@@ -454,8 +454,8 @@ align (size)
     result = 0;
   else
     result = (*__morecore) (size);
-  adj = (unsigned long int) ((unsigned long int) ((char *) result -
-						  (char *) NULL)) % BLOCKSIZE;
+  adj = (PDUMP_PINT) ((PDUMP_PINT) ((char *) result -
+				    (char *) NULL)) % BLOCKSIZE;
   if (adj != 0)
     {
       __ptr_t new;
@@ -737,8 +737,8 @@ _malloc_internal (size)
 	    next->next->prev = next->prev;
 	  block = BLOCK (result);
 	  if (--_heapinfo[block].busy.info.frag.nfree != 0)
-	    _heapinfo[block].busy.info.frag.first = (unsigned long int)
-	      ((unsigned long int) ((char *) next->next - (char *) NULL)
+	    _heapinfo[block].busy.info.frag.first = (__malloc_size_t)
+	      ((__malloc_size_t) ((char *) next->next - (char *) NULL)
 	       % BLOCKSIZE) >> log;
 
 	  /* Update the statistics.  */
@@ -1204,8 +1204,8 @@ _free_internal (ptr)
 	     it is the first free fragment of this block. */
 	  prev = (struct list *) ptr;
 	  _heapinfo[block].busy.info.frag.nfree = 1;
-	  _heapinfo[block].busy.info.frag.first = (unsigned long int)
-	    ((unsigned long int) ((char *) ptr - (char *) NULL)
+	  _heapinfo[block].busy.info.frag.first = (__malloc_size_t)
+	    ((__malloc_size_t) ((char *) ptr - (char *) NULL)
 	     % BLOCKSIZE >> type);
 	  prev->next = _fraghead[type].next;
 	  prev->prev = &_fraghead[type];
@@ -1616,7 +1616,7 @@ memalign (alignment, size)
      __malloc_size_t size;
 {
   __ptr_t result;
-  unsigned long int adj, lastadj;
+  __malloc_size_t adj, lastadj;
 
   if (__memalign_hook)
     return (*__memalign_hook) (alignment, size);
@@ -1629,7 +1629,7 @@ memalign (alignment, size)
 
   /* Figure out how much we will need to pad this particular block
      to achieve the required alignment.  */
-  adj = (unsigned long int) ((char *) result - (char *) NULL) % alignment;
+  adj = (__malloc_size_t) ((char *) result - (char *) NULL) % alignment;
 
   do
     {
@@ -1640,7 +1640,7 @@ memalign (alignment, size)
 	return NULL;
 
       lastadj = adj;
-      adj = (unsigned long int) ((char *) result - (char *) NULL) % alignment;
+      adj = (__malloc_size_t) ((char *) result - (char *) NULL) % alignment;
       /* It's conceivable we might have been so unlucky as to get a
 	 different block with weaker alignment.  If so, this block is too
 	 short to contain SIZE after alignment correction.  So we must

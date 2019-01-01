@@ -24,11 +24,8 @@
 !include makefile.def
 
 ALL		= addpm ddeclient runemacs cmdproxy addsection preprep
-!if $(MSVCNT11)
+
 TRES		= $(BLD)\emacs.res
-!else
-TRES		= $(BLD)\emacs.rbj
-!endif
 
 addpm:		  $(BLD) $(BLD)\addpm.exe
 $(BLD)\addpm.obj: addpm.c
@@ -66,9 +63,6 @@ $(BLD)\preprep.exe: $(BLD)\preprep.obj
 #
 $(TRES):	emacs.rc
 		$(RC) -Fo$(BLD)\emacs.res $**
-!if !$(MSVCNT11)
-		$(CVTRES) -r -$(ARCH) -o $@ $(BLD)\emacs.res
-!endif
 
 runemacs:	  $(BLD) $(BLD)\runemacs.exe
 $(BLD)\runemacs.obj: runemacs.c

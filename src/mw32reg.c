@@ -1008,8 +1008,8 @@ If it does not fit for emacs integer, cause overflow error.")
        (lword, hword, hhword, hhhword)
        Lisp_Object lword, hword, hhword, hhhword;
 {
-  DWORD dw, hdw;
-  DWORD mask = ~((DWORD)0) << (VALBITS-1);
+  EMACS_INT dw, hdw;
+  EMACS_INT mask = ~((EMACS_INT)0) << (VALBITS-1);
   
   CHECK_NUMBER (lword, 0);
   CHECK_NUMBER (hword, 0);
@@ -1022,11 +1022,12 @@ If it does not fit for emacs integer, cause overflow error.")
       hdw = (XFASTINT (hhhword) << 16) + XFASTINT (hhword);
     }
   
+  // TODO for 64bit env.
   if (((dw & mask) == 0 &&	/* non negative number */
        (NILP (hhword) || hdw == 0)) ||
       ((dw & mask) == mask &&	/* negative number */
        (NILP (hhword) || hdw == ~((DWORD)0)))) { 
-    return make_number ((long)dw);
+    return make_number (dw);
   } else {
     /* not fit for emacs integer, cause overflow error */
     Fsignal (Qoverflow_error, registry_integer_overflow_data);
@@ -1125,7 +1126,7 @@ DEFUN ("mw32-registry-create-key", Fmw32_registry_create_key, Smw32_registry_cre
 DEFUN ("mw32-registry-set", Fmw32_registry_set, Smw32_registry_set, 3, 3, 0,
        ""
 )
-     (key, name, data)
+     (Lisp_Object key, Lisp_Object name, Lisp_Object data)
 {
   registry_key regkey;
   Lisp_Object result;

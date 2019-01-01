@@ -234,6 +234,8 @@ is not used. This is to make compatiblity with x-selection-exists-p.")
   return IsClipboardFormatAvailable(CF_TEXT)? Qt:Qnil;
 }
 
+
+void
 syms_of_mw32clipboard ()
 {
   DEFVAR_LISP ("w32-clipboard-coding-system",

@@ -2203,6 +2203,8 @@ NUMBER may be an integer or a floating point number.")
     sprintf (buffer, "%d", XINT (number));
   else if (sizeof (long) == sizeof (EMACS_INT))
     sprintf (buffer, "%ld", (long) XINT (number));
+  else if (sizeof (long long) == sizeof (EMACS_INT))
+    sprintf (buffer, "%lld", (long long) XINT (number));
   else
     abort ();
   return build_string (buffer);

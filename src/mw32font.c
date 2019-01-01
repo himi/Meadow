@@ -2401,7 +2401,7 @@ DEFUN ("w32-add-font-internal", Fw32_add_font_internal,
        Sw32_add_font_internal, 2, 2, 0,
        "Add a font. NAME is a name of the font.\n\
 ALIST is parameters to use this font.")
-     (name, alist)
+     (Lisp_Object name, Lisp_Object alist)
 {
   CHECK_STRING (name, 0);
   CHECK_LIST (alist, 1);
@@ -2461,7 +2461,7 @@ DEFUN ("w32-get-font-info", Fw32_get_font_info,
        Sw32_get_font_info, 1, 1, 0,
        "Get the font information you specified.\n\
 NAME is a name of the font.")
-     (name)
+     (Lisp_Object name)
 {
   int idx;
   Lisp_Object ret = Qnil;
@@ -2837,6 +2837,8 @@ reinit_syms_of_mw32font ()
   mw32_add_lf_loader (mw32_default_logical_font_loader);
 }
 
+
+void
 syms_of_mw32font ()
 {
   Qany = intern ("any");

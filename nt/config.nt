@@ -105,6 +105,151 @@ Boston, MA 02111-1307, USA.  */
 #define HAVE_MULTILINGUAL_MENU
 #endif
 
+#ifdef _M_X64
+#include <stddef.h>
+#define EMACS_INT intptr_t
+#define EMACS_UINT uintptr_t
+/* #define BITS_PER_EMACS_INT (sizeof(uintptr_t) * 8) */
+#define BITS_PER_EMACS_INT 64
+#define PDUMP_PINT intptr_t
+#endif
+
+extern char* sys_strerror();
+
+extern int sigblock();
+extern int sigsetmask();
+extern int sys_kill();
+extern int _getpid();
+extern int sys_dup();
+extern void init_signals();
+extern void init_w32system();
+extern int pdump_load();
+extern void reinit_alloc_once();
+extern void reinit_obarray();
+extern void reinit_eval_once();
+extern void reinit_coding_once();
+extern void reinit_buffer_once_1();
+extern void reinit_buffer_once_2();
+extern void reinit_minibuf_once();
+extern void reinit_syms_of_search();
+extern void reinit_window_once();
+extern void init_environment();
+extern void init_ntproc();
+extern void syms_of_ntproc();
+extern void syms_of_w32misc();
+extern void syms_of_mw32term();
+extern void syms_of_mw32fns();
+extern void syms_of_mw32font();
+extern void syms_of_mw32ime();
+extern void syms_of_mw32clipboard();
+extern void syms_of_mw32menu();
+extern void syms_of_mw32reg();
+extern void syms_of_mw32mci();
+extern void syms_of_fontset();
+extern void syms_of_ntterm();
+extern void reinit_syms_of_abbrev();
+extern void reinit_syms_of_callint();
+extern void reinit_syms_of_category();
+extern intptr_t Fsetup_special_charsets();
+extern intptr_t Fupdate_coding_systems_internal();
+extern intptr_t Fset_coding_priority_internal();
+extern void reinit_syms_of_display();
+extern void reinit_syms_of_editfns();
+extern void reinit_syms_of_insdel();
+extern void reinit_syms_of_mw32fns();
+extern void reinit_syms_of_mw32font();
+extern void reinit_syms_of_mw32menu();
+extern void reinit_syms_of_mw32reg();
+extern void reinit_syms_of_fontset();
+extern void globals_of_w32menu();
+extern void init_mw32fns();
+extern void init_mw32reg();
+extern void init_mw32mci();
+extern void init_window();
+extern int sys_unlink();
+extern void pdump_free();
+extern void term_ntproc();
+extern void pdump();
+extern intptr_t Fcopy_file();
+extern void dostounix_filename();
+extern void unixtodos_filename();
+extern int sys_read();
+extern int sys_close();
+extern int sys_open();
+extern int sigmask();
+extern int sigunblock();
+extern char* getwd();
+extern void staticpro_nopdump();
+
+extern int sys_pipe();
+extern char* sys_mktemp();
+extern void set_process_dir();
+extern int setpgrp();
+extern int sys_spawnve();
+extern int sys_access();
+
+extern int file_attributes_stat();
+extern int getegid();
+extern void sys_sleep();
+
+struct passwd;
+extern struct passwd* getpwuid();
+extern int getuid();
+extern int geteuid();
+extern struct passwd* getpwnam();
+extern char* sys_ctime();
+
+extern intptr_t Ftop_level();
+
+extern int sys_mkdir();
+extern int sys_rmdir();
+extern int sys_link();
+extern int sys_chmod();
+extern int have_menus_p();
+extern intptr_t Fmw32_file_dialog();
+
+extern int glyph_to_pixel_coords();
+
+typedef void (*signal_handler)(int);
+extern signal_handler sys_signal (int sig, signal_handler handler);
+extern int encode_terminal_code ();
+
+extern void register_child();
+extern int /*BOOL*/ term_winsock ();
+extern int /*BOOL*/ init_winsock ();
+extern int sys_select();
+extern intptr_t Fstring_to_multibyte();
+extern int sys_wait();
+
+extern void srandom();
+extern int random();
+extern int _utime();
+
+extern int sys_chdir();
+extern int sys_write();
+extern unsigned char* get_data_start();
+extern unsigned char* get_data_end();
+extern void initialize_w32_display ();
+
+extern void x_make_frame_invisible();
+
+extern int getpagesize();
+extern void refill_memory_reserve();
+
+extern intptr_t Finternal_get_lisp_face_attribute();
+extern void mw32m_create_frame_window();
+extern void mw32m_ime_create_agent();
+extern void menubar_selection_callback();
+
+extern intptr_t Funix_to_dos_filename();
+extern intptr_t Fdos_to_unix_filename();
+
+extern intptr_t Fxw_display_color_p();
+
+extern intptr_t Fkeymapp();
+
+extern void* sbrk (long increment);
+
 #ifdef W32_VER4
 #define W32_SCROLLBAR
 #define W32_INTELLIMOUSE

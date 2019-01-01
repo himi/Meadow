@@ -181,8 +181,13 @@ mw32_initialize_lisp_heap ()
      the region below the 256MB line for our malloc arena - 229MB is
      still a pretty decent arena to play in!  */
 
+#ifdef _M_X64
+  unsigned char *base = ((unsigned char*) (1LL << 31));  /* 256MB */
+  unsigned char *end  = ((unsigned char*) (1LL << 36));  /* 256MB + 8GB */
+#else
   unsigned char *base = ((char*) 0) + 0x01B00000;     /*  27MB */
-  unsigned char *end  = ((char*) 0) + (1 << VALBITS); /* 256MB */
+  unsigned char *end  = ((char*) 0) + (((EMACS_INT) 1) << VALBITS); /* 256MB */
+#endif
   void *ptr = NULL;
 
   while (!ptr && (base < end))
@@ -193,7 +198,11 @@ mw32_initialize_lisp_heap ()
 
   if (!ptr)
     {
-      fprintf (stderr, "Error: could not allocate Lisp heap(%X - %X)\n", base, end);
+#ifdef _M_X64
+      fprintf (stderr, "Error: could not allocate Lisp heap (%llX - %llX)\n", base, end);
+#else
+      fprintf (stderr, "Error: could not allocate Lisp heap (%lX - %lX)\n", base, end);
+#endif
       exit (1);
     }
 
@@ -203,7 +212,7 @@ mw32_initialize_lisp_heap ()
   lisp_heap_end = end;
 }
 
-unsigned long
+PDUMP_PINT
 get_reserved_heap_size ()
 {
   return lisp_heap_end - lisp_heap_start;
@@ -230,17 +239,21 @@ getpagesize (void)
 }
 
 void*
-sbrk (unsigned long increment)
+sbrk (long increment)
 {
   void *result;
-  long size = (long) increment;
+  PDUMP_PINT size = (PDUMP_PINT) increment;
   
   result = lisp_heap_current;
+
+#if 0
+  fprintf(stderr, "sbrk %ld: %llx %llx %llx\n", increment, lisp_heap_start, lisp_heap_current, lisp_heap_alloced);
+#endif
 
   /* If size is negative, shrink the heap by decommitting pages.  */
   if (size < 0) 
     {
-      long dealloc_size;
+      PDUMP_PINT dealloc_size;
       unsigned char *new_current;
 
       size = -size;
@@ -267,8 +280,8 @@ sbrk (unsigned long increment)
   /* If size is positive, grow the heap by committing reserved pages.  */
   else if (size > 0) 
     {
-      int req_size;
-      int alloced_size;
+      PDUMP_PINT req_size;
+      PDUMP_PINT alloced_size;
       /* Sanity checks.  */
       if ((lisp_heap_current + size) >= lisp_heap_end)
 	return NULL;

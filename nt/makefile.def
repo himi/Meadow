@@ -134,7 +134,8 @@ CPU		= $(PROCESSOR_ARCHITECTURE)
 CONFIG_H	= config.nt
 OS_TYPE		= windowsnt
 ! if "$(PROCESSOR_ARCHITECTURE)" == "x86"
-ARCH		= i386
+#ARCH		= i386
+ARCH		= x64
 CPU		= i386
 ! else
 !  if "$(PROCESSOR_ARCHITECTURE)" == "MIPS"
@@ -219,7 +220,7 @@ INC             = -I.
 !if "$(BUILD_TYPE)" == "spd"
 CFLAGS_COMMON	= -nologo $(INC) $(ARCH_CFLAGS) $(LOCAL_FLAGS) -DWIN32_LEAN_AND_MEAN -D$(ARCH) -Fd$(BLD)\vc.pdb
 !else
-CFLAGS_COMMON	= -nologo $(INC) $(ARCH_CFLAGS) $(LOCAL_FLAGS) -DWIN32_LEAN_AND_MEAN -D$(ARCH) -Fd$(BLD)\vc.pdb -YX -Fp$(BLD)\emacs.pch -DEMACSDEBUG -DGLYPH_DEBUG
+CFLAGS_COMMON	= -nologo $(INC) $(ARCH_CFLAGS) $(LOCAL_FLAGS) -DWIN32_LEAN_AND_MEAN -D$(ARCH) -Fd$(BLD)\vc.pdb -Fp$(BLD)\emacs.pch -DEMACSDEBUG -DGLYPH_DEBUG
 !endif
 
 !if $(MSVCNT11)
@@ -287,6 +288,10 @@ ARCH_CFLAGS     = -nologo -D_X86_=1 -c -Zel -W2 -H63 -Od -G3d -Zi -Zp8
 ARCH_LDFLAGS	= $(SYS_LDFLAGS)
 
 !else
+!if "$(ARCH)" == "x64"
+ARCH_CFLAGS     = -nologo -c -Od -Zi -we4013 -we4293
+ARCH_LDFLAGS	= $(SYS_LDFLAGS)
+!else
 !if "$(ARCH)" == "mips"
 ARCH_CFLAGS     = -D_MIPS_=1 -c -W2 -Zi -Od -Gt0
 ARCH_LDFLAGS	= -align:0x1000 $(SYS_LDFLAGS)
@@ -308,6 +313,7 @@ ARCH_LDFLAGS	= -align:0x1000 $(SYS_LDFLAGS)
 
 !else
 !ERROR Unknown architecture type "$(ARCH)".
+!endif
 !endif
 !endif
 !endif

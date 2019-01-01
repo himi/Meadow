@@ -105,13 +105,13 @@ static int extra_bytes;
 /* Macros for rounding.  Note that rounding to any value is possible
    by changing the definition of PAGE.  */
 #define PAGE (getpagesize ())
-#define ALIGNED(addr) (((unsigned long int) (addr) & (page_size - 1)) == 0)
-#define ROUNDUP(size) (((unsigned long int) (size) + page_size - 1) \
+#define ALIGNED(addr) (((PDUMP_PINT) (addr) & (page_size - 1)) == 0)
+#define ROUNDUP(size) (((PDUMP_PINT) (size) + page_size - 1) \
 		       & ~(page_size - 1))
 #define ROUND_TO_PAGE(addr) (addr & (~(page_size - 1)))
 
 #define MEM_ALIGN sizeof(double)
-#define MEM_ROUNDUP(addr) (((unsigned long int)(addr) + MEM_ALIGN - 1) \
+#define MEM_ROUNDUP(addr) (((PDUMP_PINT)(addr) + MEM_ALIGN - 1) \
 				   & ~(MEM_ALIGN - 1))
 
 /* The hook `malloc' uses for the function which gets more space
@@ -383,7 +383,7 @@ relinquish ()
 /* Return the total size in use by relocating allocator,
    above where malloc gets space.  */
 
-long
+PDUMP_PINT
 r_alloc_size_in_use ()
 {
   return (char *) break_value - (char *) virtual_break_value;
@@ -796,7 +796,7 @@ free_bloc (bloc)
 
 POINTER 
 r_alloc_sbrk (size)
-     long size;
+     PDUMP_PINT size;
 {
   register bloc_ptr b;
   POINTER address;
@@ -1071,7 +1071,7 @@ r_re_alloc (ptr, size)
 
 void
 r_alloc_freeze (size)
-     long size;
+     PDUMP_PINT size;
 {
   if (! r_alloc_initialized)
     r_alloc_init ();

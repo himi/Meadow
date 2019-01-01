@@ -22,6 +22,7 @@ Boston, MA 02111-1307, USA.
 */
 
 
+#include <malloc.h>
 #include <stddef.h> /* for offsetof */
 #include <stdlib.h>
 #include <stdio.h>
@@ -128,6 +129,8 @@ w32_filename_special_characters[] = {'*', '?', '<', '>', '\"', '\\', '/', 0};
 #ifndef MEADOW
 extern Lisp_Object Vw32_num_mouse_buttons;
 #endif
+
+extern void w32_abort ();
 
 
 /* Equivalent of strerror for W32 error codes.  */
@@ -1716,6 +1719,8 @@ void   close_unc_volume (HANDLE);
 DIR *
 opendir (char *filename)
 {
+  extern void* malloc ();
+
   DIR *dirp;
 
   /* Opening is done by FindFirstFile.  However, a read is inherent to

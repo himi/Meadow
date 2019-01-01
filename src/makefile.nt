@@ -82,13 +82,10 @@ TLIBW32		=
 !ENDIF
 !if $(MEADOW)
 TOBJ            =
+TRES		= $(BLD)\meadow.res
 !else
 TOBJ            = $(BLD)\firstfile.obj
-!endif
-!if $(MSVCNT11)
 TRES		= $(BLD)\emacs.res
-!else
-TRES		= $(BLD)\emacs.rbj
 !endif
 TLASTLIB	= $(BLD)\lastfile.lib
 
@@ -386,9 +383,6 @@ bootstrap-clean:
 #
 $(TRES):	..\nt\meadow.rc
 		$(RC) -i..\nt -Fo$(BLD)\meadow.res $**
-!if !$(MSVCNT11)
-		$(CVTRES) -r -$(ARCH) -o $@ $(BLD)\meadow.res
-!endif
 
 #
 # Build the library.  Split up the build into two phases...otherwise we

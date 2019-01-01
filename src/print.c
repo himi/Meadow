@@ -1350,6 +1350,8 @@ print_object (obj, printcharfun, escapeflag)
 	sprintf (buf, "%d", XINT (obj));
       else if (sizeof (long) == sizeof (EMACS_INT))
 	sprintf (buf, "%ld", (long) XINT (obj));
+      else if (sizeof (long long) == sizeof (EMACS_INT))
+	sprintf (buf, "%lld", (long long) XINT (obj));
       else
 	abort ();
       strout (buf, -1, -1, printcharfun, 0);
